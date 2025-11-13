@@ -4,7 +4,7 @@ use flight\Engine;
 use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
-use app\models\AdminModel;
+use app\models\CongeModel;
 
 
 /** 
@@ -30,6 +30,6 @@ use app\models\AdminModel;
 // $app->register('redis', Redis::class, [ $config['redis']['host'], $config['redis']['port'] ]);
 
 
-// Flight::map('AdminModel', function() {
-//     return new AdminModel(Flight::db());  
-// });
+Flight::map('CongeModel', function() {
+    return new CongeModel(Flight::db());  
+});
