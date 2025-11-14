@@ -5,5 +5,3 @@ sql/initial_data.sql
 .vscode/
 app/config/config.php
 app/public/html
-nyavo.txt
-nyavo.sql
