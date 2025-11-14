@@ -150,3 +150,4 @@ CREATE TABLE avantage(
    id_contrat_employe INT,
    FOREIGN KEY(id_contrat_employe) REFERENCES contrat_employe(id)
 );
+
