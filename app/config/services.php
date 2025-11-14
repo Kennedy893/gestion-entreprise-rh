@@ -4,7 +4,6 @@ use flight\Engine;
 use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
-use app\models\AdminModel;
 
 
 /** 
@@ -13,7 +12,11 @@ use app\models\AdminModel;
  */
 
 // uncomment the following line for MySQL
- $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+// $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+
+$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
+       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
+
 
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
@@ -29,7 +32,6 @@ use app\models\AdminModel;
 // Redis? This is where you'd set that up
 // $app->register('redis', Redis::class, [ $config['redis']['host'], $config['redis']['port'] ]);
 
-
-// Flight::map('AdminModel', function() {
-//     return new AdminModel(Flight::db());  
-// });
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
+});

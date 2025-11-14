@@ -7,4 +7,8 @@ use flight\net\Router;
 
 
 $Welcome_Controller = new WelcomeController();
+$Paie_Controller = new \app\controllers\PaieController;
+
+
 $router->get('/', [ $Welcome_Controller, 'home' ]); 
+$router->get('/paie', [$Paie_Controller,'etatDePaie']);
