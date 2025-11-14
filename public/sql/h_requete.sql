@@ -13,3 +13,4 @@ SELECT date_travail, entree, sortie, id_employe
 FROM presence
 WHERE date_travail BETWEEN date_trunc('week', ?::date) AND date_trunc('week', ?::date) + INTERVAL '6 days'
   AND id_employe = ?;
+
