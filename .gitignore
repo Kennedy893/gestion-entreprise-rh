@@ -7,3 +7,4 @@ app/config/config.php
 app/public/html
 vendor
 
+public/l-sql

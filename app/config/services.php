@@ -50,5 +50,8 @@ Flight::map('HpresenceModel', function() {
     return new HpresenceModel(Flight::db());
 });  
 Flight::map('CongeModel', function() {
-    return new CongeModel(Flight::db());  
+    return new CongeModel(Flight::db());
+});
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
 });

@@ -26,3 +26,10 @@ $Conge_Controller = new CongeController();
 $router->get('/demande_conge', [ $Conge_Controller, 'versDemande' ]);
 $router->get('/liste_conge', [ $Conge_Controller, 'versListe' ]);
 $router->get('/solde_conge', [ $Conge_Controller, 'versSolde' ]);
+$Paie_Controller = new \app\controllers\PaieController;
+
+
+$router->get('/', [ $Welcome_Controller, 'home' ]); 
+$router->get('/paie', [$Paie_Controller,'etatDePaie']);
+$router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
+$router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
