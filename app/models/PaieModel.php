@@ -86,18 +86,32 @@ class PaieModel
         $sql = "SELECT * FROM avantage WHERE id_contrat_employe = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id_contrat]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $avantages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Si aucun résultat ou erreur → renvoie un tableau vide
+        if (!$avantages || !is_array($avantages)) {
+            return [];
+        }
+
+        return $avantages;
     }
 
 
     public function sommeAvantageEmployeByContrat($id_contrat)
     {
         $avantages = $this->getAvantagesEmployesByContrat($id_contrat);
-        $result = 0;
 
-        foreach ($avantages as $av) {
-            $result += $av['montant'];
+        if (!is_array($avantages) || empty($avantages)) {
+            return 0;
         }
+
+        $result = 0;
+        foreach ($avantages as $av) {
+            if (isset($av['montant']) && is_numeric($av['montant'])) {
+                $result += $av['montant'];
+            }
+        }
+
         return $result;
     }
 
@@ -165,8 +179,8 @@ class PaieModel
         $emp['autres_ret'] = 0;
         $emp['total_ret'] = $emp['cnaps_1'] + $emp['ostie_1'] + $emp['autres_ret'];
         $emp['revenu_impo'] = $emp['salaire_brut'] - ($emp['total_ret']);
-        $emp['irsa'] = $this->calculerIRSA($emp['revenu_impo'],true)['total_irsa'];
-        $emp['irsa_details'] = $this->calculerIRSA($emp['revenu_impo'],true)['details'];
+        $emp['irsa'] = $this->calculerIRSA($emp['revenu_impo'], true)['total_irsa'];
+        $emp['irsa_details'] = $this->calculerIRSA($emp['revenu_impo'], true)['details'];
         $emp['salaire_net'] = $emp['salaire_brut'] - ($emp['total_ret'] + $emp['irsa']);
         $emp['label_avantage'] = $this->getAvantagesEmployesByContrat($emp['id']);
 

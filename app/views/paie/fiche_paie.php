@@ -255,7 +255,7 @@
             <div class="logo">
                 <div class="logo-icon"></div>
                 <div class="logo-text">
-                    <span>iT</span>university<br>
+                    <span>En</span>Treprise<br>
                     <small style="font-size: 12px; color: #888;">L'avenir est notre ambition</small>
                 </div>
             </div>
@@ -291,16 +291,12 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">Ancienneté :</span>
-                    <span class="info-value">14 an(s) 7 mois et 12 jour(s)</span>
+                    <span class="info-value"> <?= calculerAnciennete($emp['date_debut']) ?></span>
                 </div>
             </div>
 
             <div class="info-column">
                 <h3>Informations Salariales</h3>
-                <div class="info-item">
-                    <span class="info-label">Classification :</span>
-                    <span class="info-value">HC</span>
-                </div>
                 <div class="info-item">
                     <span class="info-label">Salaire de base :</span>
                     <span class="info-value highlight"> <?= moneyFormat($emp['salaire']) ?></span>

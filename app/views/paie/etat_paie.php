@@ -458,7 +458,7 @@
                             <td class="amount amount-negative"> <?= moneyFormat($d['irsa']) ?> </td>
                             <td class="amount" style="font-weight: 700; color: #38a169;"> <?= moneyFormat($d['salaire_net']) ?> </td>
                             <td>
-                                <button class="download-btn">
+                                <button class="download-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/<?= $d['id_employe'] ?>`">
                                     📄 Bulletin
                                 </button>
                             </td>

@@ -49,3 +49,30 @@
     function calculMajorationHeureSup ($montant,$pourcentage) {
         return $montant + ($montant * ($pourcentage/100));
     }
+
+    function calculerAnciennete($date_debut) {
+        $debut = new DateTime($date_debut);
+        $aujourdhui = new DateTime();
+
+        $diff = $aujourdhui->diff($debut);
+
+        $texte = "";
+
+        if ($diff->y > 0) {
+            $texte .= $diff->y . " an(s) ";
+        }
+
+        if ($diff->m > 0) {
+            $texte .= $diff->m . " mois ";
+        }
+
+        if ($diff->d > 0) {
+            $texte .= "et " . $diff->d . " jour(s)";
+        }
+
+        if ($texte === "") {
+            $texte = "0 jour";
+        }
+        return trim($texte);
+    }
+
