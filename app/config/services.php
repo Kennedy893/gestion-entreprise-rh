@@ -5,6 +5,9 @@ use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
 
+use app\models\CongeModel;
+use app\models\HpresenceModel;
+
 
 
 /** 
@@ -44,5 +47,8 @@ Flight::map('HController', function() {
 });
 
 Flight::map('HpresenceModel', function() {
-    return new \app\models\HpresenceModel(Flight::db());  
+    return new HpresenceModel(Flight::db());
+});  
+Flight::map('CongeModel', function() {
+    return new CongeModel(Flight::db());  
 });
