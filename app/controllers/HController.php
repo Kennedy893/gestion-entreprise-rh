@@ -49,10 +49,10 @@ class HController {
         }
         else if($type == 2)
         {
+            $colonnes[] = "sortie";
+            $colonnes[] = "montant";
             foreach($valeurs as $valeur)
             {
-                $colonnes[] = "sortie";
-                $colonnes[] = "montant";
                 $where_colonnes = ["id_employe", "date_travail"];
                 $where_valeurs = [$valeur[0], $valeur[1]];
                 Flight::HModel()->update_generalised("presence", $colonnes, $valeur, $where_colonnes, $where_valeurs,"AND sortie IS NULL AND montant IS NULL",[]);
