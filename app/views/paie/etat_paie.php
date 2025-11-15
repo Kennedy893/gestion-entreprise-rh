@@ -370,6 +370,7 @@
     </style>
 </head>
 <body>
+    <?php include("bar/sidebar.php")?>
     <div class="container">
         <div class="header">
             <div class="header-top">
