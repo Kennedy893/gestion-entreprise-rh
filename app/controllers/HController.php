@@ -33,7 +33,7 @@ class HController {
             $rep[]=$heure;
             if($type==2)
             {
-                $rep[]=Flight::HpresenceModel()->get_salaire_heure($id,$date,1);
+                $rep[]=Flight::HpresenceModel()->get_salaire_heure($id,$date);
             }
             $valeurs[]=$rep;
         }
@@ -44,6 +44,16 @@ class HController {
             $colonnes[] = "entree";
             foreach($valeurs as $valeur)
             {
+                if(Flight::HpresenceModel()->is_heure_supp($valeur[2],$valeur[0],$valeur[1]))
+                {
+                    try
+                    {
+                        $valeur[]=Flight::HpresenceModel()->condition_heure_supp($valeur[1],$valeur[0],0);
+                    } catch (Exception $e)
+                    {
+                        Flight::redirect(constant('BASE_URL').'/time/presences?error='.$e->getMessage());
+                    }
+                }
                 Flight::HModel()->insert_generalised("presence", $colonnes, $valeur);
             }
         }
@@ -66,6 +76,17 @@ class HController {
                 $mult=max($coeff);
                 $duree=strtotime($heure_sortie) - strtotime($heure_entree);
                 $valeur[3]=$valeur[3]*$mult*$duree/3600;
+
+                if(Flight::HpresenceModel()->is_heure_supp($valeur[2],$valeur[0],$valeur[1]))
+                {
+                    try
+                    {
+                        $valeur[]=Flight::HpresenceModel()->condition_heure_supp($valeur[1],$valeur[0],$duree/3600);
+                    } catch (Exception $e)
+                    {
+                        Flight::redirect(constant('BASE_URL').'/time/presences?error='.$e->getMessage());
+                    }
+                }
                 Flight::HModel()->update_generalised("presence", $colonnes, $valeur, $where_colonnes, $where_valeurs,"AND sortie IS NULL AND montant IS NULL",[]);
             }
         }

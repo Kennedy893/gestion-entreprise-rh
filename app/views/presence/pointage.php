@@ -23,6 +23,14 @@
 </head>
 <body>
     <h2>Formulaire de Pointage</h2>
+
+    <?php if (isset($_GET['error'])): ?>
+        <div style="color: red; margin-bottom: 16px;">
+            <?php echo htmlspecialchars($_GET['error']); ?>
+        </div>
+    <?php endif; ?>
+    
+
     <form method="post" action="<?php echo constant('BASE_URL'); ?>/time/presences">
 
         <label for="date">Date :</label>

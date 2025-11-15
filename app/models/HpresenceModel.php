@@ -5,6 +5,7 @@ namespace app\models;
 use Flight;
 use PDO;
 use DateTime;
+use Exception;  
 
 class HpresenceModel {
 
@@ -14,6 +15,60 @@ class HpresenceModel {
     {
         $this->db = $db;
     }
+    public function get_semaine($date)
+    {
+        $dt = new DateTime($date);
+        $startOfWeek = clone $dt;
+        $startOfWeek->modify('monday this week');
+        $endOfWeek = clone $startOfWeek;
+        $endOfWeek->modify('+6 days');
+        $debut = $startOfWeek->format('Y-m-d');
+        $fin   = $endOfWeek->format('Y-m-d');
+        $retour=[$debut,$fin];
+    }
+    public function condition_heure_supp($date,$id_employe,$duree)
+    {
+        $duree_semaine=$this->duree_supp_semaine($date,$id_employe);
+        $duree_semaine+=$duree;
+        if($duree_semaine<=8)
+        {
+            return 1;
+        }
+        else if($duree_semaine>8 && $duree_semaine<=20)
+        {
+            return 2;
+        }
+        else
+        {
+             throw new Exception("Durée supplémentaire hors plage attendue");
+        }
+    }
+    public function duree_supp_semaine($date,$id_employe)
+    {
+        $semaine = $this->get_semaine($date);
+        $sql = "SELECT * FROM presence WHERE id_employe = ? AND date_travail BETWEEN ? AND ? ORDER BY date_travail ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id_employe, $semaine[0], $semaine[1]]);
+        $list=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        $duree=0;
+
+        foreach($list as $presence)
+        {
+            if($presence['entree'] != null && 
+                $presence['sortie'] != null && 
+                ($this->is_ferier($presence['date_travail'])>1 || 
+                $this->is_weekend($presence['date_travail'])>1 ||
+                $this->h_supplementaire($presence['entree'],$presence['sortie'],$id_employe,$presence['date_travail'])>1)
+            )
+            {
+                $debut = strtotime($presence['entree']);
+                $fin = strtotime($presence['sortie']);
+                $duree += ($fin - $debut) / 3600;
+            }
+        }
+        return $duree;
+    }
+
     public function is_ferier($date)
     {
         $dt   = DateTime::createFromFormat('Y-m-d', $date);
@@ -36,6 +91,18 @@ class HpresenceModel {
         }
         return 1;
     }
+    public function is_heure_supp($heure,$id_employe,$date)
+    {
+        $config_poste = $this->get_config_poste($id_employe,$date);
+        if(
+            strtotime($heure)<strtotime($config_poste['entree']) ||
+            strtotime($heure)>strtotime($config_poste['sortie'])
+        )
+        {
+            return true;
+        }
+        return false;
+    }
     public function h_supplementaire($heure_debut,$heure_fin,$id_employe,$date)
     {
         $duree=strtotime($heure_fin) - strtotime($heure_debut);
@@ -48,7 +115,15 @@ class HpresenceModel {
             strtotime($heure_fin)>strtotime($config_poste['sortie'])
         )
         {
-            return 1.3;
+            $h_supp=this->condition_heure_supp($date,$id_employe,$duree);
+            if($h_supp ==1)
+            {
+                return 1.3;
+            }            
+            else if($h_supp ==2)
+            {
+                return 1.5;
+            }
         }
         return 1;
     }
@@ -63,7 +138,7 @@ class HpresenceModel {
         $stmt->execute([$id_employe,$date,$date,$date]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function get_salaire_heure($id_employe, $date , $option)
+    public function get_salaire_heure($id_employe, $date)
     {
         $config_poste = $this->get_config_poste($id_employe, $date);
         $pourcentage=[1,1.2,1.5,2];
@@ -75,10 +150,10 @@ class HpresenceModel {
         [$date,$date,$date]);
         $retour=$salaire[0]['salaire'] ?? 0;
         $retour=$retour/$config_poste['duree_travail']/30;
-        $retour=$retour*$pourcentage[$option-1];
 
         return $retour;
     }
+
 
 
 }
