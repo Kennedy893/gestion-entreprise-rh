@@ -17,3 +17,9 @@ SELECT
     ))) AS anciennete_moyenne
 FROM contrat_employe
 WHERE (date_fin IS NULL OR date_fin >= DATE '2025-01-01');
+
+
+AGE : 18 ans firy tal ity anne iity avoka janvie fevrier mars
+Fin de contrat  : calculer la anne ou mois ou le jour entre la date_debut et dureer 
+conger compter le conger dans l'absnece 
+    
