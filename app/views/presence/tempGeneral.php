@@ -4,63 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistiques Hebdomadaires</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 16px; color: #222; }
+        h2 { margin-bottom: 12px; }
+        form { margin-top: 12px; }
+        input, button { padding: 6px 8px; }
+        input[type="date"] {
+            border: 1px solid #ddd; border-radius: 4px; outline: none;
+        }
+        input[type="date"]:focus {
+            border-color: #1976d2; box-shadow: 0 0 0 2px rgba(25,118,210,0.15);
+        }
+        button {
+            background: #1976d2; color: #fff; border: 1px solid #1976d2; border-radius: 4px; cursor: pointer;
+        }
+        button:hover { background: #155fa7; border-color: #155fa7; }
+    </style>
 </head>
 <body>
-    <h2>Statistiques de présence sur une semaine</h2>
+    <h2>Feuille de temps - Sélection de la date</h2>
 
-    <table border="1" cellpadding="5">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Employés en fonction</th>
-                <th>Moyenne heure de travail</th>
-                <th>Moyenne heure supplémentaire</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2025-03-03</td>
-                <td>8</td>
-                <td>7.50 h</td>
-                <td>1.20 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-04</td>
-                <td>9</td>
-                <td>7.40 h</td>
-                <td>1.00 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-05</td>
-                <td>10</td>
-                <td>7.60 h</td>
-                <td>1.10 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-06</td>
-                <td>9</td>
-                <td>7.30 h</td>
-                <td>0.90 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-07</td>
-                <td>8</td>
-                <td>7.20 h</td>
-                <td>1.00 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-08</td>
-                <td>7</td>
-                <td>6.80 h</td>
-                <td>0.80 h</td>
-            </tr>
-            <tr>
-                <td>2025-03-09</td>
-                <td>6</td>
-                <td>6.50 h</td>
-                <td>0.70 h</td>
-            </tr>
-        </tbody>
-    </table>
+    <form method="get" action="<?php echo constant('BASE_URL'); ?>/time/timecards">
+        <label for="date">Date :</label>
+        <input type="date" id="date" name="date" required>
+        <button type="submit">Voir les détails</button>
+    </form>
 </body>
 </html>

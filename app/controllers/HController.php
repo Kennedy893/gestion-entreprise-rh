@@ -93,9 +93,15 @@ class HController {
         
         Flight::redirect(constant('BASE_URL').'/time/presences');
     }
+    public function into_temp_general()
+    {
+
+        Flight::render('presence/tempGeneral');
+    }
     public function into_timecards()
     {
-        Flight::render('presence/tempGeneral');
+
+        Flight::render('presence/tempDetails');
     }
     public function into_employees()
     {
