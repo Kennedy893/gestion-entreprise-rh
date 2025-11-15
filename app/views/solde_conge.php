@@ -6,6 +6,8 @@
     <title>Document</title>
 </head>
 <body>
+    <?php include("app/views/bar/sidebar.php")?>
+
     <h1>Solde de congé</h1>
 
     <table width="500" border="1">

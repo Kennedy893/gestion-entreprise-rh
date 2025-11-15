@@ -250,6 +250,8 @@
 </head>
 
 <body>
+    <?php include("app/views/bar/sidebar.php")?>
+
     <div class="container">
         <div class="header">
             <div class="logo">

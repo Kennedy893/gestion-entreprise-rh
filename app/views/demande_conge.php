@@ -6,6 +6,8 @@
     <title>Document</title>
 </head>
 <body>
+    <?php include("app/views/bar/sidebar.php")?>
+
     <form action="" method="post">
         <label for="date_debut">Date début</label>
         <input type="date" name="date_debut">

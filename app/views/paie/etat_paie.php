@@ -15,7 +15,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px; /* Largeur du sidebar */
             padding: 20px;
+            transition: margin-left 0.3s ease;
         }
 
         .container {
@@ -341,7 +348,19 @@
             border-color: transparent;
         }
 
+        /* Responsive pour sidebar */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 70px; /* Sidebar réduit */
+            }
+        }
+
         @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
             .header-top {
                 flex-direction: column;
                 align-items: flex-start;
@@ -367,121 +386,137 @@
                 padding: 12px 10px;
             }
         }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
-    <?php include("bar/sidebar.php")?>
-    <div class="container">
-        <div class="header">
-            <div class="header-top">
-                <div class="company-info">
-                    <h1>📊 Système de Gestion de Paie</h1>
-                    <p>Tableau de bord des salaires - Période courante</p>
+    <?php include("app/views/bar/sidebar.php")?>
+    
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <div class="header-top">
+                    <div class="company-info">
+                        <h1>📊 Système de Gestion de Paie</h1>
+                        <p>Tableau de bord des salaires - Période courante</p>
+                    </div>
+                    <div class="date-badge">
+                        📅 <?= formatDate($data['resume']['date_generation']) ?>
+                    </div>
                 </div>
-                <div class="date-badge">
-                    📅 <?= formatDate($data['resume']['date_generation']) ?>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Employés</div>
+                        <div class="stat-value"> <?= $data['resume']['total_employes'] ?> </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Masse Salariale Brute</div>
+                        <div class="stat-value"> <?= moneyFormat($data['resume']['masse_brut']) ?> </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Net à Payer</div>
+                        <div class="stat-value"> <?= moneyFormat($data['resume']['total_net']) ?> </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Charges Sociales</div>
+                        <div class="stat-value"> <?= moneyFormat($data['resume']['charges_sociales']) ?> </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Employés</div>
-                    <div class="stat-value"> <?= $data['resume']['total_employes'] ?> </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Masse Salariale Brute</div>
-                    <div class="stat-value"> <?= moneyFormat($data['resume']['masse_brut']) ?> </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Net à Payer</div>
-                    <div class="stat-value"> <?= moneyFormat($data['resume']['total_net']) ?> </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Charges Sociales</div>
-                    <div class="stat-value"> <?= moneyFormat($data['resume']['charges_sociales']) ?> </div>
-                </div>
-            </div>
-        </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Employé</th>
+                                <th>Date d'embauche</th>
+                                <th>Absence (h)</th>
+                                <th>Salaire de base</th>
+                                <th>Avantage</th>
+                                <th>Heures sup.</th>
+                                <th>Salaire Brut</th>
+                                <th>CNAPS 1%</th>
+                                <th>CNAPS 8%</th>
+                                <th>OSTIE 1%</th>
+                                <th>OSTIE 5%</th>
+                                <th>Autres retenues</th>
+                                <th>Total retenues</th>
+                                <th>Rev. imposable</th>
+                                <th>IRSA</th>
+                                <th>Salaire Net</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-
-        <div class="table-card">
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Employé</th>
-                            <th>Date d'embauche</th>
-                            <th>Absence (h)</th>
-                            <th>Salaire de base</th>
-                            <th>Avantage</th>
-                            <th>Heures sup.</th>
-                            <th>Salaire Brut</th>
-                            <th>CNAPS 1%</th>
-                            <th>CNAPS 8%</th>
-                            <th>OSTIE 1%</th>
-                            <th>OSTIE 5%</th>
-                            <th>Autres retenues</th>
-                            <th>Total retenues</th>
-                            <th>Rev. imposable</th>
-                            <th>IRSA</th>
-                            <th>Salaire Net</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    <?php foreach ($data['details'] as $d ) { ?>
-                        <tr>
-                            <td># <?= $d['id_employe'] ?> </td>
-                            <td>
-                                <div class="employee-cell">
-                                    <div class="avatar">EMP</div>
-                                    <div class="employee-info">
-                                        <span class="employee-name"><?= $d['nom'] . ' ' . $d['prenom']  ?></span>
-                                        <span class="employee-position"> <?= $d['label'] ?> </span>
+                        <?php foreach ($data['details'] as $d ) { ?>
+                            <tr>
+                                <td># <?= $d['id_employe'] ?> </td>
+                                <td>
+                                    <div class="employee-cell">
+                                        <div class="avatar">EMP</div>
+                                        <div class="employee-info">
+                                            <span class="employee-name"><?= $d['nom'] . ' ' . $d['prenom']  ?></span>
+                                            <span class="employee-position"> <?= $d['label'] ?> </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td> <?= $d['date_debut'] ?> </td>
-                            <td><span class="badge badge-success">0h</span></td>
-                            <td class="amount"> <?= moneyFormat($d['salaire']) ?> </td>
-                            <td class="amount"> <?= moneyFormat($d['avantages']) ?> </td>
-                            <td class="amount amount-positive"> <?= moneyFormat($d['heure_sup']) ?> </td>
-                            <td class="amount" style="font-weight: 700;"> <?= moneyFormat($d['salaire_brut']) ?> </td>
-                            <td> <?= moneyFormat($d['cnaps_1']) ?> </td>
-                            <td> <?= moneyFormat($d['cnaps_8']) ?> </td>
-                            <td> <?= moneyFormat($d['ostie_1']) ?> </td>
-                            <td> <?= moneyFormat($d['ostie_5']) ?> </td>
-                            <td> <?= moneyFormat($d['autres_ret']) ?> </td>
-                            <td class="amount amount-negative"> <?= moneyFormat($d['total_ret']) ?> </td>
-                            <td class="amount"> <?= moneyFormat($d['revenu_impo']) ?> </td>
-                            <td class="amount amount-negative"> <?= moneyFormat($d['irsa']) ?> </td>
-                            <td class="amount" style="font-weight: 700; color: #38a169;"> <?= moneyFormat($d['salaire_net']) ?> </td>
-                            <td>
-                                <button class="download-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/<?= $d['id_employe'] ?>`">
-                                    📄 Bulletin
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                        
-                        
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination">
-                <div class="pagination-info">
-                    Affichage 1-2 sur 2 employés
+                                </td>
+                                <td> <?= $d['date_debut'] ?> </td>
+                                <td><span class="badge badge-success">0h</span></td>
+                                <td class="amount"> <?= moneyFormat($d['salaire']) ?> </td>
+                                <td class="amount"> <?= moneyFormat($d['avantages']) ?> </td>
+                                <td class="amount amount-positive"> <?= moneyFormat($d['heure_sup']) ?> </td>
+                                <td class="amount" style="font-weight: 700;"> <?= moneyFormat($d['salaire_brut']) ?> </td>
+                                <td> <?= moneyFormat($d['cnaps_1']) ?> </td>
+                                <td> <?= moneyFormat($d['cnaps_8']) ?> </td>
+                                <td> <?= moneyFormat($d['ostie_1']) ?> </td>
+                                <td> <?= moneyFormat($d['ostie_5']) ?> </td>
+                                <td> <?= moneyFormat($d['autres_ret']) ?> </td>
+                                <td class="amount amount-negative"> <?= moneyFormat($d['total_ret']) ?> </td>
+                                <td class="amount"> <?= moneyFormat($d['revenu_impo']) ?> </td>
+                                <td class="amount amount-negative"> <?= moneyFormat($d['irsa']) ?> </td>
+                                <td class="amount" style="font-weight: 700; color: #38a169;"> <?= moneyFormat($d['salaire_net']) ?> </td>
+                                <td>
+                                    <button class="download-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/<?= $d['id_employe'] ?>`">
+                                        📄 Bulletin
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="pagination-buttons">
-                    <button class="page-btn">‹ Précédent</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">Suivant ›</button>
+
+                <div class="pagination">
+                    <div class="pagination-info">
+                        Affichage 1-2 sur 2 employés
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="page-btn">‹ Précédent</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">Suivant ›</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-</html> 
+</html>

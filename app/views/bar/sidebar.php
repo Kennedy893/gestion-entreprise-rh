@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,21 +147,23 @@
                 width: 70px;
                 overflow: visible;
             }
-            
-            .sidebar-header h2, .sidebar-header p, .menu-item span {
+
+            .sidebar-header h2,
+            .sidebar-header p,
+            .menu-item span {
                 display: none;
             }
-            
+
             .menu-item {
                 justify-content: center;
                 padding: 18px 0;
             }
-            
+
             .menu-item i {
                 margin-right: 0;
                 font-size: 1.4rem;
             }
-            
+
             .content {
                 margin-left: 70px;
             }
@@ -168,6 +171,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -175,68 +179,39 @@
             <h2>Espace Employé</h2>
             <p>Gestion RH</p>
         </div>
-        
+
         <div class="sidebar-menu">
-            <div class="menu-item active">
+            <div class="menu-item active" data-url="<?= constant('BASE_URL') ?>/dashboard">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Tableau de Bord</span>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/paie">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>État de Paie</span>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/time/employees">
                 <i class="fas fa-user-check"></i>
                 <span>Présence</span>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/liste_conge">
                 <i class="fas fa-umbrella-beach"></i>
                 <span>Congé</span>
             </div>
         </div>
+
+        <script>
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        </script>
     </div>
-    
+
     <!-- Contenu principal -->
-    <div class="content">
-        <div class="content-header">
-            <h1>Tableau de Bord</h1>
-            <p>Bienvenue dans votre espace personnel</p>
-        </div>
-        
-        <div class="dashboard-cards">
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-tachometer-alt"></i>
-                </div>
-                <h3>Tableau de Bord</h3>
-                <p>Vue d'ensemble de vos informations et activités récentes.</p>
-            </div>
-            
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-                <h3>État de Paie</h3>
-                <p>Consultez vos fiches de paie, historiques et relevés de salaire.</p>
-            </div>
-            
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-user-check"></i>
-                </div>
-                <h3>Présence</h3>
-                <p>Suivez vos heures de travail, absences et pointages.</p>
-            </div>
-            
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-umbrella-beach"></i>
-                </div>
-                <h3>Congé</h3>
-                <p>Gérez vos demandes de congés et consultez votre solde.</p>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Gestion des clics sur les éléments du menu
@@ -246,10 +221,10 @@
                 document.querySelectorAll('.menu-item').forEach(el => {
                     el.classList.remove('active');
                 });
-                
+
                 // Ajouter la classe active à l'élément cliqué
                 this.classList.add('active');
-                
+
                 // Mettre à jour le titre de la page
                 const pageTitle = this.querySelector('span').textContent;
                 document.querySelector('.content-header h1').textContent = pageTitle;
@@ -257,4 +232,5 @@
         });
     </script>
 </body>
+
 </html>

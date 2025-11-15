@@ -22,6 +22,8 @@
     </style>
 </head>
 <body>
+    <?php include("app/views/bar/sidebar.php")?>
+
     <h2>Formulaire de Pointage</h2>
 
     <?php if (isset($_GET['error'])): ?>
