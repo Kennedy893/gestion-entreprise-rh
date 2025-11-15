@@ -33,3 +33,7 @@ use app\models\AdminModel;
 // Flight::map('AdminModel', function() {
 //     return new AdminModel(Flight::db());  
 // });
+Flight::map('DashboardModel', function () {
+    return new \app\models\DashboardModel(Flight::db());
+});
+
