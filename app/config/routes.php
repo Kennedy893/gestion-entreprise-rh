@@ -14,6 +14,7 @@ $hController = new HController();
 $router->group('/time' , function () use ($router,$hController){
     $router->get('/presences' , [ $hController, 'into_presence' ]);
     $router->post('/presences' , [ $hController, 'insert_presence' ]);
+    $router->get('/employees' , [ $hController, 'into_employees' ]);
     $router->get('/releves' , [ $hController, 'into_releves' ]);
     $router->get('/timecards' , [ $hController, 'into_timecards' ]);
 }) ;

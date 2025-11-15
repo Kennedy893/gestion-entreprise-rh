@@ -97,9 +97,79 @@ class HController {
     {
         Flight::render('presence/tempGeneral');
     }
+    public function into_employees()
+    {
+        $employees = Flight::HModel()->get_generalised("employe", "*", [], [], "ORDER BY nom ASC",[]);
+        $data = [ 'employees' => $employees ];
+        Flight::render('presence/liste', $data);
+    }
     public function into_releves()
     {
-        Flight::render('presence/releve');
+        $id_employe = Flight::request()->query->id_employe;
+        $annee = Flight::request()->query->annee;
+        $mois = Flight::request()->query->mois;
+        $employe=Flight::HModel()->get_generalised("employe", "*", ["id"], [$id_employe], "",[])[0];
+        $days=Flight::HpresenceModel()->jours_du_mois($annee,$mois);
+
+        $presences = Flight::HModel()->get_generalised(
+            "presence",
+            "*",
+            ["id_employe"],
+            [$id_employe],
+            "AND EXTRACT(YEAR FROM date_travail) = ?::int AND EXTRACT(MONTH FROM date_travail) = ?::int ORDER BY date_travail ASC",
+            [$annee, $mois]
+        );
+        $retour=[];
+        foreach ($days as $day)
+        {
+            $presence_jour=[];
+            $montant=0;
+            foreach($presences as $presence)
+            {
+                if($presence['date_travail']==$day['date'] && $presence['entree'] != null && $presence['sortie'] != null)
+                {
+                    $presence_jour[]=$presence;
+                    $montant+=$presence['montant'];
+                }
+            }
+            $heure_normale=0;
+            $heure_supplementaire=0;
+            $montant_normale=0;
+            $montant_supplementaire=0;
+            foreach($presence_jour as $presence)
+            {
+                $duree= (strtotime($presence['sortie']) - strtotime($presence['entree']))/3600;
+                $salaire_normal=Flight::HpresenceModel()->get_salaire_heure($id_employe,$presence['date_travail'])*$duree;
+                $montant=$presence['montant'];
+                if($montant!=null)
+                {
+                    if($montant<=$salaire_normal)
+                    {
+                        $heure_normale+=$duree;
+                        $montant_normale+=$montant;
+                    }
+                    else
+                    {
+                        $heure_supplementaire+=$duree;
+                        $montant_supplementaire+=$montant;
+                    }
+                }
+
+            }
+            $retour[]= [
+                'date' => $day['date'],
+                'presence' => $presence_jour,
+                'montant_total' => $montant,
+                'heure_normale' => $heure_normale,
+                'heure_supplementaire' => $heure_supplementaire,
+                'montant_normale' => $montant_normale,
+                'montant_supplementaire' => $montant_supplementaire
+            ];
+        }
+        Flight::render('presence/releve',['retour'=> $retour, 
+        'employe' => $employe, 
+        'annee' => $annee, 
+        'mois' => $mois]);
     }
 
 }

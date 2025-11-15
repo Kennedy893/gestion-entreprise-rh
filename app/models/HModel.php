@@ -85,6 +85,6 @@ class HModel {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($params);
     }
-
+    
 
 }

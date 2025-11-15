@@ -6,6 +6,8 @@ use Flight;
 use PDO;
 use DateTime;
 use Exception;  
+use DatePeriod;
+use DateInterval;
 
 class HpresenceModel {
 
@@ -14,6 +16,24 @@ class HpresenceModel {
     public function __construct($db)
     {
         $this->db = $db;
+    }
+    function jours_du_mois(int $annee, int $mois): array 
+    {
+        $start = new DateTime(sprintf('%04d-%02d-01', $annee, $mois));
+        $end   = (clone $start)->modify('first day of next month');
+        $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+        // 0=dimanche ... 6=samedi
+        $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+
+        $result = [];
+        foreach ($period as $d) {
+            $result[] = [
+                'date' => $d->format('Y-m-d'),
+                'jour' => $jours[(int)$d->format('w')],
+            ];
+        }
+        return $result;
     }
     public function get_semaine($date)
     {
