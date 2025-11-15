@@ -42,3 +42,7 @@ Flight::map('HModel', function() {
 Flight::map('HController', function() {
     return new \app\controllers\HController();  
 });
+
+Flight::map('HpresenceModel', function() {
+    return new \app\models\HpresenceModel(Flight::db());  
+});

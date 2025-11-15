@@ -13,19 +13,20 @@ class HModel {
     {
         $this->db = $db;
     }
-    public function get_generalised($table, $colonne_name, $colonnes, $valeurs, $request)
+    public function get_generalised($table, $colonne_name, $colonnes, $valeurs, $request,$val_request)
     {
         $sql = "SELECT ".$colonne_name." FROM ".$table." WHERE 1=1";
-        if($request != null && $request != "")
-        {
-            $sql .= " ".$request;
-        }
         foreach ($colonnes as $colonne) 
         {
             $sql .= " AND " . $colonne . " = ?";
         }
+        if($request != null && $request != "")
+        {
+            $sql .= " ".$request;
+        }
         $stmt = $this->db->prepare($sql);
-        $stmt->execute($valeurs);
+        $all_valeurs = array_merge($valeurs, $val_request);
+        $stmt->execute($all_valeurs);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -58,30 +59,32 @@ class HModel {
         return $stmt->execute($valeurs);
     }
 
-    public function update_generalised($table, $colonnes, $valeurs, $where_colonnes, $where_valeurs)
+    public function update_generalised($table, $colonnes, $valeurs, $where_colonnes, $where_valeurs, $request = '', $val_request = [])
     {
-        $sql = "UPDATE ".$table." SET ";
-        foreach ($colonnes as $colonne)
-        {
-            if($colonne != end($colonnes))
-            {
-                $sql.= $colonne . " = ?, ";
-            }
-            else
-            {
-                $sql.= $colonne . " = ? ";
-            }
-        }
-        $sql .= " WHERE 1=1 ";
-        foreach ($where_colonnes as $where_colonne)
-        {
-            $sql .= " AND " . $where_colonne . " = ? ";
-        }
-        $stmt = $this->db->prepare($sql);
-        $all_valeurs = array_merge($valeurs, $where_valeurs);
-        return $stmt->execute($all_valeurs);
-    }
+        $setParts = array_map(fn($c) => "$c = ?", $colonnes);
+        $sql = "UPDATE {$table} SET " . implode(', ', $setParts) . " WHERE 1=1";
 
+        $params = $valeurs;
+
+        foreach ($where_colonnes as $i => $wc) {
+            $val = $where_valeurs[$i] ?? null;
+            if ($val === null) {
+                $sql .= " AND {$wc} IS NULL";
+            } else {
+                $sql .= " AND {$wc} = ?";
+                $params[] = $val;
+            }
+        }
+
+        if (!empty($request)) {
+            $sql .= " " . $request;
+            if (!is_array($val_request)) { $val_request = [$val_request]; }
+            $params = array_merge($params, $val_request);
+        }
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
 
 
 }
