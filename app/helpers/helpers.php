@@ -37,6 +37,15 @@
         }
     }
 
-    function getAllBesoin () {
-        return Flight::BesoinModel()->getAllBesoin();
+
+    function calculateTauxJournaliers ($montant) {
+        return $montant/30;
+    }
+
+    function calculateTauxHoraire ($montant) {
+        return ($montant / 173.33);
+    }
+
+    function calculMajorationHeureSup ($montant,$pourcentage) {
+        return $montant + ($montant * ($pourcentage/100));
     }

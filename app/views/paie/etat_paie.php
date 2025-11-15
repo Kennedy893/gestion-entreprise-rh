@@ -435,7 +435,7 @@
                             <td># <?= $d['id_employe'] ?> </td>
                             <td>
                                 <div class="employee-cell">
-                                    <div class="avatar">DJ</div>
+                                    <div class="avatar">EMP</div>
                                     <div class="employee-info">
                                         <span class="employee-name"><?= $d['nom'] . ' ' . $d['prenom']  ?></span>
                                         <span class="employee-position"> <?= $d['label'] ?> </span>

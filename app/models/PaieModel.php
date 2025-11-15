@@ -34,10 +34,12 @@ class PaieModel
         return $montant * ($pourcentage / 100);
     }
 
-    public function calculerIRSA($salaire)
+    public function calculerIRSA($salaire, $withDetails = false)
     {
         $impot = 0;
+        $details = [];
 
+        // Tranches IRSA
         $tranches = [
             ['min' => 0,       'max' => 350000,   'taux' => 0],
             ['min' => 350001,  'max' => 400000,   'taux' => 5],
@@ -47,17 +49,36 @@ class PaieModel
             ['min' => 4000001, 'max' => PHP_INT_MAX, 'taux' => 25]
         ];
 
+        // Calcul tranche par tranche
         foreach ($tranches as $t) {
             if ($salaire > $t['min']) {
                 $montant_tranche = min($salaire, $t['max']) - $t['min'];
-                $impot += $montant_tranche * ($t['taux'] / 100);
+                $impot_tranche = $montant_tranche * ($t['taux'] / 100);
+                $impot += $impot_tranche;
+
+                if ($withDetails) {
+                    $details[] = [
+                        'min' => $t['min'],
+                        'max' => $t['max'],
+                        'taux' => $t['taux'],
+                        'montant' => round($impot_tranche, 2)
+                    ];
+                }
             } else {
                 break;
             }
         }
 
+        if ($withDetails) {
+            return [
+                'total_irsa' => round($impot, 2),
+                'details' => $details
+            ];
+        }
+
         return round($impot, 2);
     }
+
 
 
     public function getAvantagesEmployesByContrat($id_contrat)
@@ -123,5 +144,32 @@ class PaieModel
                 "date_generation" => date("d F Y")
             ]
         ];
+    }
+
+
+    public function getContratEmployeByIdEmploye($id_employe, $date)
+    {
+        $stmt = $this->db->prepare(" SELECT * FROM contrat_employe ce JOIN employe e ON ce.id_employe = e.id
+            JOIN poste p ON ce.id_poste = p.id WHERE :date BETWEEN date_debut AND date_fin AND id_statut_contrat = 2 AND id_employe = :id_emp ");
+        $stmt->execute(['date' => $date, 'id_emp' => $id_employe]);
+
+        $emp = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $emp['avantages'] = $this->sommeAvantageEmployeByContrat($emp['id_employe']);
+        $emp['heure_sup'] = 15000;
+        $emp['salaire_brut'] = $emp['salaire'] + $emp['heure_sup'] + $emp['avantages'];
+        $emp['cnaps_1'] = $this->calculCnaps($emp['salaire_brut'], 1);
+        $emp['cnaps_8'] = $this->calculCnaps($emp['salaire_brut'], 8);
+        $emp['ostie_1'] = $this->calculOstie($emp['salaire_brut'], 1);
+        $emp['ostie_5'] = $this->calculOstie($emp['salaire_brut'], 5);
+        $emp['autres_ret'] = 0;
+        $emp['total_ret'] = $emp['cnaps_1'] + $emp['ostie_1'] + $emp['autres_ret'];
+        $emp['revenu_impo'] = $emp['salaire_brut'] - ($emp['total_ret']);
+        $emp['irsa'] = $this->calculerIRSA($emp['revenu_impo'],true)['total_irsa'];
+        $emp['irsa_details'] = $this->calculerIRSA($emp['revenu_impo'],true)['details'];
+        $emp['salaire_net'] = $emp['salaire_brut'] - ($emp['total_ret'] + $emp['irsa']);
+        $emp['label_avantage'] = $this->getAvantagesEmployesByContrat($emp['id']);
+
+        return $emp;
     }
 }
