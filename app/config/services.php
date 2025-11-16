@@ -4,7 +4,10 @@ use flight\Engine;
 use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
-use app\models\AdminModel;
+
+use app\models\CongeModel;
+use app\models\HpresenceModel;
+
 
 
 /** 
@@ -13,7 +16,8 @@ use app\models\AdminModel;
  */
 
 // uncomment the following line for MySQL
- $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
+       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
 
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
@@ -33,6 +37,7 @@ use app\models\AdminModel;
 // Flight::map('AdminModel', function() {
 //     return new AdminModel(Flight::db());  
 // });
+
 Flight::map('DashboardModel', function () {
     return new \app\models\DashboardModel(Flight::db());
 });

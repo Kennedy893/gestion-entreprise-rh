@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,40 +13,47 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
+
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
+
         .stat-card {
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         .stat-value {
             font-size: 2.5em;
             font-weight: bold;
             color: #2c3e50;
             margin: 10px 0;
         }
+
         .stat-label {
             color: #7f8c8d;
             font-size: 1.1em;
         }
+
         .age-search {
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
+
         .age-search input {
             padding: 10px;
             font-size: 16px;
@@ -54,6 +62,7 @@
             margin-right: 10px;
             width: 100px;
         }
+
         .age-search button {
             padding: 10px 20px;
             background: #3498db;
@@ -62,9 +71,11 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .age-search button:hover {
             background: #2980b9;
         }
+
         .result-display {
             margin-top: 20px;
             padding: 15px;
@@ -72,32 +83,34 @@
             border-radius: 4px;
             display: none;
         }
+
         .chart-container {
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 30px;
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <h1>Tableau de Bord RH - Statistiques</h1>
-        
+
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">TURNOVER des postes</div>
                 <div class="stat-value" id="turnover-value"><?php echo htmlspecialchars($turnover); ?></div>
                 <div>Nombre total de contrats</div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-label">ABSENTÉISME</div>
                 <div class="stat-value" id="absenteeism-value"><?php echo htmlspecialchars($absenteeism); ?></div>
                 <div>Total des absences</div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-label">ANCIENNETÉ MOYENNE</div>
                 <div class="stat-value" id="seniority-value"><?php echo htmlspecialchars($averageSeniority); ?></div>
@@ -122,7 +135,7 @@
     <script>
         // Graphique de distribution par âge
         const ageDistribution = <?php echo json_encode($ageDistribution); ?>;
-        
+
         const ages = ageDistribution.map(item => item.age);
         const counts = ageDistribution.map(item => parseInt(item.count_employees));
 
@@ -147,7 +160,8 @@
                         title: {
                             display: true,
                             text: "Nombre d'employés"
-                        }
+                        },
+                    
                     },
                     x: {
                         title: {
@@ -162,7 +176,7 @@
         function searchByAge() {
             const age = document.getElementById('age-input').value;
             const resultDiv = document.getElementById('age-result');
-            
+
             if (!age || age < 18 || age > 65) {
                 resultDiv.innerHTML = '<span style="color: red;">Veuillez entrer un âge valide (18-65)</span>';
                 resultDiv.style.display = 'block';
@@ -200,4 +214,5 @@
         });
     </script>
 </body>
+
 </html>
