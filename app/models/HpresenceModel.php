@@ -47,6 +47,66 @@ class HpresenceModel {
         $retour=[$debut,$fin];
         return $retour;
     }
+    public function get_plage_horaire($id_employe,$debut,$fin,$date)
+    {
+        $config_poste = $this->get_config_poste($id_employe,$date);
+        $plage_horaire=[];
+        if($config_poste==null)
+        {
+            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
+        }
+        if(
+            strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) < strtotime($config_poste['entree']) ||
+            strtotime($debut) > strtotime($config_poste['sortie']) &&
+            strtotime($fin) > strtotime($config_poste['sortie']) ||
+            strtotime($debut) >= strtotime($config_poste['entree']) &&
+            strtotime($fin) <= strtotime($config_poste['sortie'])
+        )
+        {
+            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin];
+        }
+        else if(
+           strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) >= strtotime($config_poste['entree']) &&
+            strtotime($fin) <= strtotime($config_poste['sortie'])
+        )
+        {
+            $debut_2=strtotime($config_poste['entree']);
+            $debut_2=$debut_2-60;
+            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$debut_2)];
+            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$fin];
+        }
+        else if(
+            strtotime($debut) >= strtotime($config_poste['entree']) &&
+            strtotime($debut) <= strtotime($config_poste['sortie']) &&
+            strtotime($fin) > strtotime($config_poste['sortie'])
+        )
+        {
+            $fin_1=strtotime($config_poste['sortie']);
+            $fin_1=$fin_1-60;
+            $fin_1=date('H:i:s',$fin_1);
+            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin_1];
+            $plage_horaire[]=['debut'=>$config_poste['sortie'],'fin'=>$fin];
+        }
+        else if(
+            strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) > strtotime($config_poste['sortie'])
+        )
+        {
+            $fin_1=strtotime($config_poste['entree']);
+            $fin_1=$fin_1-60;
+            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$fin_1)];
+
+            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$config_poste['sortie']];
+
+            $debut_2=strtotime($config_poste['sortie']);
+            $debut_2=$debut_2+60;
+            $plage_horaire[]=['debut'=>date('H:i:s',$debut_2),'fin'=>$fin];
+        }
+        
+        return $plage_horaire;
+    }
     public function condition_heure_supp($date,$id_employe,$duree)
     {
         $duree_semaine=$this->duree_supp_semaine($date,$id_employe);
