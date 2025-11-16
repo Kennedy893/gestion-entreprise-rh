@@ -3,6 +3,8 @@
 use app\controllers\WelcomeController;
 use app\controllers\HController;
 use app\controllers\CongeController;
+use app\controllers\DashboardController;
+
 use flight\Engine;
 use flight\net\Router;
 //use Flight;
@@ -33,3 +35,7 @@ $router->get('/', [ $Welcome_Controller, 'home' ]);
 $router->get('/paie', [$Paie_Controller,'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
 $router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
+
+$DashboardController = new DashboardController();
+$router->get('/dashboard', [$DashboardController, 'showDashboardPage']);
+$router->get('/dashboard/employees-by-age', [$DashboardController, 'getEmployeesByAge']);

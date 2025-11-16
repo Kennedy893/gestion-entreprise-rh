@@ -55,3 +55,7 @@ Flight::map('CongeModel', function() {
 Flight::map('PaieModel', function () {
     return new \app\models\PaieModel(Flight::db());
 });
+Flight::map('DashboardModel', function () {
+    return new \app\models\DashboardModel(Flight::db());
+});
+
