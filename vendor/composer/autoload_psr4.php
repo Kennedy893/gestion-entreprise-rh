@@ -7,5 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'flight\\' => array($vendorDir . '/flightphp/runway/src'),
+    'Svg\\' => array($vendorDir . '/dompdf/php-svg-lib/src/Svg'),
+    'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
+    'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
+    'FontLib\\' => array($vendorDir . '/dompdf/php-font-lib/src/FontLib'),
+    'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
+    'Box\\Spout\\' => array($vendorDir . '/box/spout/src/Spout'),
     'Ahc\\Cli\\' => array($vendorDir . '/adhocore/cli/src'),
 );
