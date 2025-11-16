@@ -160,7 +160,7 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/auth/login-employe" method="POST">
+            <form action="<?= constant('BASE_URL') ?>/time/presences" method="GET">
                 <div class="form-group">
                     <label for="matricule">Matricule</label>
                     <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Votre matricule" required>
@@ -174,19 +174,7 @@
                 <button type="submit" class="login-btn">Se connecter</button>
             </form>
             
-            <button class="back-btn" onclick="window.location.href='index.php'">
-                ← Retour au choix du profil
-            </button>
-            
-            <div class="employee-features">
-                <h4>📋 Accès Employé :</h4>
-                <ul>
-                    <li>Consulter vos fiches de paie</li>
-                    <li>Vérifier votre présence</li>
-                    <li>Gérer vos congés</li>
-                    <li>Informations personnelles</li>
-                </ul>
-            </div>
+           
         </div>
     </div>
 </body>

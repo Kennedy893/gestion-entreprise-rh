@@ -8,8 +8,8 @@
 <body>
     <h1>HOME</h1>
 
-    <a href="<?= constant('BASE_URL') ?>loginRh">Admin RH</a>
-    <a href="<?= constant('BASE_URL') ?>loginManger">Manger Poste</a>
-    <a href="<?= constant('BASE_URL') ?>login">Solde de congé</a>
+    <a href="<?= constant('BASE_URL') ?>/loginRh">Admin RH</a>
+    <a href="<?= constant('BASE_URL') ?>/loginManager">Manger Poste</a>
+    <a href="<?= constant('BASE_URL') ?>/login">Solde de congé</a>
 </body>
 </html>

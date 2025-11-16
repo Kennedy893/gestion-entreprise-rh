@@ -12,6 +12,9 @@ use flight\net\Router;
 
 $Welcome_Controller = new WelcomeController();
 $router->get('/', [ $Welcome_Controller, 'home' ]); 
+$router->get('/loginRH', [ $Welcome_Controller, 'homeRH' ]); 
+$router->get('/loginManager', [ $Welcome_Controller, 'homeManager' ]); 
+$router->get('/login', [ $Welcome_Controller, 'homeEmp' ]); 
 
 $hController = new HController();
 $router->group('/time' , function () use ($router,$hController){

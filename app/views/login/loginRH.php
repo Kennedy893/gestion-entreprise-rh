@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, #4878bbff 0%, #384da1ff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,7 +31,7 @@
         }
 
         .login-header {
-            background: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+            background: linear-gradient(135deg, #2f5985ff 0%, #276749 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -76,14 +76,14 @@
 
         .form-control:focus {
             outline: none;
-            border-color: #48bb78;
+            border-color: #487abbff;
             box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
         }
 
         .login-btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, #4889bbff 0%, #3881a1ff 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -114,8 +114,8 @@
         }
 
         .back-btn:hover {
-            border-color: #48bb78;
-            color: #48bb78;
+            border-color: #4887bbff;
+            color: #4885bbff;
         }
 
         .rh-features {
@@ -126,7 +126,7 @@
         }
 
         .rh-features h4 {
-            color: #2f855a;
+            color: #2f5a85ff;
             margin-bottom: 10px;
             font-size: 14px;
         }
@@ -147,7 +147,7 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: #48bb78;
+            color: #486abbff;
             font-weight: bold;
         }
     </style>
@@ -160,7 +160,7 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/auth/login-rh" method="POST">
+            <form action="<?= constant('BASE_URL') ?>/dashboard" method="GET">
                 <div class="form-group">
                     <label for="email">Email RH</label>
                     <input type="email" id="email" name="email" class="form-control" placeholder="email@entreprise.com" required>
@@ -178,15 +178,7 @@
                 ← Retour au choix du profil
             </button>
             
-            <div class="rh-features">
-                <h4>👥 Accès RH :</h4>
-                <ul>
-                    <li>Gestion complète des employés</li>
-                    <li>Calcul et édition des paies</li>
-                    <li>Suivi des présences et congés</li>
-                    <li>Rapports et statistiques</li>
-                </ul>
-            </div>
+           
         </div>
     </div>
 </body>

@@ -230,7 +230,7 @@
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">TURNOVER des postes</div>
+                    <div class="stat-label">Contrats des postes</div>
                     <div class="stat-value" id="turnover-value"><?php echo htmlspecialchars($turnover); ?></div>
                     <div>Nombre total de contrats</div>
                 </div>
@@ -248,15 +248,15 @@
                 </div>
             </div>
 
-            <div class="age-search">
-                <h3>🔍 Recherche d'employés par âge</h3>
+            <!-- <div class="age-search">
+                <h3> Recherche d'employés par âge</h3>
                 <p>Entrez un âge pour voir le nombre d'employés de cet âge avec contrat actif :</p>
                 <div class="search-controls">
                     <input type="number" id="age-input" min="18" max="65" placeholder="Ex: 25">
                     <button onclick="searchByAge()">Rechercher</button>
                 </div>
                 <div id="age-result" class="result-display"></div>
-            </div>
+            </div> -->
 
             <div class="chart-container">
                 <h3>📈 Distribution des employés par âge (contrats actifs)</h3>

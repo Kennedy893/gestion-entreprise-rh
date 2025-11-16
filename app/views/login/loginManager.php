@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            background: linear-gradient(135deg, #2f5985ff 0%, #2f5985ff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,7 +31,7 @@
         }
 
         .login-header {
-            background: linear-gradient(135deg, #c05621 0%, #9c4221 100%);
+            background: linear-gradient(135deg, #2f5985ff 0%, #2f5985ff 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -83,7 +83,7 @@
         .login-btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            background: linear-gradient(135deg, #2f5985ff 0%, #2f5985ff 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -160,7 +160,7 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/auth/login-manager" method="POST">
+            <form action="<?= constant('BASE_URL') ?>/time/employees" method="GET">
                 <div class="form-group">
                     <label for="username">Nom d'utilisateur</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Votre identifiant" required>
