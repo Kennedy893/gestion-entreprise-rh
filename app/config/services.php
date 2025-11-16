@@ -5,6 +5,9 @@ use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
 use app\models\AdminModel;
+use app\models\AnnonceModel;
+use app\models\PosteModel;
+use app\models\ReferenceModel;
 
 
 
@@ -14,8 +17,7 @@ use app\models\AdminModel;
  */
 
 // uncomment the following line for MySQL
- $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
-
+$dsn = 'mysql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
 
@@ -34,3 +36,14 @@ use app\models\AdminModel;
 // Flight::map('AdminModel', function() {
 //     return new AdminModel(Flight::db());  
 // });
+Flight::map('annonceModel', function() {
+    return new AnnonceModel(Flight::db());  
+});
+
+Flight::map('posteModel', function() {
+    return new PosteModel(Flight::db());  
+});
+
+Flight::map('referenceModel', function() {
+    return new ReferenceModel(Flight::db());  
+});
