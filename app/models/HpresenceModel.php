@@ -45,6 +45,7 @@ class HpresenceModel {
         $debut = $startOfWeek->format('Y-m-d');
         $fin   = $endOfWeek->format('Y-m-d');
         $retour=[$debut,$fin];
+        return $retour;
     }
     public function condition_heure_supp($date,$id_employe,$duree)
     {

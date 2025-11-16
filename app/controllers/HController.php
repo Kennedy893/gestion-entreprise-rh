@@ -48,7 +48,7 @@ class HController {
                 {
                     try
                     {
-                        $valeur[]=Flight::HpresenceModel()->condition_heure_supp($valeur[1],$valeur[0],0);
+                        $test_heure_supp=Flight::HpresenceModel()->condition_heure_supp($valeur[1],$valeur[0],0);
                     } catch (Exception $e)
                     {
                         Flight::redirect(constant('BASE_URL').'/time/presences?error='.$e->getMessage());
@@ -76,7 +76,7 @@ class HController {
                 $mult=max($coeff);
                 $duree=strtotime($heure_sortie) - strtotime($heure_entree);
                 $valeur[3]=$valeur[3]*$mult*$duree/3600;
-
+                
                 if(Flight::HpresenceModel()->is_heure_supp($valeur[2],$valeur[0],$valeur[1]))
                 {
                     try
