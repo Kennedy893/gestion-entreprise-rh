@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,7 +129,8 @@
             color: #a0aec0;
         }
 
-        .filter-btn, .export-btn {
+        .filter-btn,
+        .export-btn {
             padding: 12px 24px;
             border: none;
             border-radius: 10px;
@@ -363,12 +365,14 @@
                 font-size: 12px;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 12px 10px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -380,6 +384,12 @@
                 <div class="date-badge">
                     📅 <?= formatDate($data['resume']['date_generation']) ?>
                 </div>
+            </div>
+
+            <div class="controls">
+                <button class="export-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/etats/export`">
+                    <span>📥</span> Exporter Excel
+                </button>
             </div>
 
             <div class="stats-grid">
@@ -430,42 +440,42 @@
                     </thead>
                     <tbody>
 
-                    <?php foreach ($data['details'] as $d ) { ?>
-                        <tr>
-                            <td># <?= $d['id_employe'] ?> </td>
-                            <td>
-                                <div class="employee-cell">
-                                    <div class="avatar">EMP</div>
-                                    <div class="employee-info">
-                                        <span class="employee-name"><?= $d['nom'] . ' ' . $d['prenom']  ?></span>
-                                        <span class="employee-position"> <?= $d['label'] ?> </span>
+                        <?php foreach ($data['details'] as $d) { ?>
+                            <tr>
+                                <td># <?= $d['id_employe'] ?> </td>
+                                <td>
+                                    <div class="employee-cell">
+                                        <div class="avatar">EMP</div>
+                                        <div class="employee-info">
+                                            <span class="employee-name"><?= $d['nom'] . ' ' . $d['prenom']  ?></span>
+                                            <span class="employee-position"> <?= $d['label'] ?> </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td> <?= $d['date_debut'] ?> </td>
-                            <td><span class="badge badge-success">0h</span></td>
-                            <td class="amount"> <?= moneyFormat($d['salaire']) ?> </td>
-                            <td class="amount"> <?= moneyFormat($d['avantages']) ?> </td>
-                            <td class="amount amount-positive"> <?= moneyFormat($d['heure_sup']) ?> </td>
-                            <td class="amount" style="font-weight: 700;"> <?= moneyFormat($d['salaire_brut']) ?> </td>
-                            <td> <?= moneyFormat($d['cnaps_1']) ?> </td>
-                            <td> <?= moneyFormat($d['cnaps_8']) ?> </td>
-                            <td> <?= moneyFormat($d['ostie_1']) ?> </td>
-                            <td> <?= moneyFormat($d['ostie_5']) ?> </td>
-                            <td> <?= moneyFormat($d['autres_ret']) ?> </td>
-                            <td class="amount amount-negative"> <?= moneyFormat($d['total_ret']) ?> </td>
-                            <td class="amount"> <?= moneyFormat($d['revenu_impo']) ?> </td>
-                            <td class="amount amount-negative"> <?= moneyFormat($d['irsa']) ?> </td>
-                            <td class="amount" style="font-weight: 700; color: #38a169;"> <?= moneyFormat($d['salaire_net']) ?> </td>
-                            <td>
-                                <button class="download-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/<?= $d['id_employe'] ?>`">
-                                    📄 Bulletin
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                        
-                        
+                                </td>
+                                <td> <?= $d['date_debut'] ?> </td>
+                                <td><span class="badge badge-success">0h</span></td>
+                                <td class="amount"> <?= moneyFormat($d['salaire']) ?> </td>
+                                <td class="amount"> <?= moneyFormat($d['avantages']) ?> </td>
+                                <td class="amount amount-positive"> <?= moneyFormat($d['heure_sup']) ?> </td>
+                                <td class="amount" style="font-weight: 700;"> <?= moneyFormat($d['salaire_brut']) ?> </td>
+                                <td> <?= moneyFormat($d['cnaps_1']) ?> </td>
+                                <td> <?= moneyFormat($d['cnaps_8']) ?> </td>
+                                <td> <?= moneyFormat($d['ostie_1']) ?> </td>
+                                <td> <?= moneyFormat($d['ostie_5']) ?> </td>
+                                <td> <?= moneyFormat($d['autres_ret']) ?> </td>
+                                <td class="amount amount-negative"> <?= moneyFormat($d['total_ret']) ?> </td>
+                                <td class="amount"> <?= moneyFormat($d['revenu_impo']) ?> </td>
+                                <td class="amount amount-negative"> <?= moneyFormat($d['irsa']) ?> </td>
+                                <td class="amount" style="font-weight: 700; color: #38a169;"> <?= moneyFormat($d['salaire_net']) ?> </td>
+                                <td>
+                                    <button class="download-btn" onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/<?= $d['id_employe'] ?>`">
+                                        📄 Bulletin
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php } ?>
+
+
                     </tbody>
                 </table>
             </div>
@@ -483,4 +493,5 @@
         </div>
     </div>
 </body>
-</html> 
+
+</html>

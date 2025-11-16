@@ -14,3 +14,4 @@ $router->get('/', [ $Welcome_Controller, 'home' ]);
 $router->get('/paie', [$Paie_Controller,'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
 $router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
+$router->get('/paie/etats/export',[$Paie_Controller, 'exportEtatDePaie']);
