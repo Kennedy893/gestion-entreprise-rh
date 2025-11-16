@@ -181,27 +181,19 @@
         </div>
 
         <div class="sidebar-menu">
-            <div class="menu-item active" data-url="<?= constant('BASE_URL') ?>/dashboard">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Tableau de Bord</span>
-            </div>
-            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/paie">
+            
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/paie/fiche/1">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <span>État de Paie</span>
+                <span>Fiche de Paie</span>
             </div>
-            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/time/employees">
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/time/presences">
                 <i class="fas fa-user-check"></i>
                 <span>Présence</span>
             </div>
-            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/liste_conge">
+            <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/demande_conge">
                 <i class="fas fa-umbrella-beach"></i>
                 <span>Congé</span>
             </div>
-             <div class="menu-item" data-url="<?= constant('BASE_URL') ?>/time/form-sheet">
-                <i class="fas fa-user-check"></i>
-                <span>Details</span>
-            </div>
-           
         </div>
 
         <script>

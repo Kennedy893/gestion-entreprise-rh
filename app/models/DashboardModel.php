@@ -44,6 +44,8 @@ class DashboardModel
     }
 
     public function getAbsenteeismStats()
+
+    //tsy ampy condition
     {
         $stmt = $this->db->prepare("SELECT COUNT(*) as absence_count FROM absence");
         $stmt->execute();

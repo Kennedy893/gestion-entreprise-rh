@@ -54,6 +54,8 @@
     </style>
 </head>
 <body>
+    <?php include("app/views/bar/sidebar.php")?>
+
 <div class="container">
 <?php
     $date = Flight::request()->query->date ?? date('Y-m-d');
