@@ -5,6 +5,9 @@ namespace app\controllers;
 use Flight;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 
 class PaieController
@@ -45,9 +48,9 @@ class PaieController
         $writer = WriterEntityFactory::createXLSXWriter();
         $writer->openToFile($tempPath);
 
-        $headerStyle = (new StyleBuilder()) 
+        $headerStyle = (new StyleBuilder())
             ->setFontSize(11)
-            ->setBackgroundColor("E2E8F0") 
+            ->setBackgroundColor("E2E8F0")
             ->build();
 
         // En-têtes du tableau
@@ -105,5 +108,30 @@ class PaieController
         header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
         readfile($tempPath);
         unlink($tempPath); // Nettoyage
+    }
+
+
+    public function exportFichePaiePDF($id_emp)
+    {
+        $date = date('Y-m-d');
+        $data = Flight::PaieModel()->getContratEmployeByIdEmploye($id_emp, $date);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+
+        ob_start();
+
+        $emp = $data;
+        include __DIR__ . '/../views/paie/fiche_paie_pdf.php';
+        $html = ob_get_clean();
+
+        $dompdf->loadHtml($html);
+
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $filename = "fiche_paie_" . $id_emp . "_" . date('Y_m_d') . ".pdf";
+        $dompdf->stream($filename, ["Attachment" => true]);
     }
 }
