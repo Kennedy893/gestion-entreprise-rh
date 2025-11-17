@@ -13,7 +13,11 @@ use app\models\CongeModel;
  */
 
 // uncomment the following line for MySQL
- $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+//  $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+
+ // pour PostgreSQL
+$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
+       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
 
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
@@ -29,7 +33,6 @@ use app\models\CongeModel;
 // Redis? This is where you'd set that up
 // $app->register('redis', Redis::class, [ $config['redis']['host'], $config['redis']['port'] ]);
 
-
 Flight::map('CongeModel', function() {
-    return new CongeModel(Flight::db());  
+    return new \app\models\CongeModel(Flight::db()); 
 });
