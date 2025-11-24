@@ -5,6 +5,4 @@ sql/initial_data.sql
 .vscode/
 app/config/config.php
 app/public/html
-vendor
-
 public/l-sql
