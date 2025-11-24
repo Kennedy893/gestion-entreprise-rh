@@ -379,7 +379,8 @@
         </div>
         <div class="submenu" id="submenu-conges">
           <a href="<?= constant('BASE_URL') ?>vers_demande_conge" class="submenu-item">Demander un congé</a>
-          <a href="<?= constant('BASE_URL') ?>vers_liste_conge" class="submenu-item">Liste des congés</a>
+          <a href="<?= constant('BASE_URL') ?>vers_liste_conge" class="submenu-item">Liste des congés (Manager)</a>
+          <a href="<?= constant('BASE_URL') ?>validation_rh" class="submenu-item">Liste des congés (RH)</a>
           <a href="<?= constant('BASE_URL') ?>vers_solde_conge" class="submenu-item">Solde de congés</a>
         </div>
       </div>
@@ -511,21 +512,48 @@
     });
 
     // Gestion des sous-items
-    // const submenuItems = document.querySelectorAll('.submenu-item');
-    // submenuItems.forEach(item => {
-    //   item.addEventListener('click', (e) => {
-    //     e.preventDefault();
+    const submenuItems = document.querySelectorAll('.submenu-item');
+    
+    // Détecter la page actuelle et ouvrir le sous-menu correspondant au chargement
+    const currentUrl = window.location.href;
+    submenuItems.forEach(item => {
+      const itemHref = item.getAttribute('href');
+      if (itemHref && currentUrl.includes(itemHref)) {
+        // Marquer le sous-item comme actif
+        item.classList.add('active');
         
-    //     // Retirer l'état actif des items principaux
-    //     navItems.forEach(i => i.classList.remove('active'));
+        // Retirer l'état actif des items principaux
+        navItems.forEach(i => i.classList.remove('active'));
         
-    //     // Retirer l'état actif des autres sous-items
-    //     submenuItems.forEach(i => i.classList.remove('active'));
+        // Ouvrir le sous-menu parent
+        const submenu = item.closest('.submenu');
+        if (submenu) {
+          const submenuId = submenu.id.replace('submenu-', '');
+          const parentMenuItem = document.querySelector(`[data-submenu="${submenuId}"]`);
+          
+          if (parentMenuItem) {
+            submenu.classList.add('open');
+            parentMenuItem.classList.add('open');
+          }
+        }
+      }
+    });
+    
+    // Gérer le clic sur les sous-items (sans empêcher la navigation)
+    submenuItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        // Ne pas utiliser e.preventDefault() pour permettre la navigation
         
-    //     // Ajouter l'état actif au sous-item cliqué
-    //     item.classList.add('active');
-    //   });
-    // });
+        // Retirer l'état actif des items principaux
+        navItems.forEach(i => i.classList.remove('active'));
+        
+        // Retirer l'état actif des autres sous-items
+        submenuItems.forEach(i => i.classList.remove('active'));
+        
+        // Ajouter l'état actif au sous-item cliqué
+        item.classList.add('active');
+      });
+    });
 
     // Responsive: fermer la sidebar sur mobile au clic sur un lien
     if (window.innerWidth <= 768) {

@@ -330,7 +330,7 @@
                     <label for="date_demande">
                         Date de demande <span class="required">*</span>
                     </label>
-                    <input type="date" id="date_demande" name="date_demande " required>
+                    <input type="date" id="date_demande" name="date_demande" required>
                 </div>
 
                 <div class="form-row">
