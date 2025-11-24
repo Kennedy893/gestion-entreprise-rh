@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -135,7 +136,8 @@
             color: #a0aec0;
         }
 
-        .filter-btn, .export-btn {
+        .filter-btn,
+        .export-btn {
             padding: 12px 24px;
             border: none;
             border-radius: 10px;
@@ -382,7 +384,8 @@
                 font-size: 12px;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 12px 10px;
             }
         }
@@ -404,6 +407,7 @@
         }
     </style>
 </head>
+
 <body>
     <?php include("app/views/bar/sidebar.php")?>
     

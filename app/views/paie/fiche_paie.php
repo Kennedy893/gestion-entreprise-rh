@@ -149,8 +149,10 @@
             overflow: hidden;
         }
 
-        thead {
-            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+    <style>
+        button {
+            background-color: #2563eb;
+            /* bleu vif */
             color: white;
         }
 
