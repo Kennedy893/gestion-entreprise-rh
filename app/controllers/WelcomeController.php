@@ -15,5 +15,15 @@ class WelcomeController {
     {
         Flight::render('home');
     }
+    public function homeRH()
+    {
+        Flight::render('login/loginRH');
+    }public function homeManager()
+    {
+        Flight::render('login/loginManager');
+    }public function homeEmp()
+    {
+        Flight::render('login/loginEmployer');
+    }
 
 }
