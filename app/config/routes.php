@@ -2,6 +2,10 @@
 
 use app\controllers\WelcomeController;
 use app\controllers\CongeController;
+use app\controllers\EmployeController;
+use app\controllers\PaieController;
+use app\controllers\HController;
+use app\controllers\MessageController;
 use flight\Engine;
 use flight\net\Router;
 //use Flight;
@@ -9,6 +13,7 @@ use flight\net\Router;
 
 $Welcome_Controller = new WelcomeController();
 $router->get('/', [ $Welcome_Controller, 'home' ]);
+
 
 $Conge_Controller = new CongeController();
 // DEMANDE CONGE
@@ -24,3 +29,31 @@ $router->post('/valider_conge_rh', [ $Conge_Controller, 'validerCongeRH' ]);
 // SOLDE
 $router->get('/vers_solde_conge', [ $Conge_Controller, 'consulterSolde' ]);
 $router->get('/details_solde', [ $Conge_Controller, 'detailsSolde' ]);
+
+$Message_Controller = new MessageController();
+$router->get('/vers_messagerie', [ $Message_Controller, 'messagerie' ]);
+$router->post('/envoyer_message', [ $Message_Controller, 'envoyer' ]);
+
+
+$Employe_Controller = new EmployeController();
+$router->get('/choose_consultation', [ $Employe_Controller, 'chooseConsultation' ]);
+$router->get('/choose_soumission', [ $Employe_Controller, 'chooseSoumission' ]);
+$router->get('/demande_attestation', [ $Employe_Controller, 'chooseAttestation' ]);
+$router->get('/demande_remboursement', [ $Employe_Controller, 'versRemboursement' ]);
+
+$Paie_Controller = new PaieController();
+$router->get('/paie', [$Paie_Controller,'etatDePaie']);
+$router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
+$router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
+$router->get('/paie/etats/export',[$Paie_Controller, 'exportEtatDePaie']);
+$router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
+
+$hController = new HController();
+$router->group('/time' , function () use ($router,$hController){
+    $router->get('/presences' , [ $hController, 'into_presence' ]);
+    $router->post('/presences' , [ $hController, 'insert_presence' ]);
+    $router->get('/employees' , [ $hController, 'into_employees' ]);
+    $router->get('/releves' , [ $hController, 'into_releves' ]);
+    $router->get('/timecards' , [ $hController, 'into_timecards' ]);
+    $router->get('/form-sheet' , [ $hController, 'into_temp_general' ]);
+}) ;

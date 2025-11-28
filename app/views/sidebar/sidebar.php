@@ -361,9 +361,19 @@
           <span class="nav-icon">📊</span>
           <span class="nav-text">Tableau de bord</span>
         </a>
-        <a href="#" class="nav-item">
+        
+        <div class="nav-item has-submenu" data-submenu="employes">
           <span class="nav-icon">👤</span>
           <span class="nav-text">Employés</span>
+          <span class="submenu-arrow">▼</span>
+        </div>
+        <div class="submenu" id="submenu-employes">
+          <a href="<?= constant('BASE_URL') ?>" class="submenu-item">Informations</a>
+          <a href="<?= constant('BASE_URL') ?>choose_consultation" class="submenu-item">Consultation</a>
+          <a href="<?= constant('BASE_URL') ?>choose_soumission" class="submenu-item">Soumission de demande</a>
+          <a href="<?= constant('BASE_URL') ?>vers_messagerie" class="submenu-item">Messagerie RH</a>
+        </div>
+
         </a>
         <a href="#" class="nav-item">
           <span class="nav-icon">📝</span>

@@ -36,3 +36,15 @@ $dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['databas
 Flight::map('CongeModel', function() {
     return new \app\models\CongeModel(Flight::db()); 
 });
+Flight::map('PaieModel', function() {
+    return new \app\models\PaieModel(Flight::db()); 
+});
+Flight::map('HModel', function() {
+    return new \app\models\HModel(Flight::db()); 
+});
+Flight::map('HpresenceModel', function() {
+    return new \app\models\HpresenceModel(Flight::db()); 
+});
+Flight::map('MessageModel', function() {
+    return new \app\models\MessageModel(Flight::db()); 
+});
