@@ -31,3 +31,31 @@ UPDATE contrat_employe SET date_fin='2027-06-05' where id_employe=2;
 
 SELECT * FROM contrat_employe ce JOIN employe e ON ce.id_employe = e.id 
         JOIN poste p ON ce.id_poste = p.id WHERE '2025-11-28' BETWEEN date_debut AND date_fin AND id_statut_contrat = 2
+
+
+CREATE VIEW vue_conge_employe AS
+SELECT 
+    e.id AS id_employe,
+    e.nom,
+    e.prenom,
+    c.id AS id_conge,
+    c.libelle AS type_conge,
+    c.paye,
+    c.duree,
+    a.id AS id_absence,
+    a.date_debut,
+    a.date_fin,
+    ce.id AS id_contrat,
+    ce.date_debut AS contrat_debut,
+    ce.date_fin AS contrat_fin
+FROM absence a
+JOIN conge c ON a.id_conge = c.id
+JOIN employe e ON a.id_document IN (
+    SELECT d.id FROM document d WHERE d.id_employe = e.id
+)
+JOIN contrat_employe ce ON ce.id_employe = e.id;
+
+
+
+
+
