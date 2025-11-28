@@ -18,6 +18,11 @@ use app\models\HpresenceModel;
 // uncomment the following line for MySQL
 $dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
        ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
+// $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+
+$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
+       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
+
 
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
@@ -42,3 +47,6 @@ Flight::map('DashboardModel', function () {
     return new \app\models\DashboardModel(Flight::db());
 });
 
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
+});
