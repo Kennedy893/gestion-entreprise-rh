@@ -1,0 +1,16 @@
+chatBot:
+    conge anah personne anakiray(code kennedy)
+    paie (getContratEmployeByIdEmploye(id,date))(code lionnel)
+
+Document rh:
+    contrat : 
+        omena ny numero an'ilay employer 
+        vue mamoka contrat jointure:
+        . poste, employer,status_contrat,type_contrat
+    attestation:
+        omena ny numero an'ilay employer 
+        contrat pour dire oe niassa tato nandritra ny izao fotoana \
+        omena ny poste
+    
+Prediction turnover:(miandry gestion perfomrance haisinniaina de integgrena sisa)
+    
