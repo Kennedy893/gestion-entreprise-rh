@@ -50,3 +50,7 @@ Flight::map('DashboardModel', function () {
 Flight::map('PaieModel', function () {
     return new \app\models\PaieModel(Flight::db());
 });
+
+Flight::map('ChatbotPaieModel', function () {
+    return new \app\models\ChatbotPaieModel(Flight::db());
+});

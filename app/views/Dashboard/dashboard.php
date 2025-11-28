@@ -95,6 +95,7 @@
 </head>
 
 <body>
+    <?= include ('app/views/Chatbot.php')?>
     <div class="dashboard-container">
         <h1>Tableau de Bord RH - Statistiques</h1>
 

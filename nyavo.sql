@@ -25,3 +25,9 @@ j'entre 18 il vas afficher une statistique des employer de 18ans dans le contrat
             WHERE EXTRACT(YEAR FROM AGE(CURRENT_DATE, e.date_naissance)) = 35
             AND ce.date_fin <= '2999-12-31';
 
+
+UPDATE contrat_employe SET date_fin='2027-06-05' where id_employe=2;
+
+
+SELECT * FROM contrat_employe ce JOIN employe e ON ce.id_employe = e.id 
+        JOIN poste p ON ce.id_poste = p.id WHERE '2025-11-28' BETWEEN date_debut AND date_fin AND id_statut_contrat = 2

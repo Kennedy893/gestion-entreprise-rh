@@ -2,6 +2,7 @@
 
 use app\controllers\WelcomeController;
 use app\controllers\DashboardController;
+use app\controllers\ChatbotController;
 
 use flight\Engine;
 use flight\net\Router;
@@ -10,6 +11,7 @@ use flight\net\Router;
 
 $Welcome_Controller = new WelcomeController();
 $router->get('/', [ $Welcome_Controller, 'home' ]); 
+$chatcontoller_Controller = new ChatbotController();
 
 // Routes pour les statistiques
 $DashboardController = new DashboardController();
@@ -23,3 +25,13 @@ $router->get('/', [ $Welcome_Controller, 'home' ]);
 $router->get('/paie', [$Paie_Controller,'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
 $router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
+$router->post('/chatbot/ask',[$chatcontoller_Controller,'processQuestion']);
+// Ajoutez ces routes à votre configuration Flight existante
+
+// Routes du chatbot
+Flight::route('GET /chatbot/toggle', function() {
+    $_SESSION['chatbot_open'] = !($_SESSION['chatbot_open'] ?? false);
+    Flight::redirect($_SERVER['HTTP_REFERER'] ?? '/');
+});
+
+?>
