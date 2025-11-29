@@ -1,4 +1,4 @@
-## pointage
+## presence (manager)
 time/
 ### pointage
 presences
@@ -9,7 +9,7 @@ releves
 form-sheet
 timecards
 
-## fonct avancées
+## fonct avancées (manager)
 performance/
 ### dashboard par departement
 dashboard?idDept={id departement}
@@ -17,4 +17,5 @@ dashboard?idDept={id departement}
 calendar?idDept={id departement}
 
 ### NB
+izany hoe manao login anle departement izany @ le dashboard de mahazo id departement
 le calendrier mandalo dashboard, lien eo @ le nbr ana employer actif
