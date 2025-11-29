@@ -17,6 +17,37 @@ class HdashModel {
     {
         $this->db = $db;
     }
+    public function get_employe_departement_annee($id_departement,$annee)
+    {
+        $sql = "SELECT employe.* 
+        FROM employe 
+        JOIN Contrat_employe ON Contrat_employe.id_employe = employe.id 
+        JOIN poste ON poste.id = Contrat_employe.id_poste 
+        WHERE poste.id_departement = ? 
+        AND YEAR(Contrat_employe.date_debut) <= ?
+        AND (Contrat_employe.date_fin IS NULL 
+             OR YEAR(Contrat_employe.date_fin) >= ?)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id_departement,$annee,$annee]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function get_employe_departement($id_departement,$mois,$annee)
+    {
+        $sql = "SELECT employe.* 
+        FROM employe 
+        JOIN Contrat_employe ON Contrat_employe.id_employe = employe.id 
+        JOIN poste ON poste.id = Contrat_employe.id_poste 
+        WHERE poste.id_departement = ? 
+        AND YEAR(Contrat_employe.date_debut) <= ?
+        AND MONTH(Contrat_employe.date_debut) <= ?
+        AND (Contrat_employe.date_fin IS NULL 
+             OR (YEAR(Contrat_employe.date_fin) >= ? 
+                 AND MONTH(Contrat_employe.date_fin) >= ?))";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id_departement,$annee,$mois,$annee,$mois]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function get_notes($mois,$annee,$id_employe)
     {
         $days= Flight::HpresenceModel()->jours_du_mois($annee,$mois);
@@ -70,6 +101,7 @@ class HdashModel {
                 $duree_travail=0;
                 $note_temps=[];
                 $note_temps['flux']=5;
+                $note_temps['time']=5;
                 if(count($presences)>2)
                 {
                     $note_temps['flux']=$note_temps['flux']-(count($presences)-2)/2;
@@ -77,8 +109,15 @@ class HdashModel {
                 for($i=0 ; $i<count($presences) ; $i++)
                 {
                     $duree_travail+=(strtotime($presences[$i]['sortie']) - strtotime($presences[$i]['entree']))/60;
+                    $norme_sortie=strtotime($config_poste['sortie'])+(3600*3);
+                    if(strtotime($presences[$i]['sortie'])>= $norme_sortie)
+                    {
+                        $difference_sortie=(strtotime($presences[$i]['sortie']) - $norme_sortie)/3600;
+                        $note_temps['time']=$note_temps['time']-$difference_sortie;
+                    }
 
                 }
+                $gestion_temps=($note_temps['flux'] + $note_temps['time'])/2;
                 $duree_poste=(strtotime($config_poste['duree_travail']))*60;
                 if($duree_travail >= $duree_poste)
                 {
@@ -104,9 +143,15 @@ class HdashModel {
                         $productivite=1;
                     }
                 }
+                $note[]=[
+                    'ponctualite'=>$ponctualite,
+                    'gestion_temps'=>$gestion_temps,
+                    'productivite'=>$productivite
+                ];
             }
             
         }
+        return $notes;
     }
     
 

@@ -59,3 +59,7 @@ Flight::map('DashboardModel', function () {
     return new \app\models\DashboardModel(Flight::db());
 });
 
+Flight::map('HdashModel', function () {
+    return new \app\models\HdashModel(Flight::db());
+});
+

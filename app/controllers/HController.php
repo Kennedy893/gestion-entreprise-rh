@@ -180,6 +180,10 @@ class HController {
         $data = [ 'employees' => $employees ];
         Flight::render('presence/liste', $data);
     }
+    public function into_performance_dashboard()
+    {
+        Flight::render('performance/dashboard');
+    }
     public function into_calendar()
     {
         $annee = Flight::request()->query->annee;

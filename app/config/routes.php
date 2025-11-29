@@ -28,6 +28,7 @@ $router->group('/time' , function () use ($router,$hController){
 
 $router->group('/performance' , function () use ($router,$hController){
     $router->get('/calendar' , [ $hController, 'into_calendar' ]);
+    $router->get('/dashboard', [ $hController, 'into_performance_dashboard' ]);
 }) ;
 
 $router->get('/', [ $Welcome_Controller, 'home' ]);
