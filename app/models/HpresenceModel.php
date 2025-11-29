@@ -175,6 +175,10 @@ class HpresenceModel {
     public function is_heure_supp($heure,$id_employe,$date)
     {
         $config_poste = $this->get_config_poste($id_employe,$date);
+        if($config_poste == null)
+        {
+            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
+        }
         if(
             strtotime($heure)<strtotime($config_poste['entree']) ||
             strtotime($heure)>strtotime($config_poste['sortie'])
@@ -189,6 +193,10 @@ class HpresenceModel {
         $duree=strtotime($heure_fin) - strtotime($heure_debut);
         $duree=$duree/3600;
         $config_poste = $this->get_config_poste($id_employe,$date);
+        if($config_poste == null)
+        {
+            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
+        }
         if(
             strtotime($heure_debut)<strtotime($config_poste['entree']) &&
             strtotime($heure_fin)<strtotime($config_poste['entree']) ||
@@ -221,12 +229,15 @@ class HpresenceModel {
     public function get_salaire_heure($id_employe, $date)
     {
         $config_poste = $this->get_config_poste($id_employe, $date);
+        if ($config_poste == null) {
+            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
+        }
         $salaire=Flight::HModel()->get_generalised("contrat_employe", 
         "salaire", 
         ["id_employe"], 
         [$id_employe], 
-        "AND (date_debut IS NULL AND (date_fin IS NULL OR date_fin>= ? )) OR (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))", 
-        [$date,$date,$date]);
+        "AND (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))", 
+        [$date,$date]);
         $retour=$salaire[0]['salaire'] ?? 0;
         $retour=$retour/$config_poste['duree_travail']/30;
 
