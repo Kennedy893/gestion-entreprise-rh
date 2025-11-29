@@ -140,11 +140,11 @@ class HdashModel {
                 {
                     $retour['heures_normales']+= $duree_travail;
                 }
-                else if ($diff>1 && $diff <=1.5)
+                else if ($diff>1 && $diff <=2)
                 {
                     $retour['hors-service']+= $duree_travail;
                 }
-                else if ($diff>1.5 && $diff <=2)
+                else if ($diff>2 && $diff <=2.5)
                 {
                     $retour['week-end']+= $duree_travail;
                 }
@@ -155,6 +155,10 @@ class HdashModel {
                 
             }
         }
+        $retour['heures_normales']=round($retour['heures_normales'],2);
+        $retour['hors-service']=round($retour['hors-service'],2);
+        $retour['week-end']=round($retour['week-end'],2);
+        $retour['jours_feries']=round($retour['jours_feries'],2);
         return $retour;
     }
     public function get_postes_departement($id_departement)

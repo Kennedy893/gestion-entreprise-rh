@@ -1,3 +1,4 @@
+
 <?php
 // Récupération des données dynamiques
 $jour_selectionne = $data['jour'] ?? null;
@@ -9,6 +10,17 @@ $poste_label = $data['poste']['label'] ?? '';
 $note_jour = $data['note_jour'] ?? null;
 $note_mois = $data['note_mois'] ?? [];
 $idDept = $data['idDept'] ?? null;
+$presence = $data['presence_jour'] ?? [];
+$jours_travail_mois = $data['jours_travail_mois'] ?? [];
+$jours_travailles = [];
+if (!empty($jours_travail_mois)) {
+    foreach ($jours_travail_mois as $jtm) {
+        $date = $jtm['date_travail'] ?? $jtm['date_travaille'] ?? null;
+        if ($date) {
+            $jours_travailles[] = $date;
+        }
+    }
+}
 
 // Pour la navigation
 $moisActuel = $mois;
@@ -40,7 +52,7 @@ function joursMois($annee, $mois) {
 $list_jours = joursMois($annee, $mois);
 
 // Générer le calendrier dynamique
-function afficherCalendrier($mois, $annee, $list_jours, $id_employe, $jour_selectionne, $idDept) {
+function afficherCalendrier($mois, $annee, $list_jours, $id_employe, $jour_selectionne, $idDept, $jours_travailles = []) {
     $premierJour = mktime(0, 0, 0, $mois, 1, $annee);
     $nombreJours = date('t', $premierJour);
     $jourDebut = date('N', $premierJour);
@@ -66,6 +78,9 @@ function afficherCalendrier($mois, $annee, $list_jours, $id_employe, $jour_selec
         }
         if ($jour_selectionne == $date_courante) {
             $classes[] = 'selectionne';
+        }
+        if (in_array($date_courante, $jours_travailles)) {
+            $classes[] = 'jour-travaille';
         }
         $classAttr = $classes ? 'class="' . implode(' ', $classes) . '"' : '';
         $url = "?mois=$mois&annee=$annee&jour=" . urlencode($date_courante) . "&idEmp=$id_employe&idDept=$idDept";
@@ -106,6 +121,18 @@ function genererEtoiles($note) {
         .calendrier td.vide { background: #f5f5f5; }
         .calendrier td.aujourdhui { background: #e3f2fd; }
         .calendrier td.selectionne { background: #bbdefb; border: 2px solid #1976d2; }
+        .calendrier td.jour-travaille { background: #d1fae5 !important; border-color: #10b981 !important; position: relative; }
+        .calendrier td.jour-travaille::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+        }
         .star { color: #bbb; font-size: 1.2em; }
         .star.active { color: #1976d2; }
         .notes-table { margin: 12px 0 24px 0; }
@@ -127,19 +154,19 @@ function genererEtoiles($note) {
 <div class="container">
     <h1>Calendrier des Présences</h1>
     <div class="navigation">
-        <a href="?mois=<?= $moisPrecedent ?>&annee=<?= $anneePrecedente ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">← Précédent</a>
-        <a href="?mois=<?= date('n') ?>&annee=<?= date('Y') ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Aujourd'hui</a>
-        <a href="?mois=<?= $moisSuivant ?>&annee=<?= $anneeSuivante ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Suivant →</a>
+        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $moisPrecedent ?>&annee=<?= $anneePrecedente ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">← Précédent</a>
+        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= date('n') ?>&annee=<?= date('Y') ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Aujourd'hui</a>
+        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $moisSuivant ?>&annee=<?= $anneeSuivante ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Suivant →</a>
     </div>
     <div class="contenu-principal" style="display: flex; gap: 32px;">
         <div class="colonne-gauche" style="flex:1;">
-            <?php afficherCalendrier($mois, $annee, $list_jours, $id_employe, $jour_selectionne, $idDept); ?>
+            <?php afficherCalendrier($mois, $annee, $list_jours, $id_employe, $jour_selectionne, $idDept, $jours_travailles); ?>
             <div style="margin-top:18px;">
                 <h3>Liste des employés</h3>
                 <ul class="employe-list">
                     <?php foreach ($employes as $emp): ?>
                         <li>
-                            <a href="?mois=<?= $mois ?>&annee=<?= $annee ?>&idEmp=<?= $emp['id'] ?>&idDept=<?= $idDept ?>" 
+                            <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $mois ?>&annee=<?= $annee ?>&idEmp=<?= $emp['id'] ?>&idDept=<?= $idDept ?>" 
                                style="<?= ($emp['id'] == $id_employe) ? 'font-weight:bold;color:#1976d2;' : '' ?>">
                                 <?= htmlspecialchars($emp['nom'].' '.$emp['prenom']) ?>
                             </a>
@@ -168,7 +195,7 @@ function genererEtoiles($note) {
                     $date_formatee = date('d/m/Y', strtotime($jour_selectionne));
                     $nom_jour = ucfirst(date('l', strtotime($jour_selectionne)));
                     echo "<div class='panneau-jour'>";
-                    echo "<h2>📅 $date_formatee</h2>";
+                    echo "<h2>$date_formatee</h2>";
                     echo "<div class='info-employe'>";
                     echo "<p><strong>Employé :</strong> " . htmlspecialchars($employe['nom'] . " " . $employe['prenom']) . "</p>";
                     echo "<p><strong>Poste :</strong> " . htmlspecialchars($poste_label) . "</p>";
@@ -198,19 +225,21 @@ function genererEtoiles($note) {
                     // Affichage des pointages du jour
                     echo "<div class='presences'>";
                     echo "<h3>Pointages</h3>";
-                    $presences = [];
-                    if (isset($employe['pointages']) && isset($employe['pointages'][$jour_selectionne])) {
-                        $presences = $employe['pointages'][$jour_selectionne];
-                    }
-                    if (!empty($presences)) {
-                        foreach ($presences as $pointage) {
+                    
+                    if (!empty($presence)) {
+                        foreach ($presence as $pointage) {
                             echo "<div class='presence-item'>";
-                            echo "<div class='presence-heures'>" . htmlspecialchars($pointage) . "</div>";
-                            list($debut, $fin) = explode('-', $pointage);
-                            $duree = strtotime($fin) - strtotime($debut);
-                            $heures = floor($duree / 3600);
-                            $minutes = floor(($duree % 3600) / 60);
-                            echo "<div><strong>Durée :</strong> " . sprintf("%dh%02d", $heures, $minutes) . "</div>";
+                            $entree = $pointage['entree'] ?? '';
+                            $sortie = $pointage['sortie'] ?? '';
+                            echo "<div class='presence-heures'>" . htmlspecialchars($entree . ' - ' . $sortie) . "</div>";
+                            if ($entree && $sortie) {
+                                $duree = strtotime($sortie) - strtotime($entree);
+                                $heures = floor($duree / 3600);
+                                $minutes = floor(($duree % 3600) / 60);
+                                echo "<div><strong>Durée :</strong> " . sprintf("%dh%02d", $heures, $minutes) . "</div>";
+                            } else {
+                                echo "<div><em>Pointage incomplet</em></div>";
+                            }
                             echo "</div>";
                         }
                     } else {

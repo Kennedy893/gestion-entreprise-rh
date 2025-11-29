@@ -196,7 +196,7 @@ class HpresenceModel {
             strtotime($heure_fin)>strtotime($config_poste['sortie'])
         )
         {
-            $h_supp=this->condition_heure_supp($date,$id_employe,$duree);
+            $h_supp=$this->condition_heure_supp($date,$id_employe,$duree);
             if($h_supp ==1)
             {
                 return 1.3;
@@ -212,10 +212,10 @@ class HpresenceModel {
     {
         $sql="SELECT * FROM config_poste cp JOIN contrat_employe ce ON ce.id_poste=cp.id_poste
         WHERE ce.id_employe= ? AND
-       (date_debut IS NULL AND (date_fin IS NULL OR date_fin>= ? )) OR 
+        ce.id_poste=cp.id_poste AND
        (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id_employe,$date,$date,$date]);
+        $stmt->execute([$id_employe,$date,$date]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function get_salaire_heure($id_employe, $date)

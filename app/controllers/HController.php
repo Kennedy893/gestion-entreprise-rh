@@ -223,6 +223,7 @@ class HController {
         $idEmp = Flight::request()->query->idEmp;
         $jour = Flight::request()->query->jour;
         $idDept = Flight::request()->query->idDept;
+        $presence_jour = null;
 
         if(!$annee)
         {
@@ -243,24 +244,38 @@ class HController {
         $employes = Flight::HdashModel()->get_employe_departement($idDept,$mois,$annee);
         $poste=null;
         $poste_config=null;
+        $note_jour=null;
+        $note_mois=null;
         if($idEmp!=null)
         {
             $poste_config=Flight::HpresenceModel()->get_config_poste($idEmp,$jour);
             $id_poste=$poste_config['id_poste'];
             $poste=Flight::HModel()->get_generalised("poste","*",
             ["id"],[$id_poste],"",[])[0];
-            
-        }
-        $note_jour=null;
-        $note_mois=null;
-        if($idEmp!=null)
-        {
             $note_jour=Flight::HdashModel()->get_note_jours($jour,$idEmp);
-            $note_mois=Flight::HdashModel()->get_notes($mois,$annee,$idEmp);    
+            $note_mois=Flight::HdashModel()->get_notes($mois,$annee,$idEmp);
+            $presence_jour = Flight::HModel()->get_generalised(
+                "presence",
+                "*",
+                ["id_employe", "date_travail"],
+                [$idEmp, $jour],
+                "",
+                []
+            );
+            $jours_travail_mois=Flight::HModel()->get_generalised(
+                "presence",
+                "DISTINCT date_travail",
+                ["id_employe"],
+                [$idEmp],
+                "AND EXTRACT(YEAR FROM date_travail) = ?::int AND EXTRACT(MONTH FROM date_travail) = ?::int",
+                [$annee, $mois]
+            );
         }
         
         // Préparer les données pour le rendu
         $data = [
+            'jours_travail_mois' => $jours_travail_mois,
+            'presence_jour' => $presence_jour,
             'poste' => $poste,
             'config_poste'=> $poste_config,
             'employes' => $employes,
