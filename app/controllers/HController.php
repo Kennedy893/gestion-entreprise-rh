@@ -243,15 +243,13 @@ class HController {
         $employes = Flight::HdashModel()->get_employe_departement($idDept,$mois,$annee);
         $poste=null;
         $poste_config=null;
-        foreach($employes as $employe)
+        if($idEmp!=null)
         {
-            if($employe['id']==$idEmp)
-            {
-                $poste_config=Flight::HpresenceModel()->get_config_poste($employe['id'],$jour);
-                $id_poste=$poste_config['id_poste'];
-                $poste=Flight::HModel()->get_generalised("poste","*",
-                ["id"],[$id_poste],"",[])[0];
-            }
+            $poste_config=Flight::HpresenceModel()->get_config_poste($idEmp,$jour);
+            $id_poste=$poste_config['id_poste'];
+            $poste=Flight::HModel()->get_generalised("poste","*",
+            ["id"],[$id_poste],"",[])[0];
+            
         }
         $note_jour=null;
         $note_mois=null;

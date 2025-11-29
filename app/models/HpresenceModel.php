@@ -213,8 +213,7 @@ class HpresenceModel {
         $sql="SELECT * FROM config_poste cp JOIN contrat_employe ce ON ce.id_poste=cp.id_poste
         WHERE ce.id_employe= ? AND
        (date_debut IS NULL AND (date_fin IS NULL OR date_fin>= ? )) OR 
-       (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL)) 
-       ORDER BY date_debut DESC LIMIT 1";
+       (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id_employe,$date,$date,$date]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
