@@ -54,3 +54,7 @@ Flight::map('PaieModel', function () {
 Flight::map('ChatbotPaieModel', function () {
     return new \app\models\ChatbotPaieModel(Flight::db());
 });
+
+Flight::map('GenerationModel', function () {
+    return new \app\models\GenerationModel(Flight::db());
+});

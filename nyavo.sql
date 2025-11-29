@@ -59,3 +59,33 @@ JOIN contrat_employe ce ON ce.id_employe = e.id;
 
 
 
+CREATE OR REPLACE VIEW vue_contrat_employe AS
+SELECT 
+    ce.id AS contrat_id,
+    e.id AS employe_id,
+    e.nom,
+    e.prenom,
+    e.cin,
+    e.date_naissance,
+    e.email,
+    e.adresse,
+
+    ce.date_debut,
+    ce.date_fin,
+    ce.duree,
+    ce.salaire,
+
+    p.label AS poste,
+    c.libelle AS categorie,
+    d.libelle AS departement,
+
+    tc.label AS type_contrat,
+    sc.label AS statut_contrat
+FROM contrat_employe ce
+JOIN Employe e ON ce.id_employe = e.id
+LEFT JOIN Poste p ON ce.id_poste = p.id
+LEFT JOIN categorie c ON p.id_categorie = c.id
+LEFT JOIN departement d ON p.id_departement = d.id
+LEFT JOIN Type_Contrat tc ON ce.id_type_contrat = tc.id
+LEFT JOIN Statut_Contrat sc ON ce.id_statut_contrat = sc.id
+ORDER BY ce.date_debut DESC;

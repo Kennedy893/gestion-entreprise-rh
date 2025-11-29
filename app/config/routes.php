@@ -1,5 +1,6 @@
 <?php
 
+use app\controllers\GenerationController;
 use app\controllers\WelcomeController;
 use app\controllers\DashboardController;
 use app\controllers\ChatbotController;
@@ -12,7 +13,7 @@ use flight\net\Router;
 $Welcome_Controller = new WelcomeController();
 $router->get('/', [ $Welcome_Controller, 'home' ]); 
 $chatcontoller_Controller = new ChatbotController();
-
+$gen=new GenerationController() ;
 // Routes pour les statistiques
 $DashboardController = new DashboardController();
 // Configuration des routes pour le tableau de bord RH
@@ -26,6 +27,10 @@ $router->get('/paie', [$Paie_Controller,'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
 $router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
 $router->post('/chatbot/ask',[$chatcontoller_Controller,'processQuestion']);
+$router->get('/contratGen/@id',[$gen,'genererContratPdf']);
+$router->get('/attestation/@id',[$gen,'genererAttestationTravailPdf']);
+$router->get('/generation',[$gen,'homeGen']);
+
 // Ajoutez ces routes à votre configuration Flight existante
 
 // Routes du chatbot
