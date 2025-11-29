@@ -207,8 +207,9 @@ class HController {
             $employes_poste=Flight::HdashModel()->get_employe_poste_annee($poste['id'],$annee);
             $nbr_postes[]=count($employes_poste);
         }
-
+        $test=Flight::HdashModel()->get_notes(11,2025,1);
         $data = [
+            'test' => $test,
             'nbr_postes' => $nbr_postes,
             'postes' => $postes,
             'nbr_employes' => array_sum($nbr_postes),

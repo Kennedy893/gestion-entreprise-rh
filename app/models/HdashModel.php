@@ -130,30 +130,29 @@ class HdashModel {
             foreach($presences as $presence)
             {
                 $config_poste = Flight::HpresenceModel()->get_config_poste($id_employe,$day['date']);
-                if($config_poste!=null)
+                
+                $montant=Flight::HpresenceModel()->get_salaire_heure($id_employe,$day['date']);
+                $montant_gagne=$presence['montant'];
+                $duree_travail=(strtotime($presence['sortie']) - strtotime($presence['entree']))/3600;
+                $montant_heure=$montant_gagne / $duree_travail;
+                $diff=$montant_heure/$montant;
+                if($diff<=1)
                 {
-                    $montant=Flight::HpresenceModel()->get_salaire_heure($id_employe,$day['date']);
-                    $montant_gagne=$presence['montant'];
-                    $duree_travail=(strtotime($presence['sortie']) - strtotime($presence['entree']))/3600;
-                    $montant_heure=$montant_gagne / $duree_travail;
-                    $diff=$montant_gagne/$montant;
-                    if($diff<=1)
-                    {
-                        $retour['heures_normales']+= $duree_travail;
-                    }
-                    else if ($diff>1 && $diff <=1.5)
-                    {
-                        $retour['hors-service']+= $duree_travail;
-                    }
-                    else if ($diff>1.5 && $diff <=2)
-                    {
-                        $retour['week-end']+= $duree_travail;
-                    }
-                    else
-                    {
-                        $retour['jours_feries']+= $duree_travail;
-                    }
+                    $retour['heures_normales']+= $duree_travail;
                 }
+                else if ($diff>1 && $diff <=1.5)
+                {
+                    $retour['hors-service']+= $duree_travail;
+                }
+                else if ($diff>1.5 && $diff <=2)
+                {
+                    $retour['week-end']+= $duree_travail;
+                }
+                else 
+                {
+                    $retour['jours_feries']+= $duree_travail;
+                }
+                
             }
         }
         return $retour;
@@ -179,96 +178,26 @@ class HdashModel {
             $presences = Flight::HModel()->get_generalised(
                 "presence",
                 "*",
-                ["id_employe","date_travail"],
-                [$id_employe,$day['date']],
+                ["id_employe"],
+                [$id_employe],
                 "",
                 []
             );
+            
             if($presences==null)
             {
                 $notes[]=[
-                    'ponctualite'=>0,
-                    'gestion_temps'=>0,
-                    'productivite'=>0
+                    'ponctualite'=>1,
+                    'gestion_temps'=>1,
+                    'productivite'=>1
                 ];
             }
             else
             {
-                $heure_arrivee=strtotime($presences[0]['entree']);                
-                $config_poste = Flight::HpresenceModel()->get_config_poste($id_employe,$day['date']);
-                $heure_poste_arrivee=strtotime($config_poste['entree']);
-                $ponctualite=5;
-                $gestion_temps=5;
-                $productivite=5;
-                if($heure_arrivee > $heure_poste_arrivee)
-                {
-                    $diff=($heure_arrivee - $heure_poste_arrivee)/60;
-                    if($diff <=15)
-                    {
-                        $ponctualite=4;
-                    }
-                    else if($diff >15 && $diff <=30)
-                    {
-                        $ponctualite=3;
-                    }
-                    else if($diff >30 && $diff <=60)
-                    {
-                        $ponctualite=2;
-                    }
-                    else
-                    {
-                        $ponctualite=1;
-                    }
-                }
-                $duree_travail=0;
-                $note_temps=[];
-                $note_temps['flux']=5;
-                $note_temps['time']=5;
-                if(count($presences)>2)
-                {
-                    $note_temps['flux']=$note_temps['flux']-(count($presences)-2)/2;
-                }
-                for($i=0 ; $i<count($presences) ; $i++)
-                {
-                    $duree_travail+=(strtotime($presences[$i]['sortie']) - strtotime($presences[$i]['entree']))/60;
-                    $norme_sortie=strtotime($config_poste['sortie'])+(3600*3);
-                    if(strtotime($presences[$i]['sortie'])>= $norme_sortie)
-                    {
-                        $difference_sortie=(strtotime($presences[$i]['sortie']) - $norme_sortie)/3600;
-                        $note_temps['time']=$note_temps['time']-$difference_sortie;
-                    }
-
-                }
-                $gestion_temps=($note_temps['flux'] + $note_temps['time'])/2;
-                $duree_poste=(strtotime($config_poste['duree_travail']))*60;
-                if($duree_travail >= $duree_poste)
-                {
-                    $productivite=5;
-                }
-                else
-                {
-                    $ratio=$duree_travail / $duree_poste;
-                    if($ratio >=0.9)
-                    {
-                        $productivite=4;
-                    }
-                    else if($ratio >=0.75)
-                    {
-                        $productivite=3;
-                    }
-                    else if($ratio >=0.5)
-                    {
-                        $productivite=2;
-                    }
-                    else
-                    {
-                        $productivite=1;
-                    }
-                }
-                $note[]=[
-                    'ponctualite'=>$ponctualite,
-                    'gestion_temps'=>$gestion_temps,
-                    'productivite'=>$productivite
+                $notes[]=[
+                    'ponctualite'=>3,
+                    'gestion_temps'=>3,
+                    'productivite'=>3
                 ];
             }
             
