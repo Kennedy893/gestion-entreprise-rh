@@ -27,7 +27,7 @@
 </form>
 
 <script>
-      const baseUrl = "<?= constant('BASE_URL') ?>";
+const baseUrl = "<?= constant('BASE_URL') ?>";
 document.getElementById('docForm').addEventListener('submit', function(event) {
   event.preventDefault();
 
