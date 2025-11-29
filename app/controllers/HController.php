@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Flight;
+use Exception;
 use app\models\HModel;
 use app\models\HpresenceModel;
 
