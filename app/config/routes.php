@@ -57,19 +57,17 @@ $router->post('/chatbot/ask',[$chatcontoller_Controller,'processQuestion']);
 $router->get('/contratGen/@id',[$gen,'genererContratPdf']);
 $router->get('/attestation/@id',[$gen,'genererAttestationTravailPdf']);
 $router->get('/generation',[$gen,'homeGen']);
+$router->get('/prediction/@id',[$hController,'get_prediction']);
 
 // Ajoutez ces routes à votre configuration Flight existante
 
 // Routes du chatbot
-Flight::route('GET /chatbot/toggle', function() {
-    $_SESSION['chatbot_open'] = !($_SESSION['chatbot_open'] ?? false);
-    Flight::redirect($_SERVER['HTTP_REFERER'] ?? '/');
-});
 
+
+// $router->get('/paie/etats/export',[$Paie_Controller, 'exportEtatDePaie']);
+// $router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
+
+// $DashboardController = new DashboardController();
+// $router->get('/dashboard', [$DashboardController, 'showDashboardPage']);
+// $router->get('/dashboard/employees-by-age', [$DashboardController, 'getEmployeesByAge']);
 ?>
-$router->get('/paie/etats/export',[$Paie_Controller, 'exportEtatDePaie']);
-$router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
-
-$DashboardController = new DashboardController();
-$router->get('/dashboard', [$DashboardController, 'showDashboardPage']);
-$router->get('/dashboard/employees-by-age', [$DashboardController, 'getEmployeesByAge']);

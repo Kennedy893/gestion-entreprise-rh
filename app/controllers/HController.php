@@ -1,7 +1,7 @@
 <?php
 
 namespace app\controllers;
-
+use app\helpers\helpers;
 use Flight;
 use app\models\HModel;
 use app\models\HpresenceModel;
@@ -359,5 +359,16 @@ class HController {
         'annee' => $annee, 
         'mois' => $mois]);
     }
+    public function get_prediction(){
+        $id_employe = Flight::request()->data->id_employe;
+        //date ajourd'hui - 6 mois =data = anne,mois 
+        $date = new \DateTime();
+        $date->modify('-6 months');
 
+        $mois = (int)$date->format('m');
+        $annee = (int)$date->format('Y');
+
+        $data=Flight::HdashModel()->moyenne_notes_6mois($id_employe, $mois, $annee);
+        return Flight::render('prediction',['data'=> $data]);
+    }
 }

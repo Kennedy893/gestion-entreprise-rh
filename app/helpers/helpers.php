@@ -36,7 +36,16 @@
             return $sexe;
         }
     }
-
+        function mois_annee_moins_6()
+        {
+            $date = new DateTime();
+            $date->modify('-6 months');
+        
+            return [
+                'mois'  => (int)$date->format('m'),
+                'annee' => (int)$date->format('Y')
+            ];
+        }
 
     function calculateTauxJournaliers ($montant) {
         return $montant/30;
