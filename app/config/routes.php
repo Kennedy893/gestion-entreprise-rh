@@ -25,6 +25,11 @@ $router->group('/time' , function () use ($router,$hController){
     $router->get('/timecards' , [ $hController, 'into_timecards' ]);
     $router->get('/form-sheet' , [ $hController, 'into_temp_general' ]);
 }) ;
+
+$router->group('/performance' , function () use ($router,$hController){
+    $router->get('/calendar' , [ $hController, 'into_calendar' ]);
+}) ;
+
 $router->get('/', [ $Welcome_Controller, 'home' ]);
 
 $Conge_Controller = new CongeController();

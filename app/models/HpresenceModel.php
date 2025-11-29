@@ -234,7 +234,5 @@ class HpresenceModel {
 
         return $retour;
     }
-
-
-
+    
 }

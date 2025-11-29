@@ -180,7 +180,23 @@ class HController {
         $data = [ 'employees' => $employees ];
         Flight::render('presence/liste', $data);
     }
+    public function into_calendar()
+    {
+        $annee = Flight::request()->query->annee;
+        $mois = Flight::request()->query->mois;
+        $idEmp = Flight::request()->query->idEmp;
+        $jour = Flight::request()->query->jour;
 
+        // Préparer les données pour le rendu
+        $data = [
+            'annee' => $annee,
+            'mois' => $mois,
+            'idEmp' => $idEmp,
+            'jour' => $jour
+        ];
+
+        Flight::render('performance/calendar', $data);
+    }
     public function into_releves()
     {
         $id_employe = Flight::request()->query->id_employe;
