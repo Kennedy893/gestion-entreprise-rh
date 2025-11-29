@@ -246,6 +246,7 @@ class HController {
         $poste_config=null;
         $note_jour=null;
         $note_mois=null;
+        $jours_travail_mois=null;
         if($idEmp!=null)
         {
             $poste_config=Flight::HpresenceModel()->get_config_poste($idEmp,$jour);

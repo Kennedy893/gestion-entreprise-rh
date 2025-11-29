@@ -15,3 +15,6 @@ performance/
 dashboard?idDept={id departement}
 ### calendrier et attestation de presence
 calendar?idDept={id departement}
+
+### NB
+le calendrier mandalo dashboard, lien eo @ le nbr ana employer actif
