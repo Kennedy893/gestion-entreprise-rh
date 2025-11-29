@@ -1,0 +1,492 @@
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Header */
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+/* Recherche */
+.recherche-employe {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.recherche-employe label {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.recherche-employe input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: #ffffff;
+}
+
+.recherche-employe input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.info-recherche {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+.resultats-recherche {
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    right: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.resultats-recherche.visible {
+    display: block;
+}
+
+.employe-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.employe-item:hover {
+    background-color: #f9fafb;
+}
+
+.employe-item:last-child {
+    border-bottom: none;
+}
+
+.employe-nom {
+    font-weight: 500;
+    color: #111827;
+}
+
+.employe-poste {
+    color: #6b7280;
+    font-size: 13px;
+    margin-left: 8px;
+}
+
+.aucun-resultat {
+    padding: 16px;
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* Employé sélectionné */
+.employe-selectionne {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+/* Layout principal */
+.contenu-principal {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Colonne calendrier */
+.colonne-gauche {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre mois */
+.mois-titre {
+    background: #374151;
+    color: #ffffff;
+    padding: 16px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Tableau calendrier */
+.calendrier {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.calendrier th {
+    background: #4b5563;
+    color: #ffffff;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 12px;
+    border: 1px solid #374151;
+}
+
+.calendrier td {
+    border: 1px solid #e5e7eb;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    height: 80px;
+    vertical-align: top;
+    position: relative;
+    background: #ffffff;
+}
+
+.calendrier td:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+}
+
+.calendrier td.vide {
+    background: #f9fafb;
+    cursor: default;
+}
+
+.calendrier td.vide:hover {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.calendrier td.aujourdhui {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    font-weight: 600;
+}
+
+.calendrier td.jour-special {
+    background: #fef3c7;
+    border-color: #f59e0b;
+}
+
+.calendrier td.jour-special::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+}
+
+/* Navigation */
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.navigation a {
+    padding: 8px 16px;
+    background: #374151;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background-color 0.15s;
+}
+
+.navigation a:hover {
+    background: #4b5563;
+}
+
+/* Panneau jour */
+.colonne-droite {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.panneau-jour h2 {
+    color: #1e293b;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.info-employe {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.info-employe p {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.info-employe p:last-child {
+    margin-bottom: 0;
+}
+
+/* Scores */
+.scores-employe {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.scores-employe h3 {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.score-item:last-child {
+    margin-bottom: 0;
+}
+
+.score-label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    color: #d1d5db;
+    font-size: 16px;
+}
+
+.star.active {
+    color: #f59e0b;
+}
+
+/* Notes mensuelles */
+.notes-mensuelles {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.notes-mensuelles h3 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.note-mensuelle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.note-mensuelle-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Présences */
+.presences h3 {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.presence-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.presence-heures {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+/* Tableau heures */
+.tableau-heures {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.tableau-heures th,
+.tableau-heures td {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tableau-heures th {
+    background: #374151;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.tableau-heures tr.sous-total {
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+.tableau-heures tr.sous-categorie {
+    background: #ffffff;
+    color: #6b7280;
+}
+
+.tableau-heures tr.sous-categorie td:first-child {
+    padding-left: 24px;
+}
+
+.tableau-heures tr.total-ligne {
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.heures-chiffre {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+/* États vides */
+.aucune-selection,
+.aucune-donnee {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+}
+
+.aucune-selection h3,
+.aucune-donnee h3 {
+    color: #6b7280;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .contenu-principal {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .colonne-droite {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .navigation {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .navigation a {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .calendrier td {
+        padding: 8px 4px;
+        height: 60px;
+        font-size: 12px;
+    }
+    
+    .calendrier th {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+}

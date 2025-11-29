@@ -15,6 +15,7 @@ class DashboardModel
         $this->db = $db;
     }
 
+
     public function update_key_table($table, $key_name)
     {
         $stmt = $this->db->prepare("SELECT setval('{$table}_{$key_name}_seq', (SELECT MAX({$key_name}) FROM {$table}))");
@@ -43,6 +44,8 @@ class DashboardModel
     }
 
     public function getAbsenteeismStats()
+
+    //tsy ampy condition
     {
         $stmt = $this->db->prepare("SELECT COUNT(*) as absence_count FROM absence");
         $stmt->execute();

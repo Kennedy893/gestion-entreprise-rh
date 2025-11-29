@@ -43,6 +43,23 @@ $dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['databas
 //     return new AdminModel(Flight::db());  
 // });
 
+Flight::map('HModel', function() {
+    return new \app\models\HModel(Flight::db());  
+});
+
+Flight::map('HController', function() {
+    return new \app\controllers\HController();  
+});
+
+Flight::map('HpresenceModel', function() {
+    return new HpresenceModel(Flight::db());
+});  
+Flight::map('CongeModel', function() {
+    return new CongeModel(Flight::db());
+});
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
+});
 Flight::map('DashboardModel', function () {
     return new \app\models\DashboardModel(Flight::db());
 });
@@ -58,3 +75,7 @@ Flight::map('ChatbotPaieModel', function () {
 Flight::map('GenerationModel', function () {
     return new \app\models\GenerationModel(Flight::db());
 });
+Flight::map('HdashModel', function () {
+    return new \app\models\HdashModel(Flight::db());
+});
+

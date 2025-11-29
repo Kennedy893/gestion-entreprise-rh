@@ -5,251 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiche de Paie - IT University</title>
+    <link rel="stylesheet" href="<?= constant('BASE_URL') ?>/public/assets/css/fiche_paie_web.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e5e7eb;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #1e40af;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #059669, #047857);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .logo-text span {
-            color: #1e40af;
-        }
-
-        .title-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .title-section h1 {
-            font-size: 22px;
-            color: #1f2937;
-            margin-bottom: 5px;
-        }
-
-        .title-section h2 {
-            font-size: 18px;
-            color: #1e40af;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .info-column h3 {
-            font-size: 14px;
-            color: #1e40af;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        .info-value {
-            color: #1f2937;
-        }
-
-        .highlight {
-            background: #1e40af;
+        button {
+            background-color: #2563eb;
+            /* bleu vif */
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-        }
-
-        thead {
-            background: linear-gradient(135deg, #1e40af, #1e3a8a);
-            color: white;
-        }
-
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        th:last-child,
-        td:last-child {
-            text-align: right;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #e5e7eb;
-            transition: background 0.2s;
-        }
-
-        tbody tr:hover {
-            background: #f9fafb;
-        }
-
-        td {
-            padding: 12px 15px;
-            color: #1f2937;
-        }
-
-        .section-header {
-            background: #f3f4f6;
-            font-weight: 600;
-            color: #1e40af;
-        }
-
-        .total-row {
-            background: #dbeafe;
-            font-weight: 600;
+            border: none;
+            padding: 12px 25px;
             font-size: 16px;
-        }
-
-        .final-total {
-            background: linear-gradient(135deg, #1e40af, #1e3a8a);
-            color: white;
-            font-size: 18px;
-        }
-
-        .amount {
             font-weight: 600;
-            color: #1f2937;
-        }
-
-        .amount-highlight {
-            color: #1e40af;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .footer-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
-            padding: 20px;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .footer-box {
-            padding: 15px;
-            background: white;
             border-radius: 6px;
-            border-left: 4px solid #1e40af;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
         }
 
-        .footer-box h4 {
-            color: #1e40af;
-            margin-bottom: 10px;
-            font-size: 14px;
-            font-weight: 600;
+        button:hover {
+            background-color: #1e40af;
+            /* bleu plus foncé au survol */
+            box-shadow: 0 6px 12px rgba(30, 64, 175, 0.5);
         }
 
-        .footer-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-        }
-
-        .payment-mode {
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            background: #ecfdf5;
-            border-radius: 6px;
-            color: #047857;
-            font-weight: 600;
-            border: 1px solid #a7f3d0;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .container {
-                box-shadow: none;
-                padding: 20px;
-            }
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.6);
         }
     </style>
 </head>
 
 <body>
+
+    <button onclick="window.location.href=`<?= constant('BASE_URL') ?>/paie/fiche/export/<?= $emp['id_employe'] ?>`"> Exporter PDF </button>
+
     <div class="container">
         <div class="header">
             <div class="logo">

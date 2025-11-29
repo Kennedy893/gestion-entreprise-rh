@@ -62,6 +62,7 @@ INSERT INTO contrat_employe(date_debut, date_fin, duree, salaire, id_poste, id_e
  ('2024-06-01', '2025-06-01', 12, 800000, 2, 2, 1, 2),
  ('2024-02-15', '2024-08-15', 6, 600000, 3, 3, 1, 3);
 
+UPDATE contrat_employe set id_statut_contrat = 2 where id_employe=1;
 -- Avantages
 INSERT INTO avantage(libelle, montant, id_contrat_employe) VALUES
  ('Prime de transport', 50000, 1),

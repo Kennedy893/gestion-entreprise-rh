@@ -13,12 +13,10 @@ class DashboardController {
     {
         $DashboardModel = Flight::DashboardModel();
         
-        // Récupérer les statistiques de base
         $turnover = $DashboardModel->getTurnoverStats();
         $absenteeism = $DashboardModel->getAbsenteeismStats();
         $averageSeniority = $DashboardModel->getAverageSeniority();
         
-        // Récupérer la distribution par âge pour le graphique
         $ageDistribution = $DashboardModel->getAgeDistribution();
         
         Flight::render('Dashboard/dashboard', [

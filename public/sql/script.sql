@@ -1,4 +1,5 @@
-CREATE DATABASE gestion_entreprise_rh;
+CREATE DATABASE gestion_entreprise_rh ;
+
 \c gestion_entreprise_rh;
 
 CREATE TABLE Type_Contrat(
@@ -153,3 +154,4 @@ CREATE TABLE avantage(
    id_contrat_employe INT,
    FOREIGN KEY(id_contrat_employe) REFERENCES contrat_employe(id)
 );
+
