@@ -1,7 +1,6 @@
 <?php
 // Récupération des données dynamiques
 $mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-print_r($data['test']);
 // Données de performance dynamiques
 $productivite = [];
 $gestion_temps = [];
