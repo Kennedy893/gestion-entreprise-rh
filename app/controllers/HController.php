@@ -224,12 +224,55 @@ class HController {
         $jour = Flight::request()->query->jour;
         $idDept = Flight::request()->query->idDept;
 
+        if(!$annee)
+        {
+            $annee = date("Y");
+        }
+        if(!$mois)
+        {
+            $mois = date("n");
+        }
+        if(!$jour)
+        {
+            $jour = date("Y-m-d");
+        }
+        if(!$idDept)
+        {
+            $idDept = 1;
+        }
+        $employes = Flight::HdashModel()->get_employe_departement($idDept,$mois,$annee);
+        $poste=null;
+        $poste_config=null;
+        foreach($employes as $employe)
+        {
+            if($employe['id']==$idEmp)
+            {
+                $poste_config=Flight::HpresenceModel()->get_config_poste($employe['id'],$jour);
+                $id_poste=$poste_config['id_poste'];
+                $poste=Flight::HModel()->get_generalised("poste","*",
+                ["id"],[$id_poste],"",[])[0];
+            }
+        }
+        $note_jour=null;
+        $note_mois=null;
+        if($idEmp!=null)
+        {
+            $note_jour=Flight::HdashModel()->get_note_jours($jour,$idEmp);
+            $note_mois=Flight::HdashModel()->get_notes($mois,$annee,$idEmp);    
+        }
+        
         // Préparer les données pour le rendu
         $data = [
+            'poste' => $poste,
+            'config_poste'=> $poste_config,
+            'employes' => $employes,
             'annee' => $annee,
             'mois' => $mois,
             'idEmp' => $idEmp,
-            'jour' => $jour
+            'jour' => $jour,
+            'idDept' => $idDept,
+            'note_jour' => $note_jour,
+            'note_mois' => $note_mois
         ];
 
         Flight::render('performance/calendar', $data);
