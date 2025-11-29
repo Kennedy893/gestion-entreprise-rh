@@ -1,22 +1,38 @@
 <?php
-// Simulation de données
+// Récupération des données dynamiques
 $mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
-// Données de performance
-$productivite = [3.2, 3.5, 3.8, 4.1, 4.3, 4.2, 4.0, 4.4, 4.6, 4.5, 4.7, 4.8];
-$gestion_temps = [2.8, 3.1, 3.3, 3.6, 3.9, 4.0, 3.8, 4.1, 4.3, 4.2, 4.4, 4.5];
-$ponctualite = [4.0, 4.1, 4.2, 4.3, 4.4, 4.3, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0];
+// Données de performance dynamiques
+$productivite = [];
+$gestion_temps = [];
+$ponctualite = [];
 
-// Données employés
-$employes_actifs = 47;
-$postes = ['Développeurs', 'Designers', 'Marketing', 'RH', 'Support'];
-$actifs_par_poste = [18, 8, 9, 5, 7];
+foreach ($data['notes'] as $note) {
+    $productivite[] = round($note['productivite'], 1);
+    $gestion_temps[] = round($note['gestion_temps'], 1);
+    $ponctualite[] = round($note['ponctualite'], 1);
+}
 
-// Données heures de travail
-$heures_normales = [160, 162, 158, 165, 163, 161, 159, 164, 166, 168, 167, 169];
-$heures_weekend = [12, 14, 11, 13, 15, 16, 14, 13, 12, 15, 16, 17];
-$heures_hors_service = [8, 7, 9, 6, 8, 7, 9, 8, 7, 6, 8, 9];
-$heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
+// Données employés dynamiques
+$employes_actifs = $data['nbr_employes'];
+$postes = [];
+foreach ($data['postes'] as $poste) {
+    $postes[] = $poste['label'];
+}
+$actifs_par_poste = $data['nbr_postes'];
+
+// Données heures de travail dynamiques
+$heures_normales = [];
+$heures_weekend = [];
+$heures_hors_service = [];
+$heures_ferie = [];
+
+foreach ($data['heures'] as $heure) {
+    $heures_normales[] = $heure['heures_normales'];
+    $heures_weekend[] = $heure['week-end'];
+    $heures_hors_service[] = $heure['hors-service'];
+    $heures_ferie[] = $heure['jours_feries'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +50,7 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
             <h1>Dashboard Performance Département</h1>
             <div class="header-info">
                 <span>Mise à jour: <?php echo date('d/m/Y'); ?></span>
+                <span>Année: <?php echo $annee ?? date('Y'); ?></span>
             </div>
         </header>
 
@@ -47,20 +64,18 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
             </section>
 
             <!-- Section Employés -->
-            <a href="index.php">
-                <section class="card employees-card">
-                    <h2>Employés Actifs</h2>
-                    <div class="employees-stats">
-                        <div class="total-employees">
-                            <span class="number"><?php echo $employes_actifs; ?></span>
-                            <span class="label">Employés actifs</span>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="postesChart"></canvas>
-                        </div>
+            <section class="card employees-card">
+                <h2>Employés Actifs</h2>
+                <div class="employees-stats">
+                    <div class="total-employees">
+                        <span class="number"><?php echo $employes_actifs; ?></span>
+                        <span class="label">Employés actifs</span>
                     </div>
-                </section>
-            </a>
+                    <div class="chart-container">
+                        <canvas id="postesChart"></canvas>
+                    </div>
+                </div>
+            </section>
 
             <!-- Section Heures de Travail -->
             <section class="card hours-card">
@@ -173,7 +188,12 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
                         bodyColor: '#ffffff',
                         borderColor: '#1a237e',
                         borderWidth: 1,
-                        cornerRadius: 4
+                        cornerRadius: 4,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1);
+                            }
+                        }
                     }
                 },
                 interaction: {
@@ -196,7 +216,10 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
                         '#283593',
                         '#303f9f',
                         '#3949ab',
-                        '#5c6bc0'
+                        '#5c6bc0',
+                        '#7986cb',
+                        '#9fa8da',
+                        '#c5cae9'
                     ],
                     borderWidth: 1.5,
                     borderColor: '#ffffff',
@@ -226,7 +249,16 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
                         titleColor: '#ffffff',
                         bodyColor: '#ffffff',
                         borderColor: '#1a237e',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
                     }
                 }
             }
@@ -331,7 +363,12 @@ $heures_ferie = [4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4, 6];
                         bodyColor: '#ffffff',
                         borderColor: '#1a237e',
                         borderWidth: 1,
-                        cornerRadius: 4
+                        cornerRadius: 4,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + 'h';
+                            }
+                        }
                     }
                 },
                 interaction: {

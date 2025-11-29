@@ -222,7 +222,6 @@ class HpresenceModel {
     public function get_salaire_heure($id_employe, $date)
     {
         $config_poste = $this->get_config_poste($id_employe, $date);
-        $pourcentage=[1,1.2,1.5,2];
         $salaire=Flight::HModel()->get_generalised("contrat_employe", 
         "salaire", 
         ["id_employe"], 

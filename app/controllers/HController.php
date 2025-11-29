@@ -182,7 +182,40 @@ class HController {
     }
     public function into_performance_dashboard()
     {
-        Flight::render('performance/dashboard');
+        $idDept = Flight::request()->query->idDept;
+        $annee = Flight::request()->query->annee;
+
+        if(!$annee)
+        {
+            $annee = date("Y");
+        }
+        if(!$idDept)
+        {
+            $idDept = 1;
+        }
+        $postes = Flight::HdashModel()->get_postes_departement($idDept);
+        $nbr_postes=[];
+        $notes= [];
+        $heures=[];
+        for($i=1;$i<=12;$i++)
+        {
+            $heures[]=Flight::HdashModel()->get_sum_hours($i,$annee,$idDept);
+            $notes[]=Flight::HdashModel()->get_sum_notes($i,$annee,$idDept);
+        }
+        foreach($postes as $poste)
+        {
+            $employes_poste=Flight::HdashModel()->get_employe_poste_annee($poste['id'],$annee);
+            $nbr_postes[]=count($employes_poste);
+        }
+
+        $data = [
+            'nbr_postes' => $nbr_postes,
+            'postes' => $postes,
+            'nbr_employes' => array_sum($nbr_postes),
+            'heures' => $heures,
+            'notes' => $notes
+        ];
+        Flight::render('performance/dashboard', $data);
     }
     public function into_calendar()
     {
@@ -190,6 +223,7 @@ class HController {
         $mois = Flight::request()->query->mois;
         $idEmp = Flight::request()->query->idEmp;
         $jour = Flight::request()->query->jour;
+        $idDept = Flight::request()->query->idDept;
 
         // Préparer les données pour le rendu
         $data = [
