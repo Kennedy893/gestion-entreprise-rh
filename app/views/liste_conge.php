@@ -425,8 +425,9 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <?php include('app/views/sidebar/sidebar.php') ?>
+    <?php include("app/views/bar/sidebar.php")?>
+
+    <h1>Liste des congés</h1>
 
     <div class="main-content">
         <?php

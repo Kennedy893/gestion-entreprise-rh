@@ -1,54 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pointage</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 16px; color: #222; }
-        h2 { margin-bottom: 12px; }
-        label { display: inline-block; min-width: 120px; }
-
-        /* Champs de formulaire */
-        input, select, button { padding: 6px 8px; }
-        input[type="date"],
-        input[type="time"],
-        input[type="number"],
-        select {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            outline: none;
-        }
-        input[type="date"]:focus,
-        input[type="time"]:focus,
-        input[type="number"]:focus,
-        select:focus {
-            border-color: #1976d2;
-            box-shadow: 0 0 0 2px rgba(25,118,210,0.15);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Style unifié pour tous les boutons et submits */
-        button,
-        input[type="submit"] {
-            padding: 8px 12px;
-            background: #1976d2;
-            color: #fff;
-            border: 1px solid #1976d2;
-            border-radius: 4px;
-            cursor: pointer;
-            line-height: 1.2;
-            transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+        body {
+            display: flex;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            color: #222;
         }
-        button:hover,
-        input[type="submit"]:hover { background: #155fa7; border-color: #155fa7; }
-        button:focus,
-        input[type="submit"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(25,118,210,0.25); }
-        button:disabled,
-        input[type="submit"]:disabled { opacity: .65; cursor: not-allowed; }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        /* Messages d'erreur */
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e53e3e;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
 
         /* Tableau */
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-        th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 15px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f7fafc;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Cases à cocher */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
 
         /* Mini-formulaires dans chaque ligne */
         table td form {

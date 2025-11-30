@@ -441,24 +441,9 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <?php include('app/views/sidebar/sidebar.php') ?>
-    
-    <div class="main-content">
-        <div class="page-header">
-            <div class="breadcrumb">
-                <a href="<?= constant('BASE_URL') ?>">Accueil</a>
-                <span class="breadcrumb-separator">›</span>
-                <a href="<?= constant('BASE_URL') ?>conges">Congés</a>
-                <span class="breadcrumb-separator">›</span>
-                <span>Solde de congés</span>
-            </div>
-            
-            <h1 class="page-title">
-                <span class="page-title-icon">💼</span>
-                Solde de Congés
-            </h1>
-        </div>
+    <?php include("app/views/bar/sidebar.php")?>
+
+    <h1>Solde de congé</h1>
 
         <!-- Filtre -->
         <div class="filter-card">

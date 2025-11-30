@@ -1,3 +1,7 @@
+CREATE DATABASE gestion_entreprise_rh ;
+
+\c gestion_entreprise_rh;
+
 CREATE TABLE Type_Contrat(
    id SERIAL PRIMARY KEY,
    label VARCHAR(50)
@@ -150,3 +154,4 @@ CREATE TABLE avantage(
    id_contrat_employe INT,
    FOREIGN KEY(id_contrat_employe) REFERENCES contrat_employe(id)
 );
+

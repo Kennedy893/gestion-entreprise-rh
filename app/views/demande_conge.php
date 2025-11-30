@@ -293,8 +293,11 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <?php include('app/views/sidebar/sidebar.php') ?>
+    <?php include("app/views/bar/sidebarEmp.php")?>
+
+    <form action="" method="post">
+        <label for="date_debut">Date début</label>
+        <input type="date" name="date_debut">
 
     <div class="main-content">
         <div class="page-header">
