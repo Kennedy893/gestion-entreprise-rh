@@ -48,3 +48,6 @@ Flight::map('HpresenceModel', function() {
 Flight::map('MessageModel', function() {
     return new \app\models\MessageModel(Flight::db()); 
 });
+Flight::map('DemandeModel', function() {
+    return new \app\models\DemandeModel(Flight::db()); 
+});

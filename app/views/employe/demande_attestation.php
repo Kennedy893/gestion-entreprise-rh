@@ -405,6 +405,13 @@
                 Demande d'Attestation
             </h1>
             <p class="page-subtitle">Obtenez votre attestation officielle en quelques clics</p>
+            <!-- affichage message -->
+            <?php if (isset($message)) : ?>
+                <div class="form-info" style="margin-top: 16px; <?php echo strpos($message, 'Erreur') !== false ? 'border-color: #ef4444; background: #fee2e2; color: #b91c1c;' : ''; ?>">
+                    <span class="form-info-icon">ℹ️</span>
+                    <span><?= htmlspecialchars($message) ?></span>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="form-container">
@@ -416,7 +423,7 @@
                 </div>
             </div>
 
-            <form action="#" method="post">
+            <form action="<?= constant('BASE_URL') ?>demande_attestation" method="post">
                 <div class="form-group">
                     <label class="form-label">
                         Type d'attestation <span class="required">*</span>

@@ -6,6 +6,7 @@ use app\controllers\EmployeController;
 use app\controllers\PaieController;
 use app\controllers\HController;
 use app\controllers\MessageController;
+use app\controllers\DemandeController;
 use flight\Engine;
 use flight\net\Router;
 //use Flight;
@@ -57,3 +58,8 @@ $router->group('/time' , function () use ($router,$hController){
     $router->get('/timecards' , [ $hController, 'into_timecards' ]);
     $router->get('/form-sheet' , [ $hController, 'into_temp_general' ]);
 }) ;
+
+
+$Demande_Controller = new DemandeController();
+$router->post('/demande_attestation', [ $Demande_Controller, 'insererDemandeAttestation' ]);
+$router->post('/demande_remboursement', [ $Demande_Controller, 'insererDemandeRemboursement' ]);

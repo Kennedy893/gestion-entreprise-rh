@@ -447,6 +447,13 @@
                 Demande de Remboursement
             </h1>
             <p class="page-subtitle">Soumettez votre demande de remboursement de frais professionnels</p>
+            <!-- affichage message -->
+            <?php if (isset($message)) : ?>
+                <div class="form-info" style="margin-top: 16px; <?php echo strpos($message, 'Erreur') !== false ? 'border-color: #ef4444; background: #fee2e2; color: #b91c1c;' : ''; ?>">
+                    <span class="form-info-icon">ℹ️</span>
+                    <span><?= htmlspecialchars($message) ?></span>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="form-container">
@@ -465,7 +472,7 @@
                 </div>
             </div>
 
-            <form action="#" method="post" enctype="multipart/form-data">
+            <form action="<?= constant('BASE_URL') ?>demande_remboursement" method="post" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="montant">
@@ -528,7 +535,7 @@
                             <input 
                                 type="file" 
                                 id="justificatifs" 
-                                name="justificatifs[]" 
+                                name="fichier[]" 
                                 class="file-upload-input"
                                 accept=".pdf,.jpg,.jpeg,.png"
                                 multiple
