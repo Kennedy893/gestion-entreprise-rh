@@ -6,7 +6,6 @@ use app\controllers\HController;
 use app\controllers\CongeController;
 use app\controllers\EmployeController;
 use app\controllers\PaieController;
-use app\controllers\HController;
 use app\controllers\MessageController;
 use app\controllers\DashboardController;
 use app\controllers\ChatbotController;
