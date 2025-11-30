@@ -24,7 +24,8 @@ class DashboardController {
             'absenteeism' => $absenteeism,
             'averageSeniority' => round($averageSeniority, 2),
             'ageDistribution' => $ageDistribution
-        ]);
+        ], 'contenu');
+        Flight::render('shared/home');
     }
 
     public function getEmployeesByAge() 

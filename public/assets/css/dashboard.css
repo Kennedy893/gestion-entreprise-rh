@@ -1,0 +1,172 @@
+
+    /* Styles spécifiques au Dashboard */
+
+    .dashboard-container {
+        padding: 0; /* Le padding est géré par .main-content */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 2rem;
+        color: var(--text-main);
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* --- GRILLE DE STATISTIQUES (KPI) --- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 25px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid var(--primary); /* Ligne colorée pour l'accent */
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 5px;
+    }
+
+    .stat-card > div:last-child {
+        font-size: 0.85rem;
+        color: var(--secondary);
+    }
+
+    /* Couleurs spécifiques aux KPI (Exemples) */
+    .stat-card:nth-child(1) { border-left-color: var(--primary); }
+    .stat-card:nth-child(2) .stat-value { color: var(--danger-text); }
+    .stat-card:nth-child(2) { border-left-color: var(--danger-text); }
+    .stat-card:nth-child(3) .stat-value { color: var(--success-text); }
+    .stat-card:nth-child(3) { border-left-color: var(--success-text); }
+
+
+    /* --- CONTENEUR DE GRAPHIQUES ET RECHERCHE --- */
+    .chart-and-search-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Graphique large, recherche plus étroite */
+        gap: 25px;
+    }
+    
+    .chart-container {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 25px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-container h3 {
+        font-size: 1.25rem;
+        color: var(--text-main);
+        margin-top: 0;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+
+    /* --- RECHERCHE PAR ÂGE (Bloc à droite) --- */
+    .age-search {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 25px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .age-search h3 {
+        font-size: 1.25rem;
+        color: var(--text-main);
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    
+    .age-search p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .search-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    #age-input {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 1rem;
+        width: 100px;
+        text-align: center;
+        transition: border-color 0.3s;
+    }
+    #age-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .search-controls button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .search-controls button:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .result-display {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: var(--bg-body);
+        border: 1px solid var(--border);
+        display: none; /* Masqué par défaut */
+        font-size: 0.95rem;
+    }
+
+    /* Couleurs spécifiques aux résultats JS */
+    #age-result .fa-triangle-exclamation { color: var(--danger-text); }
+    #age-result .fa-rotate { color: var(--primary); }
+    #age-result .fa-circle-check { color: var(--success-text); }
+
+
+    /* --- Responsive Design --- */
+    @media (max-width: 900px) {
+        .chart-and-search-grid {
+            grid-template-columns: 1fr; /* Empilement sur mobile */
+        }
+    }

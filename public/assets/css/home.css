@@ -1,0 +1,36 @@
+:root {
+  /* Palette raffinée */
+  --primary: #4f46e5; /* Indigo moderne */
+  --primary-dark: #4338ca;
+  --secondary: #64748b; /* Slate grey */
+  --bg-body: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+
+  /* Couleurs sémantiques */
+  --success-bg: #dcfce7;
+  --success-text: #166534;
+  --danger-bg: #fee2e2;
+  --danger-text: #991b1b;
+  --warning-bg: #fef9c3;
+  --warning-text: #854d0e;
+
+  /* Dimensions */
+  --sidebar-width: 260px;
+  --header-height: 70px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+}
