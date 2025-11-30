@@ -6,7 +6,6 @@ use app\controllers\HController;
 use app\controllers\CongeController;
 use app\controllers\EmployeController;
 use app\controllers\PaieController;
-use app\controllers\HController;
 use app\controllers\MessageController;
 use app\controllers\DashboardController;
 use app\controllers\ChatbotController;
@@ -92,7 +91,6 @@ $router->group('/time' , function () use ($router,$hController){
 $router->get('/demande_conge', [ $Conge_Controller, 'versDemande' ]);
 $router->get('/liste_conge', [ $Conge_Controller, 'versListe' ]);
 $router->get('/solde_conge', [ $Conge_Controller, 'versSolde' ]);
-$Paie_Controller = new \app\controllers\PaieController;
 
 
 $router->get('/', [ $Welcome_Controller, 'home' ]); 
