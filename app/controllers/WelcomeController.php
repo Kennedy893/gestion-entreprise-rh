@@ -13,7 +13,7 @@ class WelcomeController {
 
     public function home()
     {
-        Flight::render('home');
+        Flight::render('sidebar/sidebar');
     }
     public function homeRH()
     {

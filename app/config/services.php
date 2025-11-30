@@ -16,10 +16,9 @@ use app\models\HpresenceModel;
  */
 
 // uncomment the following line for MySQL
-$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
-       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
-// $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+//  $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
 
+ // pour PostgreSQL
 $dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
        ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
 
@@ -55,7 +54,19 @@ Flight::map('HpresenceModel', function() {
     return new HpresenceModel(Flight::db());
 });  
 Flight::map('CongeModel', function() {
-    return new CongeModel(Flight::db());
+    return new \app\models\CongeModel(Flight::db()); 
+});
+Flight::map('PaieModel', function() {
+    return new \app\models\PaieModel(Flight::db()); 
+});
+Flight::map('HModel', function() {
+    return new \app\models\HModel(Flight::db()); 
+});
+Flight::map('HpresenceModel', function() {
+    return new \app\models\HpresenceModel(Flight::db()); 
+});
+Flight::map('MessageModel', function() {
+    return new \app\models\MessageModel(Flight::db()); 
 });
 Flight::map('PaieModel', function () {
     return new \app\models\PaieModel(Flight::db());

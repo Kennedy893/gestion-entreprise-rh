@@ -425,9 +425,8 @@
     </style>
 </head>
 <body>
-    <?php include("app/views/bar/sidebar.php")?>
-
-    <h1>Liste des congés</h1>
+    <!-- Sidebar -->
+    <?php include('app/views/sidebar/sidebar.php') ?>
 
     <div class="main-content">
         <?php
@@ -463,7 +462,7 @@
             <div class="page-title-wrapper">
                 <h1 class="page-title">
                     <span class="page-title-icon">📋</span>
-                    Gestion des Demandes de Congés
+                    Validation de congés (coté RH)
                 </h1>
             </div>
         </div>
@@ -527,7 +526,7 @@
                             
                             
                             <tr>
-                                <form action="<?= constant('BASE_URL') ?>valider_conge" method="post" style="display: table-row;">
+                                <form action="<?= constant('BASE_URL') ?>valider_conge_rh" method="post" style="display: table-row;">
                                 <input type="hidden" value="<?= $l['id_absence'] ?>" name="id_absence">
                                 <input type="hidden" value="<?= $l['poste'] ?>" name="poste">
                                 <input type="hidden" value="<?= $l['id_employe'] ?>" name="id_employe">

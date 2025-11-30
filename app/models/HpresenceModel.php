@@ -9,6 +9,7 @@ use Exception;
 use DatePeriod;
 use DateInterval;
 
+
 class HpresenceModel {
 
     private $db;
@@ -45,67 +46,6 @@ class HpresenceModel {
         $debut = $startOfWeek->format('Y-m-d');
         $fin   = $endOfWeek->format('Y-m-d');
         $retour=[$debut,$fin];
-        return $retour;
-    }
-    public function get_plage_horaire($id_employe,$debut,$fin,$date)
-    {
-        $config_poste = $this->get_config_poste($id_employe,$date);
-        $plage_horaire=[];
-        if($config_poste==null)
-        {
-            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
-        }
-        if(
-            strtotime($debut) < strtotime($config_poste['entree']) &&
-            strtotime($fin) < strtotime($config_poste['entree']) ||
-            strtotime($debut) > strtotime($config_poste['sortie']) &&
-            strtotime($fin) > strtotime($config_poste['sortie']) ||
-            strtotime($debut) >= strtotime($config_poste['entree']) &&
-            strtotime($fin) <= strtotime($config_poste['sortie'])
-        )
-        {
-            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin];
-        }
-        else if(
-           strtotime($debut) < strtotime($config_poste['entree']) &&
-            strtotime($fin) >= strtotime($config_poste['entree']) &&
-            strtotime($fin) <= strtotime($config_poste['sortie'])
-        )
-        {
-            $debut_2=strtotime($config_poste['entree']);
-            $debut_2=$debut_2-60;
-            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$debut_2)];
-            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$fin];
-        }
-        else if(
-            strtotime($debut) >= strtotime($config_poste['entree']) &&
-            strtotime($debut) <= strtotime($config_poste['sortie']) &&
-            strtotime($fin) > strtotime($config_poste['sortie'])
-        )
-        {
-            $fin_1=strtotime($config_poste['sortie']);
-            $fin_1=$fin_1-60;
-            $fin_1=date('H:i:s',$fin_1);
-            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin_1];
-            $plage_horaire[]=['debut'=>$config_poste['sortie'],'fin'=>$fin];
-        }
-        else if(
-            strtotime($debut) < strtotime($config_poste['entree']) &&
-            strtotime($fin) > strtotime($config_poste['sortie'])
-        )
-        {
-            $fin_1=strtotime($config_poste['entree']);
-            $fin_1=$fin_1-60;
-            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$fin_1)];
-
-            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$config_poste['sortie']];
-
-            $debut_2=strtotime($config_poste['sortie']);
-            $debut_2=$debut_2+60;
-            $plage_horaire[]=['debut'=>date('H:i:s',$debut_2),'fin'=>$fin];
-        }
-        
-        return $plage_horaire;
     }
     public function condition_heure_supp($date,$id_employe,$duree)
     {
@@ -175,10 +115,6 @@ class HpresenceModel {
     public function is_heure_supp($heure,$id_employe,$date)
     {
         $config_poste = $this->get_config_poste($id_employe,$date);
-        if($config_poste == null)
-        {
-            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
-        }
         if(
             strtotime($heure)<strtotime($config_poste['entree']) ||
             strtotime($heure)>strtotime($config_poste['sortie'])
@@ -193,10 +129,6 @@ class HpresenceModel {
         $duree=strtotime($heure_fin) - strtotime($heure_debut);
         $duree=$duree/3600;
         $config_poste = $this->get_config_poste($id_employe,$date);
-        if($config_poste == null)
-        {
-            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
-        }
         if(
             strtotime($heure_debut)<strtotime($config_poste['entree']) &&
             strtotime($heure_fin)<strtotime($config_poste['entree']) ||
@@ -220,28 +152,90 @@ class HpresenceModel {
     {
         $sql="SELECT * FROM config_poste cp JOIN contrat_employe ce ON ce.id_poste=cp.id_poste
         WHERE ce.id_employe= ? AND
-        ce.id_poste=cp.id_poste AND
-       (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))";
+       (date_debut IS NULL AND (date_fin IS NULL OR date_fin>= ? )) OR 
+       (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL)) 
+       ORDER BY date_debut DESC LIMIT 1";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id_employe,$date,$date]);
+        $stmt->execute([$id_employe,$date,$date,$date]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function get_salaire_heure($id_employe, $date)
     {
         $config_poste = $this->get_config_poste($id_employe, $date);
-        if ($config_poste == null) {
-            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
-        }
+        $pourcentage=[1,1.2,1.5,2];
         $salaire=Flight::HModel()->get_generalised("contrat_employe", 
         "salaire", 
         ["id_employe"], 
         [$id_employe], 
-        "AND (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL))", 
-        [$date,$date]);
+        "AND (date_debut IS NULL AND (date_fin IS NULL OR date_fin>= ? )) OR (date_debut <= ? AND (date_fin >= ? OR date_fin IS NULL)) ORDER BY date_debut DESC LIMIT 1", 
+        [$date,$date,$date]);
         $retour=$salaire[0]['salaire'] ?? 0;
         $retour=$retour/$config_poste['duree_travail']/30;
 
         return $retour;
     }
+
+
+    public function get_plage_horaire($id_employe,$debut,$fin,$date)
+    {
+        $config_poste = $this->get_config_poste($id_employe,$date);
+        $plage_horaire=[];
+        if($config_poste==null)
+        {
+            throw new Exception("Aucun poste assigné pour cet employé à la date ".$date);
+        }
+        if(
+            strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) < strtotime($config_poste['entree']) ||
+            strtotime($debut) > strtotime($config_poste['sortie']) &&
+            strtotime($fin) > strtotime($config_poste['sortie']) ||
+            strtotime($debut) >= strtotime($config_poste['entree']) &&
+            strtotime($fin) <= strtotime($config_poste['sortie'])
+        )
+        {
+            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin];
+        }
+        else if(
+           strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) >= strtotime($config_poste['entree']) &&
+            strtotime($fin) <= strtotime($config_poste['sortie'])
+        )
+        {
+            $debut_2=strtotime($config_poste['entree']);
+            $debut_2=$debut_2-60;
+            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$debut_2)];
+            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$fin];
+        }
+        else if(
+            strtotime($debut) >= strtotime($config_poste['entree']) &&
+            strtotime($debut) <= strtotime($config_poste['sortie']) &&
+            strtotime($fin) > strtotime($config_poste['sortie'])
+        )
+        {
+            $fin_1=strtotime($config_poste['sortie']);
+            $fin_1=$fin_1-60;
+            $fin_1=date('H:i:s',$fin_1);
+            $plage_horaire[]=['debut'=>$debut,'fin'=>$fin_1];
+            $plage_horaire[]=['debut'=>$config_poste['sortie'],'fin'=>$fin];
+        }
+        else if(
+            strtotime($debut) < strtotime($config_poste['entree']) &&
+            strtotime($fin) > strtotime($config_poste['sortie'])
+        )
+        {
+            $fin_1=strtotime($config_poste['entree']);
+            $fin_1=$fin_1-60;
+            $plage_horaire[]=['debut'=>$debut,'fin'=>date('H:i:s',$fin_1)];
+
+            $plage_horaire[]=['debut'=>$config_poste['entree'],'fin'=>$config_poste['sortie']];
+
+            $debut_2=strtotime($config_poste['sortie']);
+            $debut_2=$debut_2+60;
+            $plage_horaire[]=['debut'=>date('H:i:s',$debut_2),'fin'=>$fin];
+        }
+        
+        return $plage_horaire;
+    }
+  
     
 }

@@ -5,7 +5,6 @@ namespace app\models;
 use Flight;
 use PDO;
 
-
 class HModel {
 
     private $db;
