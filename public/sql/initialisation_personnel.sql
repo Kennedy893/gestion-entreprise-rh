@@ -153,3 +153,7 @@ INSERT INTO annonce_emploi (titre, description, competences_requises, diplomes_r
  1,  -- CDI
  1   -- Manager ID
 );
+
+
+INSERT INTO utilisateurs (username, password, role, nom, prenom, email) VALUES
+('admin1', 'cccc', 'admin', 'ANDRIANJAKA', 'Marie', 'sss@gmail.com');
