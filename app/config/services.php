@@ -13,6 +13,9 @@ use app\models\EntretienModel;
 use app\models\DocumentCandidatureModel;
 
 
+use app\models\CongeModel;
+use app\models\HpresenceModel;
+
 
 
 /** 
@@ -21,7 +24,13 @@ use app\models\DocumentCandidatureModel;
  */
 
 // uncomment the following line for MySQL
-$dsn = 'mysql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+//  $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
+
+ // pour PostgreSQL
+$dsn = 'pgsql:host=' . $config['database']['host'] . ';port=' . $config['database']['port'] . ';dbname=' . $config['database']['dbname'] . 
+       ';user=' . $config['database']['user'] . ';password=' . $config['database']['password'];
+
+
 // uncomment the following line for SQLite
 // $dsn = 'sqlite:' . $config['database']['file_path'];
 
@@ -105,3 +114,52 @@ Flight::map('contratModel', function() {
 // Flight::map('mailer', function() use ($config) {
 //     return new PHPMailer($config['mail']);
 // });
+
+Flight::map('HModel', function() {
+    return new \app\models\HModel(Flight::db());  
+});
+
+Flight::map('HController', function() {
+    return new \app\controllers\HController();  
+});
+
+Flight::map('HpresenceModel', function() {
+    return new HpresenceModel(Flight::db());
+});  
+Flight::map('CongeModel', function() {
+    return new \app\models\CongeModel(Flight::db()); 
+});
+Flight::map('PaieModel', function() {
+    return new \app\models\PaieModel(Flight::db()); 
+});
+Flight::map('HModel', function() {
+    return new \app\models\HModel(Flight::db()); 
+});
+Flight::map('HpresenceModel', function() {
+    return new \app\models\HpresenceModel(Flight::db()); 
+});
+Flight::map('MessageModel', function() {
+    return new \app\models\MessageModel(Flight::db()); 
+});
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
+});
+Flight::map('DashboardModel', function () {
+    return new \app\models\DashboardModel(Flight::db());
+});
+
+Flight::map('PaieModel', function () {
+    return new \app\models\PaieModel(Flight::db());
+});
+
+Flight::map('ChatbotPaieModel', function () {
+    return new \app\models\ChatbotPaieModel(Flight::db());
+});
+
+Flight::map('GenerationModel', function () {
+    return new \app\models\GenerationModel(Flight::db());
+});
+Flight::map('HdashModel', function () {
+    return new \app\models\HdashModel(Flight::db());
+});
+

@@ -1,0 +1,136 @@
+/* --- SIDEBAR --- */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: #1e293b; /* Dark Slate */
+  color: white;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.brand {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.brand i {
+  margin-right: 10px;
+  color: var(--primary);
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 20px 10px;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.nav-item {
+  margin-bottom: 5px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.nav-link i {
+  width: 25px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+.nav-link.active {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+}
+
+.nav-item.has-submenu {
+  /* Style pour l'élément parent */
+}
+
+.dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-icon {
+  margin-right: 0; /* Réinitialiser la marge pour l'icône de flèche */
+  transition: transform 0.3s ease;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Rotation de la flèche quand le sous-menu est ouvert */
+.dropdown-toggle.open .arrow-icon {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* Styles pour masquer le sous-menu */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.submenu li a {
+  display: block;
+  padding: 8px 20px 8px 55px; /* Décalage pour l'indentation */
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  background-color: var(--submenu-bg);
+}
+
+.submenu li a:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--sidebar-link-color);
+}
+
+/* Classe à ajouter par JS pour ouvrir le sous-menu */
+.nav-item.has-submenu.open .submenu {
+  max-height: 500px; /* Grande valeur pour permettre l'animation de slide */
+}
+
+.user-profile {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}

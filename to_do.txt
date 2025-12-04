@@ -1,0 +1,10 @@
+/requete pointage et feuille de temps
+affichage simple pointage et feuille de temps
+ajout heure supp
+    +week-end *2
+    +ferie *3
+    +...
+ajout limite d'heure supp
+Releve de presence
+
+css ny rehetra

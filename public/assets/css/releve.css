@@ -1,0 +1,173 @@
+.container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        color: var(--text-main);
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        color: var(--secondary);
+        font-weight: 500;
+        margin-top: 0;
+        margin-bottom: 30px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 10px;
+    }
+
+    /* --- GESTION DES TOTAUX (Premier Tableau) --- */
+    .summary-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 20px 0; /* Espacement entre les cellules pour un look de carte */
+        margin-bottom: 30px;
+    }
+
+    .summary-table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .summary-table td {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+
+    .summary-table thead {
+        display: none; /* Masquer l'en-tête du tableau de résumé */
+    }
+    
+    .summary-table td {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        /* Style des labels manuels */
+        position: relative;
+    }
+
+    .summary-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 8px;
+        left: 0;
+        right: 0;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    /* Couleurs spécifiques pour les montants */
+    .summary-table td:nth-child(3), 
+    .summary-table td:nth-child(4) {
+        color: var(--success-text);
+        font-size: 2rem;
+    }
+    
+    /* --- TABLEAU DÉTAILLÉ (Second Tableau) --- */
+    table:nth-of-type(2) {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+    table:nth-of-type(2) thead th {
+        text-align: left;
+        padding: 15px 12px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid var(--border);
+        background-color: transparent;
+    }
+    
+    table:nth-of-type(2) tbody tr {
+        background-color: var(--bg-card);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    table:nth-of-type(2) tbody td {
+        padding: 15px 12px;
+        vertical-align: top;
+        border: 1px solid var(--border);
+        font-size: 0.95rem;
+    }
+    
+    table:nth-of-type(2) tbody tr td:first-child { border-left: 1px solid var(--border); border-top-left-radius: var(--radius); border-bottom-left-radius: var(--radius); }
+    table:nth-of-type(2) tbody tr td:last-child { border-right: 1px solid var(--border); border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); }
+    table:nth-of-type(2) tbody tr td:not(:last-child) { border-right: none; }
+
+    /* Colonnes Heures/Montants */
+    table:nth-of-type(2) tbody td:nth-child(2), 
+    table:nth-of-type(2) tbody td:nth-child(3), 
+    table:nth-of-type(2) tbody td:nth-child(4), 
+    table:nth-of-type(2) tbody td:nth-child(5) {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    /* --- LISTE DES PRÉSENCES DÉTAILLÉES (dernière colonne) --- */
+    .presences {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .presences li {
+        background-color: var(--bg-body);
+        padding: 5px 10px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .presences .time {
+        font-weight: 500;
+        color: var(--text-main);
+    }
+    .presences .amount {
+        font-weight: 700;
+        color: var(--primary-dark);
+        font-size: 0.9rem;
+    }
+
+    .badge-muted {
+        display: inline-block;
+        background-color: var(--border);
+        color: var(--text-muted);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+        .summary-table tbody tr {
+            grid-template-columns: 1fr 1fr; /* 2 colonnes sur mobile */
+        }
+        .summary-table td::before {
+            white-space: normal;
+        }
+        
+        /* Réduire la taille de la police pour le détail du tableau */
+        table:nth-of-type(2) tbody td {
+            padding: 10px 8px;
+            font-size: 0.85rem;
+        }
+    }

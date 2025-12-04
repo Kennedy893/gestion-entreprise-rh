@@ -1,5 +1,7 @@
 <?php
 
+require(__DIR__ . $ds . '..' . $ds . 'helpers' . $ds . 'helpers.php');
+
 /*
  * This is the file called bootstrap who's job is to make sure that all the
  * required services, plugins, connections, etc. are loaded and ready to go

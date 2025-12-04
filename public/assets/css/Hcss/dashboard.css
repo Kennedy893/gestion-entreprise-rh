@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    color: #2c3e50;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 25px 30px;
+    background: #1a237e;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(26, 35, 126, 0.15);
+    border: 1px solid #e8eaf6;
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.header-info {
+    font-size: 0.9rem;
+    color: #e8eaf6;
+    font-weight: 300;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 25px;
+    grid-template-areas: 
+        "performance employees"
+        "hours hours";
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8eaf6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: #1a237e;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e8eaf6;
+    letter-spacing: -0.3px;
+}
+
+.performance-card {
+    grid-area: performance;
+}
+
+.employees-card {
+    grid-area: employees;
+}
+
+.hours-card {
+    grid-area: hours;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.employees-stats {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 25px;
+}
+
+.total-employees {
+    text-align: center;
+    padding: 25px 20px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border: 1px solid #e8eaf6;
+    transition: all 0.3s ease;
+}
+
+.total-employees:hover {
+    background: #f0f2ff;
+    border-color: #1a237e;
+}
+
+.total-employees .number {
+    display: block;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: #1a237e;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.total-employees .label {
+    font-size: 0.95rem;
+    color: #5c6bc0;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hours-stats {
+    height: 100%;
+}
+
+/* Styles spécifiques pour les graphiques */
+.chartjs-render-monitor {
+    border-radius: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "performance"
+            "employees"
+            "hours";
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .total-employees .number {
+        font-size: 2.2rem;
+    }
+    
+    .dashboard-header {
+        padding: 20px;
+    }
+}
+
+/* Animation d'entrée */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.performance-card {
+    animation-delay: 0.1s;
+}
+
+.employees-card {
+    animation-delay: 0.2s;
+}
+
+.hours-card {
+    animation-delay: 0.3s;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1a237e;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #283593;
+}
