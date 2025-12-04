@@ -1,0 +1,40 @@
+/* Fichier : public/assets/css/rh_custom.css */
+
+/* grid */
+.entretiens-grid, .candidats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    gap: 18px;
+}
+
+/* card */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid #e6eef8;
+    box-shadow: 0 6px 22px rgba(15,23,42,0.03);
+}
+
+/* meta */
+.meta { color:#475569; font-size:0.95rem; margin-bottom:10px; }
+
+/* pills */
+.pill {
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f1f5f9;
+    border:1px solid #e2e8f0;
+    color:#0f172a;
+    text-decoration:none;
+}
+.badge-success { background:#dcfce7; color:#166534; padding:6px 10px; border-radius:8px; }
+.badge-warning { background:#fef3c7; color:#92400e; padding:6px 10px; border-radius:8px; }
+
+/* table */
+.table { width:100%; border-collapse:collapse; }
+.table th, .table td { padding:10px 12px; border-bottom:1px solid #e6eef8; text-align:left; }
+
+/* small buttons */
+.btn-sm { padding:6px 10px; border-radius:6px; text-decoration:none; background:#eef2ff; color:#1e40af; border:1px solid #c7d2fe; margin-right:6px; }

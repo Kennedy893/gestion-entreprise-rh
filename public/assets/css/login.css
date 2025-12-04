@@ -1,0 +1,223 @@
+/* Login Page Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.login-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.login-section {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+}
+
+.login-section:hover {
+    transform: translateY(-5px);
+}
+
+.admin-section {
+    border-top: 5px solid #2563eb;
+}
+
+.candidate-section {
+    border-top: 5px solid #10b981;
+}
+
+.section-content {
+    text-align: center;
+}
+
+.icon-wrapper {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-wrapper i {
+    font-size: 3rem;
+    color: white;
+}
+
+.candidate-section .icon-wrapper {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.login-form {
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(16,185,129,0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #10b981;
+    border: 2px solid #10b981;
+}
+
+.btn-outline:hover {
+    background: #10b981;
+    color: white;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.help-text {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.help-text p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.features {
+    text-align: left;
+    margin: 30px 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.feature-item i {
+    color: #10b981;
+    font-size: 1.3rem;
+}
+
+@media (max-width: 968px) {
+    .login-split {
+        grid-template-columns: 1fr;
+    }
+    
+    .login-section {
+        padding: 30px;
+    }
+}

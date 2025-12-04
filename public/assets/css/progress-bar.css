@@ -1,0 +1,303 @@
+/* ==========================================
+   STYLES POUR BARRE DE PROGRESSION 0-100%
+   ========================================== */
+
+/* Conteneur principal de barre de progression */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Barre de progression redéfinie */
+.progress-bar-full {
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    position: relative;
+}
+
+.progress-bar-full::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
+    border-radius: 20px;
+}
+
+/* Remplissage avec dégradé couleur basé sur score */
+.progress-fill-score {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(90deg, #ef4444 0%, #f97316 25%, #eab308 50%, #84cc16 75%, #22c55e 100%);
+    border-radius: 20px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+/* Score affichage - côté droit */
+.score-display-badge {
+    min-width: 70px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* États de scoring */
+/* Très bon (80-100%) */
+.progress-excellent {
+    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%) !important;
+}
+
+.score-excellent {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+/* Bon (60-80%) */
+.progress-good {
+    background: linear-gradient(90deg, #84cc16 0%, #65a30d 100%) !important;
+}
+
+.score-good {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}
+
+/* Moyen (40-60%) */
+.progress-fair {
+    background: linear-gradient(90deg, #eab308 0%, #ca8a04 100%) !important;
+}
+
+.score-fair {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+
+/* Faible (20-40%) */
+.progress-poor {
+    background: linear-gradient(90deg, #f97316 0%, #ea580c 100%) !important;
+}
+
+.score-poor {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+}
+
+/* Critique (0-20%) */
+.progress-critical {
+    background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+.score-critical {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+/* Indicateur seuils */
+.threshold-indicators {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.threshold-markers {
+    display: flex;
+    width: 100%;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.threshold-marker {
+    flex: 1;
+    height: 2px;
+    background: #e5e7eb;
+}
+
+.threshold-marker.critical {
+    background: #ef4444;
+}
+
+.threshold-marker.warning {
+    background: #f59e0b;
+}
+
+.threshold-marker.safe {
+    background: #22c55e;
+}
+
+/* Tooltip pour seuils */
+.threshold-tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.progress-bar-full:hover .threshold-tooltip {
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes pulse-score {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    }
+}
+
+.score-display-badge.pulse {
+    animation: pulse-score 2s infinite;
+}
+
+@keyframes slide-fill {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.progress-fill-score {
+    animation: slide-fill 0.8s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .progress-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .score-display-badge {
+        width: 100%;
+    }
+    
+    .progress-bar-full {
+        height: 35px;
+    }
+    
+    .progress-fill-score {
+        font-size: 0.85rem;
+    }
+}
+
+/* États spéciaux */
+.progress-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.progress-loading {
+    animation: loading 1s infinite;
+}
+
+@keyframes loading {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Barre avec étapes */
+.progress-stepped {
+    position: relative;
+}
+
+.progress-steps {
+    display: flex;
+    gap: 2px;
+    height: 100%;
+}
+
+.progress-step {
+    flex: 1;
+    height: 100%;
+    background: #e5e7eb;
+    transition: background 0.3s;
+    border-radius: 2px;
+}
+
+.progress-step.filled {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Info box sous la barre */
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.progress-info-label {
+    font-weight: 600;
+}
+
+.progress-info-value {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* Barre avec actions */
+.progress-with-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.progress-action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #f3f4f6;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.progress-action-btn:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.progress-action-btn.active {
+    background: #667eea;
+    color: white;
+}
