@@ -5,25 +5,25 @@ namespace app\controllers;
 use DateTime;
 use Flight;
 
-class CongeController {
+class CongeController
+{
 
-	public function __construct() {
-
-	}
+    public function __construct() {}
 
     public function versDemande()
     {
-        Flight::render('demande_conge');   
+        Flight::render('conge/demande', [], 'contenu');
+        Flight::render('shared/home');
     }
 
     public function versListe()
     {
-        Flight::render('liste_conge');   
+        Flight::render('liste_conge');
     }
 
     public function versSolde()
     {
-        Flight::render('solde_conge');   
+        Flight::render('solde_conge');
     }
 
     public function demanderConge()
@@ -52,7 +52,8 @@ class CongeController {
         $liste = Flight::CongeModel()->listeConge();
         // Retourner une réponse (JSON ou redirection)
         if ($result['success']) {
-            Flight::render('liste_conge', ['liste' => $liste]);
+            Flight::render('conge/liste', ['liste' => $liste], 'contenu');
+            Flight::render('shared/home');
         } else {
             Flight::json(['success' => false, 'error' => $result['error']]);
         }
@@ -62,14 +63,16 @@ class CongeController {
     {
         $liste = Flight::CongeModel()->listeConge();
 
-        Flight::render('liste_conge', ['liste' => $liste]);
+        Flight::render('conge/liste', ['liste' => $liste], 'contenu');
+        Flight::render('shared/home');
     }
 
     public function listerCongeRH()
     {
         $liste = Flight::CongeModel()->listeCongeRH();
 
-        Flight::render('validation_rh', ['liste' => $liste]);
+        Flight::render('validation_rh', ['liste' => $liste], 'contenu');
+        Flight::render('shared/home');
     }
 
 
@@ -96,7 +99,7 @@ class CongeController {
 
             Flight::CongeModel()->updateStatut(2, $id_absence, $date_validation);
 
-            Flight::redirect(constant('BASE_URL').'liste_conge?refuse=1');
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?refuse=1');
             return;
         }
 
@@ -108,7 +111,7 @@ class CongeController {
         // 1. Récupérer absence
         $absence = Flight::CongeModel()->getAbsenceById($id_absence);
         if (!$absence) {
-            Flight::redirect(constant('BASE_URL').'liste_conge?error=' . urlencode("Absence introuvable"));
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?error=' . urlencode("Absence introuvable"));
             return;
         }
 
@@ -117,7 +120,7 @@ class CongeController {
         $date_fin     = $absence['date_fin'];
 
         if (!$date_demande || !$date_debut || !$date_fin) {
-            Flight::redirect(constant('BASE_URL').'liste_conge?error=' . urlencode("Impossible de valider : données manquantes"));
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?error=' . urlencode("Impossible de valider : données manquantes"));
             return;
         }
 
@@ -141,7 +144,7 @@ class CongeController {
         $jours_preavis = $dateDemande->diff($dateDebut)->days;
 
         if ($jours_preavis < $preavis) {
-            Flight::redirect(constant('BASE_URL').'liste_conge?error=' . urlencode("Préavis insuffisant : minimum $preavis jours"));
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?error=' . urlencode("Préavis insuffisant : minimum $preavis jours"));
             return;
         }
 
@@ -150,7 +153,7 @@ class CongeController {
         //  Vérifier SI AUTRE employé du même poste a un congé simultané
         // --------------------------------------------------------------------
         if (Flight::CongeModel()->issetAutreConge($poste, $id_absence, $date_debut, $date_fin)) {
-            Flight::redirect(constant('BASE_URL').'liste_conge?error=' . urlencode(
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?error=' . urlencode(
                 "Un employé du même poste a déjà un congé à ces dates"
             ));
             return;
@@ -161,7 +164,7 @@ class CongeController {
         //  Vérifier le SOLDE
         // --------------------------------------------------------------------
         if (!Flight::CongeModel()->hasSoldeSuffisant($id_employe, $date_debut, $date_fin)) {
-            Flight::redirect(constant('BASE_URL').'liste_conge?error=' . urlencode("Solde insuffisant"));
+            Flight::redirect(constant('BASE_URL') . 'liste_conge?error=' . urlencode("Solde insuffisant"));
             return;
         }
 
@@ -171,7 +174,7 @@ class CongeController {
         // --------------------------------------------------------------------
         Flight::CongeModel()->updateStatut(1, $id_absence, $date_validation);
 
-        Flight::redirect(constant('BASE_URL').'validation_rh');
+        Flight::redirect(constant('BASE_URL') . 'validation_rh');
         return;
     }
 
@@ -195,11 +198,10 @@ class CongeController {
         // --------------------------------------------------------------------
         //  REFUSER LE CONGÉ
         // --------------------------------------------------------------------
-        if ($button == "1") 
-        {
+        if ($button == "1") {
             Flight::CongeModel()->updateStatut(2, $id_absence, $date_validation);
 
-            Flight::redirect(constant('BASE_URL').'validation_rh?refuse=1');
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?refuse=1');
             return;
         }
 
@@ -211,7 +213,7 @@ class CongeController {
         // 1. Récupérer absence
         $absence = Flight::CongeModel()->getAbsenceById($id_absence);
         if (!$absence) {
-            Flight::redirect(constant('BASE_URL').'validation_rh?error=' . urlencode("Absence introuvable"));
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?error=' . urlencode("Absence introuvable"));
             return;
         }
 
@@ -220,7 +222,7 @@ class CongeController {
         $date_fin     = $absence['date_fin'];
 
         if (!$date_demande || !$date_debut || !$date_fin) {
-            Flight::redirect(constant('BASE_URL').'validation_rh?error=' . urlencode("Impossible de valider : données manquantes"));
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?error=' . urlencode("Impossible de valider : données manquantes"));
             return;
         }
 
@@ -254,7 +256,7 @@ class CongeController {
         $jours_preavis = $dateDemande->diff($dateDebut)->days;
 
         if ($jours_preavis < $preavis) {
-            Flight::redirect(constant('BASE_URL').'validation_rh?error=' . urlencode("Préavis insuffisant : minimum $preavis jours"));
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?error=' . urlencode("Préavis insuffisant : minimum $preavis jours"));
             return;
         }
 
@@ -263,7 +265,7 @@ class CongeController {
         //  Vérifier SI AUTRE employé du même poste a un congé simultané
         // --------------------------------------------------------------------
         if (Flight::CongeModel()->issetAutreConge($poste, $id_absence, $date_debut, $date_fin)) {
-            Flight::redirect(constant('BASE_URL').'validation_rh?error=' . urlencode(
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?error=' . urlencode(
                 "Un employé du même poste a déjà un congé à ces dates"
             ));
             return;
@@ -274,7 +276,7 @@ class CongeController {
         //  Vérifier le SOLDE
         // --------------------------------------------------------------------
         if (!Flight::CongeModel()->hasSoldeSuffisant($id_employe, $date_debut, $date_fin)) {
-            Flight::redirect(constant('BASE_URL').'validation_rh?error=' . urlencode("Solde insuffisant"));
+            Flight::redirect(constant('BASE_URL') . 'validation_rh?error=' . urlencode("Solde insuffisant"));
             return;
         }
 
@@ -285,7 +287,7 @@ class CongeController {
         Flight::CongeModel()->updateSolde($anneeConge, $id_employe, $nbJours);
         Flight::CongeModel()->updateStatut(11, $id_absence, $date_validation);
 
-        Flight::redirect(constant('BASE_URL').'validation_rh');
+        Flight::redirect(constant('BASE_URL') . 'validation_rh');
         return;
     }
 
@@ -293,25 +295,21 @@ class CongeController {
     {
         $employes = Flight::CongeModel()->getAllEmployes();
 
-        if (isset($_GET['id_employe']) && $_GET['id_employe'] != "") 
-        {
+        if (isset($_GET['id_employe']) && $_GET['id_employe'] != "") {
             // raha misy id_employe
             $solde = Flight::CongeModel()->getSoldeCongeByEmploye($_GET['id_employe']);
             $annee_debut = Flight::CongeModel()->getAnneeDebutContrat($_GET['id_employe']);
-        } 
-        else 
-        {
+        } else {
             $solde = Flight::CongeModel()->getSoldeCongeAll();
         }
 
         Flight::render('solde_conge', ['solde' => $solde, 'employes' => $employes, 'annee_debut' => $annee_debut ?? null]);
-
     }
 
     public function detailsSolde()
     {
         if (!isset($_GET['employe']) || !isset($_GET['annee'])) {
-            Flight::redirect(constant('BASE_URL').'vers_solde_conge?error=' . urlencode("Paramètres manquants"));
+            Flight::redirect(constant('BASE_URL') . 'vers_solde_conge?error=' . urlencode("Paramètres manquants"));
             return;
         }
 
@@ -323,6 +321,4 @@ class CongeController {
 
         Flight::render('details_solde', ['id_employe' => $id_employe, 'annee' => $annee, 'jrsPris_normal' => $jrsPris_normal, 'jrsPris_exc' => $jrsPris_exc]);
     }
-
-
 }

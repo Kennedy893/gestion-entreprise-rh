@@ -42,6 +42,18 @@
       </ul>
     </li>
 
+    <li class="nav-item has-submenu">
+      <a href="#" class="nav-link dropdown-toggle" id="performance-toggle">
+        <i class="fa-solid fa-file-invoice-dollar"></i>Congés
+        <i class="fa-solid fa-chevron-right arrow-icon"></i>
+      </a>
+      <ul class="submenu">
+        <li><a href="<?= constant('BASE_URL') ?>vers_demande_conge">Demande congé</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>liste_conge">Liste congés</a></li>
+      </ul>
+    </li>
+
+
     <li class="nav-item">
       <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Rapports</a>
     </li>

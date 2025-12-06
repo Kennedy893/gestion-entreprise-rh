@@ -58,9 +58,9 @@ $router->group('/performance', function () use ($router, $hController) {
 // DEMANDE CONGE
 $router->get('/vers_demande_conge', [$Conge_Controller, 'versDemande']);
 $router->post('/demande_conge', [$Conge_Controller, 'demanderConge']);
-// VALIDATION MANAGER
-$router->get('/vers_liste_conge', [$Conge_Controller, 'listerConge']);
 $router->get('/liste_conge', [$Conge_Controller, 'listerConge']);
+
+
 $router->post('/valider_conge', [$Conge_Controller, 'validerConge']);
 // VALIDATION RH
 $router->get('/validation_rh', [$Conge_Controller, 'listerCongeRH']);
@@ -80,33 +80,16 @@ $router->get('/choose_soumission', [$Employe_Controller, 'chooseSoumission']);
 $router->get('/demande_attestation', [$Employe_Controller, 'chooseAttestation']);
 $router->get('/demande_remboursement', [$Employe_Controller, 'versRemboursement']);
 
-
-
 $router->get('/paie', [$Paie_Controller, 'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
-$router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
 $router->get('/paie/etats/export', [$Paie_Controller, 'exportEtatDePaie']);
 $router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
 
-
-$router->group('/time', function () use ($router, $hController) {
-    $router->get('/presences', [$hController, 'into_presence']);
-    $router->post('/presences', [$hController, 'insert_presence']);
-    $router->get('/employees', [$hController, 'into_employees']);
-    $router->get('/releves', [$hController, 'into_releves']);
-    $router->get('/timecards', [$hController, 'into_timecards']);
-    $router->get('/form-sheet', [$hController, 'into_temp_general']);
-});
 $router->get('/demande_conge', [$Conge_Controller, 'versDemande']);
 $router->get('/liste_conge', [$Conge_Controller, 'versListe']);
 $router->get('/solde_conge', [$Conge_Controller, 'versSolde']);
 
 
-
-$router->get('/', [$Welcome_Controller, 'home']);
-$router->get('/paie', [$Paie_Controller, 'etatDePaie']);
-$router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
-$router->get('/paie/details', [$Paie_Controller, 'detailsEmp']);
 $router->post('/chatbot/ask', [$chatcontoller_Controller, 'processQuestion']);
 $router->get('/contratGen/@id', [$gen, 'genererContratPdf']);
 $router->get('/attestation/@id', [$gen, 'genererAttestationTravailPdf']);
