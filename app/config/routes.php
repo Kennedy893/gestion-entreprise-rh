@@ -33,11 +33,10 @@ $router->get('/loginManager', [$Welcome_Controller, 'homeManager']);
 $router->get('/login', [$Welcome_Controller, 'homeEmp']);
 
 
+// $router->get('/', [$Welcome_Controller, 'home']);
 
-$router->get('/', [$Welcome_Controller, 'home']);
 
-
-$router->get('/dashboard', [$DashboardController, 'showDashboardPage']);
+$router->get('/', [$DashboardController, 'showDashboardPage']);
 $router->get('/dashboard/employees-by-age', [$DashboardController, 'getEmployeesByAge']);
 
 
@@ -54,9 +53,6 @@ $router->group('/performance', function () use ($router, $hController) {
     $router->get('/calendar', [$hController, 'into_calendar']);
     $router->get('/dashboard', [$hController, 'into_performance_dashboard']);
 });
-
-$router->get('/', [$Welcome_Controller, 'home']);
-
 
 
 // DEMANDE CONGE

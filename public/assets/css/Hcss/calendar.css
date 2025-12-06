@@ -1,18 +1,7 @@
-/* Reset et base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
+.container {
     background-color: #f8fafc;
     color: #334155;
     line-height: 1.5;
-}
-
-.container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 24px;

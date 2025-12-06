@@ -327,7 +327,8 @@ class HController
             'heures' => $heures,
             'notes' => $notes
         ];
-        Flight::render('performance/dashboard', $data);
+        Flight::render('performance/dashboard', $data, 'contenu');
+        Flight::render('shared/home');
     }
     public function into_calendar()
     {
@@ -403,7 +404,8 @@ class HController
             'note_mois' => $note_mois
         ];
 
-        Flight::render('performance/calendar', $data);
+        Flight::render('performance/calendar', $data, 'contenu');
+        Flight::render('shared/home');
     }
 
     public function get_prediction()
