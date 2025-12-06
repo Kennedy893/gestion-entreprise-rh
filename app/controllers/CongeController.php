@@ -71,7 +71,7 @@ class CongeController
     {
         $liste = Flight::CongeModel()->listeCongeRH();
 
-        Flight::render('validation_rh', ['liste' => $liste], 'contenu');
+        Flight::render('conge/liste_rh', ['liste' => $liste], 'contenu');
         Flight::render('shared/home');
     }
 
@@ -303,7 +303,8 @@ class CongeController
             $solde = Flight::CongeModel()->getSoldeCongeAll();
         }
 
-        Flight::render('solde_conge', ['solde' => $solde, 'employes' => $employes, 'annee_debut' => $annee_debut ?? null]);
+        Flight::render('conge/solde', ['solde' => $solde, 'employes' => $employes, 'annee_debut' => $annee_debut ?? null] , 'contenu');
+        Flight::render('shared/home');
     }
 
     public function detailsSolde()
@@ -319,6 +320,7 @@ class CongeController
         $jrsPris_normal = Flight::CongeModel()->getJrsPrisByTypeConge($id_employe, $annee, 'Conge normal');
         $jrsPris_exc = Flight::CongeModel()->getJrsPrisByTypeConge($id_employe, $annee, 'Conge exceptionnel');
 
-        Flight::render('details_solde', ['id_employe' => $id_employe, 'annee' => $annee, 'jrsPris_normal' => $jrsPris_normal, 'jrsPris_exc' => $jrsPris_exc]);
+        Flight::render('conge/details_solde', ['id_employe' => $id_employe, 'annee' => $annee, 'jrsPris_normal' => $jrsPris_normal, 'jrsPris_exc' => $jrsPris_exc], 'contenu');
+        Flight::render('shared/home');
     }
 }

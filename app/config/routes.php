@@ -55,7 +55,6 @@ $router->group('/performance', function () use ($router, $hController) {
 });
 
 
-// DEMANDE CONGE
 $router->get('/vers_demande_conge', [$Conge_Controller, 'versDemande']);
 $router->post('/demande_conge', [$Conge_Controller, 'demanderConge']);
 $router->get('/liste_conge', [$Conge_Controller, 'listerConge']);

@@ -50,6 +50,8 @@
       <ul class="submenu">
         <li><a href="<?= constant('BASE_URL') ?>vers_demande_conge">Demande congé</a></li>
         <li><a href="<?= constant('BASE_URL') ?>liste_conge">Liste congés</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>validation_rh">Liste congés (RH)</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>vers_solde_conge">Solde de conge</a></li>
       </ul>
     </li>
 
