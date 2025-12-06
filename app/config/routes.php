@@ -69,6 +69,8 @@ $router->get('/vers_solde_conge', [$Conge_Controller, 'consulterSolde']);
 $router->get('/details_solde', [$Conge_Controller, 'detailsSolde']);
 
 
+
+// WARNING : mbola tsy atao
 $router->get('/vers_messagerie', [$Message_Controller, 'messagerie']);
 $router->post('/envoyer_message', [$Message_Controller, 'envoyer']);
 
@@ -83,11 +85,6 @@ $router->get('/paie', [$Paie_Controller, 'etatDePaie']);
 $router->get('/paie/fiche/@id', [$Paie_Controller, 'fichePaie']);
 $router->get('/paie/etats/export', [$Paie_Controller, 'exportEtatDePaie']);
 $router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
-
-$router->get('/demande_conge', [$Conge_Controller, 'versDemande']);
-$router->get('/liste_conge', [$Conge_Controller, 'versListe']);
-$router->get('/solde_conge', [$Conge_Controller, 'versSolde']);
-
 
 $router->post('/chatbot/ask', [$chatcontoller_Controller, 'processQuestion']);
 $router->get('/contratGen/@id', [$gen, 'genererContratPdf']);

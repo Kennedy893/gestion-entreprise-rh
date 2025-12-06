@@ -1,449 +1,339 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demande de Remboursement - RH Manager</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    .main-content {
+        padding: 30px;
+        max-width: 1400px;
+        margin: 20px auto;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
-        }
+    /* --- EN-TÊTE DE PAGE --- */
+    .page-header {
+        margin-bottom: 30px;
+    }
+    .breadcrumb {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+    }
+    .breadcrumb a {
+        color: var(--text-muted);
+        text-decoration: none;
+    }
+    .breadcrumb-separator {
+        margin: 0 5px;
+    }
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 5px 0;
+        display: flex;
+        align-items: center;
+    }
+    .page-title-icon {
+        font-size: 1.5em;
+        margin-right: 10px;
+        color: var(--accent);
+    }
+    .page-subtitle {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
 
-        .main-content {
-            margin-left: 260px;
-            padding: 40px;
-            transition: margin-left 0.3s ease;
-        }
+    /* --- CONTENEUR DE FORMULAIRE --- */
+    .form-container {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        border-top: 5px solid var(--accent);
+        padding: 30px;
+    }
 
-        .page-header {
-            margin-bottom: 32px;
-        }
+    .form-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+    .form-icon {
+        font-size: 2rem;
+        color: var(--accent);
+    }
+    .form-header-text h2 {
+        font-size: 1.5rem;
+        margin: 0;
+        color: var(--text-main);
+    }
+    .form-header-text p {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 5px 0 0 0;
+    }
+    
+    /* --- INFO BANNER --- */
+    .form-info {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: var(--info-bg);
+        color: var(--info-text);
+        border-radius: var(--radius-sm);
+        margin-bottom: 25px;
+        font-size: 0.9rem;
+    }
+    .form-info-icon {
+        font-size: 1.5rem;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
 
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 16px;
-        }
+    /* --- ÉLÉMENTS DE FORMULAIRE --- */
+    .form-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+    .form-group {
+        flex: 1;
+    }
+    .form-group.full-width {
+        flex: 0 0 100%;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text-main);
+        font-size: 1rem;
+    }
+    .required {
+        color: var(--danger);
+    }
+    .hint {
+        font-weight: 400;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
 
-        .breadcrumb a {
-            color: #3b82f6;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+    input[type="number"],
+    input[type="date"],
+    textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 1rem;
+        background-color: var(--bg-body);
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+    }
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
 
-        .breadcrumb a:hover {
-            color: #1e40af;
-        }
+    /* Input avec icône */
+    .input-with-icon {
+        position: relative;
+    }
+    .input-with-icon input {
+        padding-left: 40px;
+    }
+    .input-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent);
+        font-size: 1.2rem;
+    }
 
-        .breadcrumb-separator {
-            color: #cbd5e1;
-        }
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
 
-        .page-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    .char-count {
+        text-align: right;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+    #charCount {
+        font-weight: 600;
+        color: var(--text-main);
+    }
 
-        .page-title-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
+    /* --- UPLOAD DE FICHIERS --- */
+    .file-upload-container {
+        margin-top: 10px;
+    }
 
-        .page-subtitle {
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 8px;
-        }
+    .file-upload-area {
+        border: 2px dashed var(--border);
+        border-radius: var(--radius-sm);
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+        background-color: var(--bg-body);
+    }
 
-        .form-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 32px;
-            max-width: 800px;
-        }
+    .file-upload-area:hover, .file-upload-area.dragover {
+        border-color: var(--primary);
+        background-color: #f8fafc;
+    }
 
-        .form-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f1f5f9;
-        }
+    .file-upload-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
 
-        .form-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
+    .file-upload-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+    }
 
-        .form-header-text h2 {
-            font-size: 20px;
-            color: #1e293b;
-            margin-bottom: 4px;
-        }
+    .file-upload-text {
+        font-weight: 500;
+        color: var(--text-main);
+        margin-bottom: 5px;
+    }
+    .file-upload-hint {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
 
-        .form-header-text p {
-            font-size: 13px;
-            color: #64748b;
-        }
+    /* Liste des fichiers */
+    .file-list {
+        margin-top: 20px;
+        border-top: 1px solid var(--border);
+        padding-top: 15px;
+    }
 
-        .form-info {
-            background: #ecfdf5;
-            border-left: 4px solid #10b981;
-            padding: 14px 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
-            font-size: 13px;
-            color: #065f46;
-            display: flex;
-            gap: 10px;
-            align-items: start;
-        }
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        background-color: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
 
-        .form-info-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+    .file-icon {
+        font-size: 1.2rem;
+        color: var(--accent);
+        flex-shrink: 0;
+    }
+    .file-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px;
+    }
+    .file-size {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    .file-remove {
+        background: none;
+        border: none;
+        color: var(--danger);
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 5px;
+        line-height: 1;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    .file-remove:hover {
+        opacity: 1;
+    }
 
+    /* --- BOUTONS D'ACTION --- */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        padding-top: 20px;
+        margin-top: 30px;
+        border-top: 1px solid var(--border);
+    }
+
+    .form-actions button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-actions button:first-child { /* Annuler */
+        background-color: var(--border);
+        color: var(--text-main);
+    }
+    .form-actions button:first-child:hover {
+        background-color: #cbd5e1;
+    }
+
+    .form-actions button[type="submit"] {
+        background-color: var(--primary);
+        color: white;
+    }
+    .form-actions button[type="submit"]:hover:not(:disabled) {
+        background-color: var(--primary-dark);
+    }
+    .form-actions button[type="submit"]:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
         .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            flex-direction: column;
+            gap: 25px;
         }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #334155;
-            margin-bottom: 8px;
-        }
-
-        .form-label .required {
-            color: #ef4444;
-            margin-left: 2px;
-        }
-
-        .form-label .hint {
-            font-weight: 400;
-            color: #94a3b8;
-            font-size: 12px;
-            margin-left: 4px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 14px;
-            color: #1e293b;
-            background: #ffffff;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        input[type="text"]:focus,
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        input[type="text"]:hover,
-        input[type="date"]:hover,
-        input[type="number"]:hover,
-        textarea:hover {
-            border-color: #cbd5e1;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-            line-height: 1.6;
-        }
-
-        .char-count {
-            text-align: right;
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 6px;
-        }
-
-        /* Styles pour l'upload de fichier */
-        .file-upload-container {
-            margin-top: 8px;
-        }
-
-        .file-upload-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 8px;
-            padding: 32px;
-            text-align: center;
-            background: #f8fafc;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .file-upload-area:hover {
-            border-color: #10b981;
-            background: #ecfdf5;
-        }
-
-        .file-upload-area.dragover {
-            border-color: #10b981;
-            background: #d1fae5;
-        }
-
-        .file-upload-input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-upload-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        .file-upload-text {
-            font-size: 14px;
-            color: #475569;
-            margin-bottom: 8px;
-        }
-
-        .file-upload-text strong {
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .file-upload-hint {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .file-list {
-            margin-top: 16px;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .file-item:hover {
-            background: #f1f5f9;
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .file-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .file-details {
-            flex: 1;
-        }
-
-        .file-name {
-            font-size: 13px;
-            font-weight: 500;
-            color: #1e293b;
-            margin-bottom: 2px;
-        }
-
-        .file-size {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .file-remove {
-            width: 28px;
-            height: 28px;
-            border: none;
-            background: #fee2e2;
-            color: #dc2626;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .file-remove:hover {
-            background: #fecaca;
-            transform: scale(1.1);
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: #94a3b8;
-        }
-
-        .input-with-icon input {
-            padding-left: 40px;
-        }
-
         .form-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #f1f5f9;
+            flex-direction: column;
         }
-
-        button {
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 500;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .form-actions button {
+            width: 100%;
         }
-
-        button[type="submit"] {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            flex: 1;
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        button[type="submit"]:active {
-            transform: translateY(0);
-        }
-
-        button[type="button"] {
-            background: white;
-            color: #64748b;
-            border: 1.5px solid #e2e8f0;
-        }
-
-        button[type="button"]:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .form-container {
-                padding: 24px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <?php include('app/views/sidebar/sidebar.php') ?>
+    }
+</style>
 
     <div class="main-content">
         <div class="page-header">
-            <div class="breadcrumb">
-                <a href="<?= constant('BASE_URL') ?>">Accueil</a>
-                <span class="breadcrumb-separator">›</span>
-                <a href="<?= constant('BASE_URL') ?>soumission">Soumission</a>
-                <span class="breadcrumb-separator">›</span>
-                <span>Demande de remboursement</span>
-            </div>
             <h1 class="page-title">
-                <span class="page-title-icon">💵</span>
+                <span class="page-title-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span>
                 Demande de Remboursement
             </h1>
             <p class="page-subtitle">Soumettez votre demande de remboursement de frais professionnels</p>
@@ -461,7 +351,7 @@
             <div class="form-info">
                 <span class="form-info-icon">ℹ️</span>
                 <div>
-                    <strong>Important :</strong> Les justificatifs sont obligatoires (factures, reçus, tickets). Le remboursement sera effectué sous 7 jours après validation.
+                    <strong>Important :</strong> Les justificatifs (factures, reçus, tickets) sont **obligatoires**. Le remboursement sera effectué sous 7 jours après validation.
                 </div>
             </div>
 
@@ -473,7 +363,7 @@
                             <span class="hint">(en Ar)</span>
                         </label>
                         <div class="input-with-icon">
-                            <span class="input-icon">💰</span>
+                            <span class="input-icon"><i class="fa-solid fa-money-bill-wave"></i></span>
                             <input 
                                 type="number" 
                                 id="montant" 
@@ -534,7 +424,7 @@
                                 multiple
                                 required
                             >
-                            <div class="file-upload-icon">📎</div>
+                            <div class="file-upload-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
                             <div class="file-upload-text">
                                 <strong>Cliquez pour parcourir</strong> ou glissez-déposez vos fichiers
                             </div>
@@ -548,10 +438,10 @@
 
                 <div class="form-actions">
                     <button type="button" onclick="window.history.back()">
-                        ← Annuler
+                        <i class="fa-solid fa-arrow-left"></i> Annuler
                     </button>
                     <button type="submit" id="submitBtn">
-                        ✓ Soumettre la demande
+                        <i class="fa-solid fa-check"></i> Soumettre la demande
                     </button>
                 </div>
             </form>
@@ -559,17 +449,19 @@
     </div>
 
     <script>
-        // Compteur de caractères
+        // --- LOGIQUE JS ---
+
+        // 1. Compteur de caractères
         function updateCharCount(textarea) {
             const count = textarea.value.length;
             document.getElementById('charCount').textContent = count;
         }
 
-        // Gestion de l'upload de fichiers
+        // 2. Gestion de l'upload de fichiers (Drag & Drop et Sélection)
         const fileInput = document.getElementById('justificatifs');
         const fileUploadArea = document.getElementById('fileUploadArea');
         const fileList = document.getElementById('fileList');
-        let selectedFiles = [];
+        let selectedFiles = []; // Array pour stocker les fichiers valides
 
         // Empêcher le comportement par défaut du drag & drop
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -609,6 +501,10 @@
             const maxSize = 5 * 1024 * 1024; // 5 Mo
             const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
 
+            // Vider l'ancienne sélection de l'input et reconstruire entièrement
+            // (méthode simple pour éviter les doublons et gérer l'ajout/suppression)
+            selectedFiles = [];
+
             Array.from(files).forEach(file => {
                 // Vérifier la taille
                 if (file.size > maxSize) {
@@ -622,12 +518,12 @@
                     return;
                 }
 
-                // Ajouter le fichier à la liste
+                // Ajouter le fichier à la liste des fichiers valides
                 selectedFiles.push(file);
-                displayFile(file);
             });
 
             updateFileInput();
+            renderFileList();
         }
 
         function displayFile(file) {
@@ -645,7 +541,7 @@
                         <div class="file-size">${fileSize} Ko • ${fileExtension}</div>
                     </div>
                 </div>
-                <button type="button" class="file-remove" onclick="removeFile('${file.name}')">
+                <button type="button" class="file-remove" data-file-name="${file.name}">
                     ✕
                 </button>
             `;
@@ -654,7 +550,10 @@
         }
 
         function removeFile(fileName) {
+            // Filtrer le fichier à supprimer de l'array
             selectedFiles = selectedFiles.filter(file => file.name !== fileName);
+            
+            // Reconstruire l'input file et la liste visuelle
             updateFileInput();
             renderFileList();
         }
@@ -665,15 +564,33 @@
         }
 
         function updateFileInput() {
-            // Créer un nouveau DataTransfer pour mettre à jour l'input
+            // Reconstruire un DataTransfer pour mettre à jour l'input file
             const dataTransfer = new DataTransfer();
             selectedFiles.forEach(file => dataTransfer.items.add(file));
             fileInput.files = dataTransfer.files;
+            
+            // Mettre à jour l'attribut required en fonction de la présence de fichiers
+            if (selectedFiles.length > 0) {
+                fileInput.removeAttribute('required');
+            } else {
+                fileInput.setAttribute('required', 'required');
+            }
         }
+        
+        // Écouteur pour la suppression des fichiers (utilise la délégation d'événements)
+        fileList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('file-remove')) {
+                const fileName = e.target.getAttribute('data-file-name');
+                removeFile(fileName);
+            }
+        });
 
-        // Validation du formulaire
+
+        // 3. Validation du formulaire et soumission
         const form = document.querySelector('form');
         form.addEventListener('submit', function(e) {
+            // La validation des fichiers est gérée par l'attribut required et la fonction updateFileInput,
+            // mais on peut ajouter une double vérification ici:
             if (selectedFiles.length === 0) {
                 e.preventDefault();
                 alert('Veuillez joindre au moins un justificatif.');
@@ -681,13 +598,21 @@
             }
 
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerHTML = '⏳ Envoi en cours...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Envoi en cours...';
             submitBtn.disabled = true;
         });
 
-        // Définir la date max à aujourd'hui
-        const dateInput = document.getElementById('date');
-        dateInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+        // 4. Initialisations au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+             // Définir la date max à aujourd'hui (utile si le PHP échoue)
+            const dateInput = document.getElementById('date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('max', today);
+            if (!dateInput.value) {
+                dateInput.value = today;
+            }
+            
+            // Initialisation du compteur de caractères
+            updateCharCount(document.getElementById('raison'));
+        });
     </script>
-</body>
-</html>

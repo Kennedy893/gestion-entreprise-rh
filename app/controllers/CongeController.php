@@ -16,15 +16,7 @@ class CongeController
         Flight::render('shared/home');
     }
 
-    public function versListe()
-    {
-        Flight::render('liste_conge');
-    }
-
-    public function versSolde()
-    {
-        Flight::render('solde_conge');
-    }
+    
 
     public function demanderConge()
     {
