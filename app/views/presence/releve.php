@@ -77,7 +77,7 @@
                                             $montant = $p['montant'] ?? null;
                                             $montantTxt = ($montant === null)
                                                 ? '—'
-                                                : number_format((float)$montant, 2, ',', ' ') . ' €';
+                                                : number_format((float)$montant, 2, ',', ' ') . ' Ar';
                                             ?>
                                             <span class="amount"><?php echo $montantTxt; ?></span>
                                         </li>

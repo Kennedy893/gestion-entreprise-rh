@@ -1,8 +1,8 @@
 <style>
     .main-content {
         padding: 30px;
-        max-width: 1400px;
-        margin: 20px auto;
+        width: 1350px;
+        margin: 20px 350px;
     }
 
     /* --- EN-TÊTE DE PAGE --- */
@@ -290,17 +290,7 @@
 
 <body>
     <div class="main-content">
-        <div class="page-header">
-            <div class="breadcrumb">
-                <a href="<?= constant('BASE_URL') ?>">Accueil</a>
-                <span class="breadcrumb-separator">›</span>
-                <a href="<?= constant('BASE_URL') ?>conges">Congés</a>
-                <span class="breadcrumb-separator">›</span>
-                <a href="<?= constant('BASE_URL') ?>vers_solde_conge">Solde</a>
-                <span class="breadcrumb-separator">›</span>
-                <span>Détails</span>
-            </div>
-            
+        <div class="page-header">    
             <h1 class="page-title">
                 <span class="page-title-icon"><i class="fa-solid fa-chart-pie"></i></span>
                 Détails des Congés - <?= isset($_GET['annee']) ? htmlspecialchars($_GET['annee']) : date('Y') ?>

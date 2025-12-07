@@ -1,5 +1,6 @@
 .dashboard-container {
-    max-width: 1400px;
+    width: 1350px;
+    margin: 20px 350px;
     background-color: #f8fafc;
     color: #334155;
     line-height: 1.5;

@@ -12,59 +12,67 @@ class ComposerStaticInit4b3a253f57d31d773b6986822b8dc6cf
     );
 
     public static $prefixLengthsPsr4 = array (
-        'f' =>
+        'f' => 
         array (
             'flight\\' => 7,
         ),
-        'S' =>
+        'S' => 
         array (
             'Svg\\' => 4,
             'Sabberworm\\CSS\\' => 15,
         ),
-        'M' =>
+        'M' => 
         array (
             'Masterminds\\' => 12,
         ),
-        'F' =>
+        'F' => 
         array (
             'FontLib\\' => 8,
         ),
-        'D' =>
+        'D' => 
         array (
             'Dompdf\\' => 7,
         ),
-        'A' =>
+        'B' => 
+        array (
+            'Box\\Spout\\' => 10,
+        ),
+        'A' => 
         array (
             'Ahc\\Cli\\' => 8,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'flight\\' =>
+        'flight\\' => 
         array (
             0 => __DIR__ . '/..' . '/flightphp/runway/src',
         ),
-        'Svg\\' =>
+        'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg',
         ),
-        'Sabberworm\\CSS\\' =>
+        'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
         ),
-        'Masterminds\\' =>
+        'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
-        'FontLib\\' =>
+        'FontLib\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/php-font-lib/src/FontLib',
         ),
-        'Dompdf\\' =>
+        'Dompdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
-        'Ahc\\Cli\\' =>
+        'Box\\Spout\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/box/spout/src/Spout',
+        ),
+        'Ahc\\Cli\\' => 
         array (
             0 => __DIR__ . '/..' . '/adhocore/cli/src',
         ),

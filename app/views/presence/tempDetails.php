@@ -101,7 +101,7 @@
                                         </span>
                                         <?php
                                             $m = $p['montant'] ?? null;
-                                            $mTxt = ($m === null) ? '—' : number_format((float)$m, 2, ',', ' ') . ' €';
+                                            $mTxt = ($m === null) ? '—' : number_format((float)$m, 2, ',', ' ') . ' Ar';
                                         ?>
                                         <span class="amount"><?php echo $mTxt; ?></span>
                                     </li>

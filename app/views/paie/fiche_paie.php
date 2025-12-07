@@ -1,25 +1,31 @@
 <style>
     /* VARIABLES */
     :root {
-        --primary: #4f46e5;       /* Indigo */
-        --accent-pay: #10b981;    /* Vert pour Net à payer */
-        --bg-body: #f1f5f9;       /* Gris clair pour le fond */
+        --primary: #4f46e5;
+        /* Indigo */
+        --accent-pay: #10b981;
+        /* Vert pour Net à payer */
+        --bg-body: #f1f5f9;
+        /* Gris clair pour le fond */
         --bg-card: #ffffff;
-        --text-main: #0f172a;     /* Noir foncé */
-        --text-muted: #64748b;    /* Gris bleu */
-        --border: #e2e8f0;        /* Gris très clair */
+        --text-main: #0f172a;
+        /* Noir foncé */
+        --text-muted: #64748b;
+        /* Gris bleu */
+        --border: #e2e8f0;
+        /* Gris très clair */
         --radius: 12px;
     }
 
     .container {
         width: 1450px;
-        margin: 0 220px;
+        margin: 20px 350px;
         background: var(--bg-card);
         padding: 40px;
         border-radius: var(--radius);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
-    
+
 
     /* --- HEADER (LOGO ET INFO ENTREPRISE) --- */
     .header {
@@ -56,11 +62,13 @@
         text-align: center;
         margin-bottom: 30px;
     }
+
     .title-section h1 {
         font-size: 2.5rem;
         color: var(--primary);
         margin: 0;
     }
+
     .title-section h2 {
         font-size: 1.1rem;
         color: var(--text-muted);
@@ -79,6 +87,7 @@
         border-radius: var(--radius);
         background-color: #f8fafc;
     }
+
     .info-column h3 {
         font-size: 1.25rem;
         border-bottom: 2px solid var(--border);
@@ -86,20 +95,24 @@
         margin-bottom: 15px;
         color: var(--text-main);
     }
+
     .info-item {
         display: flex;
         justify-content: space-between;
         padding: 5px 0;
         font-size: 0.95rem;
     }
+
     .info-label {
         color: var(--text-muted);
         font-weight: 500;
     }
+
     .info-value {
         font-weight: 600;
         text-align: right;
     }
+
     .highlight {
         color: var(--primary);
     }
@@ -111,6 +124,7 @@
         margin-bottom: 30px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
+
     table thead th {
         background-color: var(--primary);
         color: white;
@@ -119,16 +133,18 @@
         font-size: 0.9rem;
         font-weight: 600;
     }
+
     table tbody td {
         padding: 10px 15px;
         border: 1px solid var(--border);
         font-size: 0.9rem;
         vertical-align: middle;
     }
+
     table tbody td:first-child {
         font-weight: 500;
     }
-    
+
     .amount {
         text-align: right;
         font-weight: 600;
@@ -142,6 +158,7 @@
         font-size: 1rem;
         border-top: 2px solid var(--primary);
     }
+
     .amount-highlight {
         font-size: 1.1rem;
         font-weight: 700;
@@ -163,6 +180,7 @@
         color: white !important;
         padding: 15px;
     }
+
     .final-total td:last-child {
         text-align: right;
         font-size: larger;
@@ -174,16 +192,19 @@
         padding: 20px;
         border-top: 1px solid var(--border);
     }
+
     .footer-box h4 {
         text-align: center;
         color: var(--text-muted);
         margin-bottom: 10px;
     }
-    .footer-box > div {
+
+    .footer-box>div {
         max-width: 600px;
         margin: 0 auto;
     }
-    .footer-box div > div {
+
+    .footer-box div>div {
         width: 40%;
     }
 
@@ -192,25 +213,33 @@
         .container {
             padding: 20px;
         }
+
         .info-grid {
             grid-template-columns: 1fr;
             gap: 20px;
         }
+
         table {
             display: block;
             overflow-x: auto;
         }
-        table thead, table tbody {
-            min-width: 600px; /* Assure le scroll horizontal */
+
+        table thead,
+        table tbody {
+            min-width: 600px;
+            /* Assure le scroll horizontal */
         }
-        .footer-box > div {
+
+        .footer-box>div {
             flex-direction: column;
             gap: 50px;
         }
-        .footer-box div > div {
+
+        .footer-box div>div {
             width: 100%;
         }
-        body > button {
+
+        body>button {
             position: static;
             display: block;
             width: calc(100% - 80px);
@@ -220,11 +249,12 @@
 </style>
 
 <body>
-    <button onclick="window.location.href=`<?= constant('BASE_URL') ?>paie/fiche/export/<?= $emp['id_employe'] ?? 0 ?>`">
-        <i class="fa-solid fa-file-pdf"></i> Exporter PDF
-    </button>
 
     <div class="container">
+        <button onclick="window.location.href=`<?= constant('BASE_URL') ?>paie/fiche/export/<?= $emp['id_employe'] ?? 0 ?>`">
+            <i class="fa-solid fa-file-pdf"></i> Exporter PDF
+        </button>
+
         <div class="header">
             <div class="logo">
                 <div class="logo-icon"></div>
@@ -283,7 +313,7 @@
                     <span class="info-label">Taux horaires :</span>
                     <span class="info-value"> <?= function_exists('calculateTauxHoraire') ? moneyFormat(calculateTauxHoraire($emp['salaire'])) : 'N/A' ?> </span>
                 </div>
-                 <div class="info-item" style="margin-top: 15px;">
+                <div class="info-item" style="margin-top: 15px;">
                     <span class="info-label"><strong>Total Avantages :</strong></span>
                     <span class="info-value highlight"><strong> <?= function_exists('moneyFormat') ? moneyFormat($emp['avantages'] ?? 0) : '0 Ar' ?></strong></span>
                 </div>
@@ -330,14 +360,14 @@
                     <td> <?= function_exists('calculMajorationHeureSup') ? moneyFormat(calculMajorationHeureSup(calculateTauxHoraire($emp['salaire'] ?? 0), 30)) : 'N/A' ?> </td>
                     <td class="amount">0,00</td>
                 </tr>
-                
+
                 <tr>
                     <td>Primes diverses / Rappels</td>
                     <td>-</td>
                     <td>-</td>
                     <td class="amount">-</td>
                 </tr>
-                
+
                 <tr class="total-row">
                     <td colspan="3"><strong>Salaire brut</strong></td>
                     <td class="amount-highlight"> <?= function_exists('moneyFormat') ? moneyFormat($emp['salaire_brut']) : ($emp['salaire_brut'] ?? '0,00') ?> </td>
@@ -368,26 +398,28 @@
                     <td colspan="4">Impôt sur les Revenus Salariaux et Assimilés (IRSA)</td>
                 </tr>
 
-                <?php 
+                <?php
                 $total_irsa = 0;
                 if (isset($emp['irsa_details']) && is_array($emp['irsa_details'])) {
                     foreach ($emp['irsa_details'] as $t) {
                         $total_irsa += $t['montant'] ?? 0;
-                        $money = function_exists('moneyFormat') ? 'moneyFormat' : function($v) { return number_format($v, 2, ',', ' '); };
+                        $money = function_exists('moneyFormat') ? 'moneyFormat' : function ($v) {
+                            return number_format($v, 2, ',', ' ');
+                        };
                 ?>
-                    <tr>
-                        <td colspan="2">
-                            <?php if (($t['max'] ?? PHP_INT_MAX) === PHP_INT_MAX): ?>
-                                Tranche IRSA PLUS DE <?= $money($t['min'] ?? 0) ?>
-                            <?php elseif (($t['min'] ?? 0) == 0): ?>
-                                Tranche IRSA INF <?= $money($t['max'] ?? 0) ?>
-                            <?php else: ?>
-                                Tranche IRSA DE <?= $money($t['min'] ?? 0) ?> à <?= $money($t['max'] ?? 0) ?>
-                            <?php endif; ?>
-                        </td>
-                        <td><?= $t['taux'] ?? 0 ?> %</td>
-                        <td class="amount"><?= $money($t['montant'] ?? 0) ?></td>
-                    </tr>
+                        <tr>
+                            <td colspan="2">
+                                <?php if (($t['max'] ?? PHP_INT_MAX) === PHP_INT_MAX): ?>
+                                    Tranche IRSA PLUS DE <?= $money($t['min'] ?? 0) ?>
+                                <?php elseif (($t['min'] ?? 0) == 0): ?>
+                                    Tranche IRSA INF <?= $money($t['max'] ?? 0) ?>
+                                <?php else: ?>
+                                    Tranche IRSA DE <?= $money($t['min'] ?? 0) ?> à <?= $money($t['max'] ?? 0) ?>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= $t['taux'] ?? 0 ?> %</td>
+                            <td class="amount"><?= $money($t['montant'] ?? 0) ?></td>
+                        </tr>
                 <?php }
                 } ?>
 
@@ -395,19 +427,19 @@
                     <td colspan="3"><strong>TOTAL IRSA</strong></td>
                     <td class="amount-highlight"><?= function_exists('moneyFormat') ? moneyFormat($emp['irsa']) : ($emp['irsa'] ?? '0,00') ?> </td>
                 </tr>
-                
+
                 <tr class="total-row">
                     <td colspan="3"><strong>Total des retenues (Cotisations + IRSA)</strong></td>
-                    <td class="amount-highlight"> 
-                        <?= function_exists('moneyFormat') ? moneyFormat(($emp['total_ret'] ?? 0) + ($emp['irsa'] ?? 0)) : number_format((($emp['total_ret'] ?? 0) + ($emp['irsa'] ?? 0)), 2, ',', ' ') ?> 
+                    <td class="amount-highlight">
+                        <?= function_exists('moneyFormat') ? moneyFormat(($emp['total_ret'] ?? 0) + ($emp['irsa'] ?? 0)) : number_format((($emp['total_ret'] ?? 0) + ($emp['irsa'] ?? 0)), 2, ',', ' ') ?>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td colspan="3">Montant imposable avant abattement (Revenu imposable)</td>
                     <td class="amount"> <?= function_exists('moneyFormat') ? moneyFormat($emp['revenu_impo']) : ($emp['revenu_impo'] ?? '0,00') ?> </td>
                 </tr>
-                
+
                 <tr class="final-total">
                     <td colspan="3"><strong>NET À PAYER</strong></td>
                     <td><strong> <?= function_exists('moneyFormat') ? moneyFormat($emp['salaire_net']) : ($emp['salaire_net'] ?? '0,00') ?> </strong></td>

@@ -12,5 +12,6 @@ return array(
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
     'FontLib\\' => array($vendorDir . '/dompdf/php-font-lib/src/FontLib'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
+    'Box\\Spout\\' => array($vendorDir . '/box/spout/src/Spout'),
     'Ahc\\Cli\\' => array($vendorDir . '/adhocore/cli/src'),
 );

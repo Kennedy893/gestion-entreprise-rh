@@ -1,8 +1,8 @@
 <style>
     .main-content {
         padding: 30px;
-        max-width: 1400px;
-        margin: 20px auto;
+        width: 1350px;
+        margin: 20px 350px;
     }
 
     /* --- EN-TÊTE DE PAGE --- */

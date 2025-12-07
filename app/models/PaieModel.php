@@ -119,7 +119,7 @@ class PaieModel
     public function getContratEmployeByDate($date)
     {
         $stmt = $this->db->prepare(" SELECT * FROM contrat_employe ce JOIN employe e ON ce.id_employe = e.id 
-        JOIN poste p ON ce.id_poste = p.id WHERE :date BETWEEN date_debut AND date_fin AND id_statut_contrat = 2 ");
+        JOIN poste p ON ce.id_poste = p.id WHERE :date >= date_debut AND (date_fin IS NULL OR :date <= date_fin) AND id_statut_contrat = 1 ");
         $stmt->execute(['date' => $date]);
         $contrats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -163,8 +163,17 @@ class PaieModel
 
     public function getContratEmployeByIdEmploye($id_employe, $date)
     {
-        $stmt = $this->db->prepare(" SELECT * FROM contrat_employe ce JOIN employe e ON ce.id_employe = e.id
-            JOIN poste p ON ce.id_poste = p.id WHERE :date BETWEEN date_debut AND date_fin AND id_statut_contrat = 2 AND id_employe = :id_emp ");
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM contrat_employe ce
+            JOIN employe e ON ce.id_employe = e.id
+            JOIN poste p ON ce.id_poste = p.id
+            WHERE 
+                :date >= date_debut
+                AND (date_fin IS NULL OR :date <= date_fin)
+                AND id_statut_contrat = 1
+                AND id_employe = :id_emp
+        ");
         $stmt->execute(['date' => $date, 'id_emp' => $id_employe]);
 
         $emp = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?= constant('BASE_URL') ?>public/assets/css/sidebar.css" />
 
 <nav class="sidebar">
-  <div class="brand"><i class="fa-solid fa-sack-dollar"></i> PayPro</div>
+  <div class="brand"><i class="fa-solid fa-sack-dollar"></i> GESTION rh</div>
   <ul class="nav-menu">
     <li class="nav-item">
       <a href="<?= constant('BASE_URL') ?>" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Tableau de bord</a>
