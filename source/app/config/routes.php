@@ -357,14 +357,14 @@ $router->post('/candidat/questionnaire/submit', function() {
     (new \app\controllers\CompetenceController())->submitQuestionnaire();
 });
 
-$router->post('/debug/questionnaire-post', function() {
-    (new \app\controllers\CompetenceController())->debugPostData();
-});
+// $router->post('/debug/questionnaire-post', function() {
+//     (new \app\controllers\CompetenceController())->debugPostData();
+// });
 
-// Questionnaire candidat (après soumission du formulaire de formation)
-$router->get('/candidat/questionnaire/@id', function($id) {
-    (new \app\controllers\CompetenceController())->showQuestionnaire($id);
-});
+// // Questionnaire candidat (après soumission du formulaire de formation)
+// $router->get('/candidat/questionnaire/@id', function($id) {
+//     (new \app\controllers\CompetenceController())->showQuestionnaire($id);
+// });
 
 // Évaluation formation RH
 $router->get('/rh/evaluer-formation/@id', function($id) use ($checkRHAuth) {

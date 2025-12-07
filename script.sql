@@ -1,1700 +1,1467 @@
---
--- PostgreSQL database dump
---
+-- Active: 1751743068514@@127.0.0.1@3306@rh_docker
+CREATE TABLE Type_Contrat(
+   id SERIAL PRIMARY KEY,
+   label VARCHAR(50)
+);
 
--- Dumped from database version 16.0
--- Dumped by pg_dump version 16.0
+CREATE TABLE Employe(
+   id SERIAL PRIMARY KEY,
+   nom VARCHAR(50),
+   prenom VARCHAR(50),
+   contact VARCHAR(50),
+   photo VARCHAR(100),
+   cin VARCHAR(50),
+   date_naissance DATE,
+   email VARCHAR(50),
+   adresse VARCHAR(50),
+   genre INT
+);
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+CREATE TABLE Statut_Contrat(
+   id SERIAL PRIMARY KEY,
+   label VARCHAR(50)
+);
 
-SET default_tablespace = '';
+CREATE TABLE Type_Document(
+   id SERIAL PRIMARY KEY,
+   label VARCHAR(50)
+);
 
-SET default_table_access_method = heap;
+CREATE TABLE Document(
+   id SERIAL PRIMARY KEY,
+   chemin VARCHAR(250),
+   id_type_document BIGINT UNSIGNED,
+   id_employe BIGINT UNSIGNED,
+   FOREIGN KEY(id_employe) REFERENCES Employe(id),
+   FOREIGN KEY(id_type_document) REFERENCES Type_Document(id)
+);
 
---
--- Name: annonce; Type: TABLE; Schema: public; Owner: postgres
---
+CREATE TABLE conge(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(150),
+   paye INT,
+   duree DECIMAL(15,2),
+   frequence INT,
+   jour INT,
+   mois INT
+);
 
-CREATE TABLE public.annonce (
-    id_annonce integer NOT NULL,
-    id_besoin integer NOT NULL
+CREATE TABLE absence(
+   id SERIAL PRIMARY KEY,
+   motif VARCHAR(255),
+   date_debut DATE,
+   date_fin DATE,
+   id_document BIGINT UNSIGNED,
+   id_conge BIGINT UNSIGNED,
+   FOREIGN KEY(id_document) REFERENCES Document(id),
+   FOREIGN KEY(id_conge) REFERENCES conge(id)
+);
+
+CREATE TABLE statut_abscence(
+   id SERIAL PRIMARY KEY,
+   date_statut DATE,
+   statut INT,
+   id_absence BIGINT UNSIGNED,
+   FOREIGN KEY(id_absence) REFERENCES absence(id)
+);
+
+CREATE TABLE presence(
+   id SERIAL PRIMARY KEY,
+   date_travail DATE,
+   entree TIME,
+   sortie TIME,
+   montant DECIMAL(15,2),
+   id_employe BIGINT UNSIGNED,
+   FOREIGN KEY(id_employe) REFERENCES Employe(id)
+);
+
+CREATE TABLE type_retenu(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(255)
+);
+
+CREATE TABLE data(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(100),
+   valeur DECIMAL(25,2)
+);
+
+CREATE TABLE categorie(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(100)
+);
+
+CREATE TABLE departement(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(100),
+   fonction INT
+);
+
+CREATE TABLE Poste(
+   id SERIAL PRIMARY KEY,
+   label VARCHAR(50),
+   valeur INT,
+   id_categorie BIGINT UNSIGNED,
+   id_departement BIGINT UNSIGNED,
+   FOREIGN KEY(id_categorie) REFERENCES categorie(id),
+   FOREIGN KEY(id_departement) REFERENCES departement(id)
+);
+
+CREATE TABLE config_poste(
+   id SERIAL PRIMARY KEY,
+   duree_travail INT,
+   entree TIME,
+   sortie TIME,
+   id_poste BIGINT UNSIGNED,
+   FOREIGN KEY(id_poste) REFERENCES Poste(id)
+);
+
+CREATE TABLE config_retenu(
+   id SERIAL PRIMARY KEY,
+   pourcentage_entreprise DECIMAL(5,2),
+   pourcentage_employer DECIMAL(5,2),
+   salaire_min DECIMAL(25,2),
+   salaire_max DECIMAL(25,2),
+   id_categorie BIGINT UNSIGNED,
+   id_type_retenu BIGINT UNSIGNED,
+   FOREIGN KEY(id_categorie) REFERENCES categorie(id),
+   FOREIGN KEY(id_type_retenu) REFERENCES type_retenu(id)
+);
+
+CREATE TABLE contrat_employe(
+   id SERIAL PRIMARY KEY,
+   date_debut DATE,
+   date_fin DATE,
+   duree INT,
+   salaire DECIMAL(25,2),
+   id_poste BIGINT UNSIGNED,
+   id_employe BIGINT UNSIGNED,
+   id_statut_contrat BIGINT UNSIGNED,
+   id_type_contrat BIGINT UNSIGNED,
+   FOREIGN KEY(id_poste) REFERENCES Poste(id),
+   FOREIGN KEY(id_employe) REFERENCES Employe(id),
+   FOREIGN KEY(id_statut_contrat) REFERENCES Statut_Contrat(id),
+   FOREIGN KEY(id_type_contrat) REFERENCES Type_Contrat(id)
+);
+
+CREATE TABLE avantage(
+   id SERIAL PRIMARY KEY,
+   libelle VARCHAR(100),
+   montant DECIMAL(25,2),
+   id_contrat_employe BIGINT UNSIGNED,
+   FOREIGN KEY(id_contrat_employe) REFERENCES contrat_employe(id)
+);
+
+CREATE TABLE annonce_emploi(
+   id SERIAL PRIMARY KEY,
+   titre VARCHAR(200),
+   description TEXT,
+   competences_requises TEXT,
+   diplomes_requis TEXT,
+   experience_min INT,
+   niveau_responsabilite VARCHAR(100),
+   autonomie_requise TEXT,
+   date_publication DATE,
+   date_limite DATE,
+   statut VARCHAR(50),
+   id_poste BIGINT UNSIGNED,
+   id_type_contrat BIGINT UNSIGNED,
+   id_manager BIGINT UNSIGNED,
+   FOREIGN KEY(id_poste) REFERENCES Poste(id),
+   FOREIGN KEY(id_type_contrat) REFERENCES Type_Contrat(id),
+   FOREIGN KEY(id_manager) REFERENCES Employe(id)
+);
+    CREATE TABLE candidature(
+   id SERIAL PRIMARY KEY,
+   nom VARCHAR(100),
+   prenom VARCHAR(100),
+   email VARCHAR(100),
+   telephone VARCHAR(50),
+   date_naissance DATE,
+   adresse VARCHAR(255),
+   cv_path VARCHAR(255),
+   lettre_motivation_path VARCHAR(255),
+   diplomes_path VARCHAR(255),
+   experience_annees INT,
+   note_manager DECIMAL(4,2),
+   note_rh DECIMAL(4,2),
+   score_final DECIMAL(4,2),
+   statut VARCHAR(50),
+   date_candidature DATE,
+   date_entretien DATETIME,
+   accepte_essai TINYINT(1),
+   id_annonce BIGINT UNSIGNED,
+   FOREIGN KEY(id_annonce) REFERENCES annonce_emploi(id)
+);
+
+CREATE TABLE IF NOT EXISTS utilisateurs(
+   id SERIAL PRIMARY KEY,
+   username VARCHAR(100) UNIQUE NOT NULL,
+   password VARCHAR(255) NOT NULL,
+   role VARCHAR(50) NOT NULL,
+   nom VARCHAR(100),
+   prenom VARCHAR(100),
+   email VARCHAR(100),
+   actif TINYINT(1) DEFAULT 1,
+   date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+   id_employe BIGINT UNSIGNED,
+   FOREIGN KEY(id_employe) REFERENCES Employe(id)
+);
+
+-- Table des entretiens
+CREATE TABLE IF NOT EXISTS entretien(
+   id SERIAL PRIMARY KEY,
+   date_entretien DATETIME NOT NULL,
+   lieu VARCHAR(255),
+   statut VARCHAR(50) DEFAULT 'planifie',
+   note_manager DECIMAL(4,2),
+   qualites_manager TEXT,
+   defauts_manager TEXT,
+   note_rh DECIMAL(4,2),
+   observation_rh TEXT,
+   note_finale DECIMAL(4,2),
+   notation_etoiles INT,
+   decision VARCHAR(50),
+   date_decision DATETIME,
+   id_candidature BIGINT UNSIGNED NOT NULL,
+   id_manager BIGINT UNSIGNED,
+   id_rh BIGINT UNSIGNED,
+   FOREIGN KEY(id_candidature) REFERENCES candidature(id) ON DELETE CASCADE,
+   FOREIGN KEY(id_manager) REFERENCES utilisateurs(id),
+   FOREIGN KEY(id_rh) REFERENCES utilisateurs(id)
+);
+
+-- Table des documents candidatures
+CREATE TABLE IF NOT EXISTS document_candidature(
+   id SERIAL PRIMARY KEY,
+   type_document VARCHAR(100),
+   chemin_fichier VARCHAR(500),
+   nom_original VARCHAR(255),
+   taille INT,
+   date_upload DATETIME DEFAULT CURRENT_TIMESTAMP,
+   id_candidature BIGINT UNSIGNED NOT NULL,
+   FOREIGN KEY(id_candidature) REFERENCES candidature(id) ON DELETE CASCADE
 );
 
 
-ALTER TABLE public.annonce OWNER TO postgres;
 
---
--- Name: annonce_id_annonce_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.annonce_id_annonce_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.annonce_id_annonce_seq OWNER TO postgres;
-
---
--- Name: annonce_id_annonce_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.annonce_id_annonce_seq OWNED BY public.annonce.id_annonce;
+ALTER TABLE candidature 
+ADD COLUMN demande_contrat_direct TINYINT(1) DEFAULT 0,
+ADD COLUMN qualifications TEXT,
+ADD COLUMN competences TEXT,
+ADD COLUMN dernier_diplome VARCHAR(255),
+ADD COLUMN etablissement VARCHAR(255),
+ADD COLUMN langue_parlee VARCHAR(255),
+ADD COLUMN statut_entretien VARCHAR(50) DEFAULT 'en_attente',
+ADD COLUMN type_contrat_accorde VARCHAR(100),
+ADD COLUMN date_debut_travail DATE,
+ADD COLUMN decision_finale VARCHAR(50),
+ADD COLUMN date_decision DATETIME;
+ALTER TABLE candidature
+ADD COLUMN IF NOT EXISTS genre VARCHAR(20) DEFAULT NULL;
 
 
---
--- Name: barem; Type: TABLE; Schema: public; Owner: postgres
---
 
-CREATE TABLE public.barem (
-    id_barem integer NOT NULL,
-    libelle character varying(50),
-    valeur numeric(5,2)
+ALTER TABLE candidature 
+ADD COLUMN IF NOT EXISTS id_manager BIGINT UNSIGNED,
+ADD FOREIGN KEY (id_manager) REFERENCES utilisateurs(id);
+
+-- Ajouter visible_public dans entretien
+ALTER TABLE entretien 
+ADD COLUMN IF NOT EXISTS visible_public TINYINT(1) DEFAULT 0;
+-- Ajouter le champ statut_publication à la table entretien
+ALTER TABLE entretien 
+ADD COLUMN IF NOT EXISTS statut_publication VARCHAR(50) DEFAULT 'brouillon' 
+COMMENT 'brouillon ou publie';
+
+-- Mettre à jour les entretiens existants
+UPDATE entretien 
+SET statut_publication = CASE 
+    WHEN visible_public = 1 THEN 'publie'
+    ELSE 'brouillon'
+END
+WHERE statut_publication IS NULL;
+
+
+CREATE OR REPLACE VIEW v_stats_recrutement AS
+SELECT 
+    COUNT(DISTINCT a.id) as total_annonces,
+    COUNT(DISTINCT CASE WHEN a.statut = 'active' THEN a.id END) as annonces_actives,
+    COUNT(DISTINCT c.id) as total_candidatures,
+    COUNT(DISTINCT CASE WHEN c.statut = 'en_attente' THEN c.id END) as candidatures_attente,
+    COUNT(DISTINCT CASE WHEN c.statut = 'accepte' THEN c.id END) as candidatures_acceptees,
+    COUNT(DISTINCT CASE WHEN c.statut = 'rejete' THEN c.id END) as candidatures_rejetees,
+    COUNT(DISTINCT e.id) as total_entretiens,
+    COUNT(DISTINCT CASE WHEN e.statut = 'planifie' THEN e.id END) as entretiens_planifies,
+    COUNT(DISTINCT CASE WHEN e.statut = 'termine' THEN e.id END) as entretiens_termines
+FROM annonce_emploi a
+LEFT JOIN candidature c ON a.id = c.id_annonce
+LEFT JOIN entretien e ON c.id = e.id_candidature;
+
+-- Vue pour les détails candidatures avec annonces
+DROP VIEW IF EXISTS v_candidatures_details;
+
+-- Vue complète pour les candidatures avec toutes les décisions
+CREATE OR REPLACE VIEW v_candidatures_details AS
+SELECT 
+    c.id,
+    c.nom,
+    c.prenom,
+    c.email,
+    c.telephone,
+    c.date_naissance,
+    c.adresse,
+    c.cv_path,
+    c.lettre_motivation_path,
+    c.diplomes_path,
+    c.experience_annees,
+    c.note_manager,
+    c.note_rh,
+    c.score_final,
+    c.statut,
+    c.date_candidature,
+    c.date_entretien,
+    c.accepte_essai,
+    c.demande_contrat_direct,
+    c.qualifications,
+    c.competences,
+    c.dernier_diplome,
+    c.etablissement,
+    c.langue_parlee,
+    c.statut_entretien,
+    c.type_contrat_accorde,
+    c.date_debut_travail,
+    c.decision_finale,
+    c.date_decision,
+    c.genre,
+    c.id_annonce,
+    c.id_manager,
+    
+    -- Informations de l'annonce
+    a.titre AS annonce_titre,
+    a.description AS annonce_description,
+    a.date_publication,
+    a.date_limite,
+    
+    -- Informations du poste
+    p.label AS poste_nom,
+    p.valeur AS poste_valeur,
+    
+    -- Informations de l'entretien (si existe)
+    e.id AS entretien_id,
+    e.date_entretien AS entretien_date,
+    e.lieu AS entretien_lieu,
+    e.statut AS entretien_statut,
+    e.note_manager AS entretien_note_manager,
+    e.note_rh AS entretien_note_rh,
+    e.note_finale AS entretien_note_finale,
+    e.notation_etoiles AS entretien_notation_etoiles,
+    e.decision AS entretien_decision,
+    e.date_decision AS entretien_date_decision,
+    
+    -- Informations du manager
+    u.nom AS manager_nom,
+    u.prenom AS manager_prenom,
+    
+    -- CALCUL DU STATUT FINAL
+    CASE
+        -- Si entretien existe et a une décision
+        WHEN e.decision IS NOT NULL THEN e.decision
+        -- Sinon si candidature a une decision_finale
+        WHEN c.decision_finale IS NOT NULL THEN c.decision_finale
+        -- Sinon basé sur le statut
+        WHEN c.statut IN ('entretien_termine', 'valide', 'actif') AND c.date_decision IS NOT NULL THEN 'accepte'
+        WHEN c.statut IN ('rejete', 'refuse', 'decline') THEN 'rejete'
+        ELSE 'en_attente'
+    END AS status_computed
+
+FROM candidature c
+LEFT JOIN annonce_emploi a ON c.id_annonce = a.id
+LEFT JOIN Poste p ON a.id_poste = p.id
+LEFT JOIN entretien e ON c.id = e.id_candidature
+LEFT JOIN utilisateurs u ON c.id_manager = u.id
+ORDER BY c.date_candidature DESC;
+
+-- Ajouter des nouveaux statuts possibles pour les candidatures
+-- 'en_attente' : Candidature déposée, en attente de traitement RH
+-- 'envoye_manager' : Candidature envoyée au manager par RH
+-- 'entretien_planifie' : Date d'entretien définie
+-- 'entretien_termine' : Entretien passé, en attente évaluation RH
+-- 'accepte' : Candidature acceptée
+-- 'rejete' : Candidature rejetée
+
+
+-- Vue pour les postes libres avec détails
+CREATE OR REPLACE VIEW v_postes_libres AS
+SELECT 
+    p.id,
+    p.label,
+    p.valeur,
+    p.id_categorie,
+    p.id_departement,
+    c.libelle as categorie_nom,
+    d.libelle as departement_nom,
+    -- Compter le nombre d'annonces actives pour ce poste
+    COUNT(DISTINCT CASE WHEN ae.statut = 'active' THEN ae.id END) as annonces_actives,
+    -- Compter le nombre d'employés actuellement sur ce poste
+    COUNT(DISTINCT CASE WHEN ce.id_statut_contrat = 1 THEN ce.id_employe END) as employes_actifs,
+    -- Calcul du nombre de postes libres (valeur - employés actifs - annonces actives)
+    (p.valeur - 
+     COUNT(DISTINCT CASE WHEN ce.id_statut_contrat = 1 THEN ce.id_employe END) -
+     COUNT(DISTINCT CASE WHEN ae.statut = 'active' THEN ae.id END)
+    ) as postes_disponibles,
+    -- Statut du poste
+    CASE 
+        WHEN (p.valeur - 
+              COUNT(DISTINCT CASE WHEN ce.id_statut_contrat = 1 THEN ce.id_employe END) -
+              COUNT(DISTINCT CASE WHEN ae.statut = 'active' THEN ae.id END)
+             ) > 0 THEN 'disponible'
+        ELSE 'complet'
+    END as statut_disponibilite
+FROM Poste p
+JOIN categorie c ON p.id_categorie = c.id
+JOIN departement d ON p.id_departement = d.id
+LEFT JOIN annonce_emploi ae ON p.id = ae.id_poste
+LEFT JOIN contrat_employe ce ON p.id = ce.id_poste
+GROUP BY p.id, p.label, p.valeur, p.id_categorie, p.id_departement, c.libelle, d.libelle;
+
+-- Vue pour les statistiques des postes
+CREATE OR REPLACE VIEW v_stats_postes AS
+SELECT 
+    COUNT(*) as total_postes,
+    SUM(valeur) as total_capacite,
+    SUM(CASE WHEN (
+        valeur - 
+        (SELECT COUNT(DISTINCT ce.id_employe) 
+         FROM contrat_employe ce 
+         WHERE ce.id_poste = Poste.id AND ce.id_statut_contrat = 1) -
+        (SELECT COUNT(DISTINCT ae.id) 
+         FROM annonce_emploi ae 
+         WHERE ae.id_poste = Poste.id AND ae.statut = 'active')
+    ) > 0 THEN 1 ELSE 0 END) as postes_avec_places_libres,
+    SUM(valeur - 
+        (SELECT COUNT(DISTINCT ce.id_employe) 
+         FROM contrat_employe ce 
+         WHERE ce.id_poste = Poste.id AND ce.id_statut_contrat = 1) -
+        (SELECT COUNT(DISTINCT ae.id) 
+         FROM annonce_emploi ae 
+         WHERE ae.id_poste = Poste.id AND ae.statut = 'active')
+    ) as total_places_libres
+FROM Poste;
+
+-- Vue pour les contrats avec détails employés
+CREATE OR REPLACE VIEW v_contrats_details AS
+SELECT 
+    ce.id,
+    ce.date_debut,
+    ce.date_fin,
+    ce.duree,
+    ce.salaire,
+    ce.id_poste,
+    ce.id_employe,
+    ce.id_statut_contrat,
+    ce.id_type_contrat,
+    e.nom as employe_nom,
+    e.prenom as employe_prenom,
+    e.email as employe_email,
+    e.contact as employe_contact,
+    e.cin as employe_cin,
+    e.genre as employe_genre,
+    p.label as poste_nom,
+    c.libelle as categorie_nom,
+    d.libelle as departement_nom,
+    tc.label as type_contrat_nom,
+    sc.label as statut_contrat_nom,
+    -- Informations candidature si disponibles
+    cand.id as candidature_id,
+    cand.email as candidature_email
+FROM contrat_employe ce
+JOIN Employe e ON ce.id_employe = e.id
+JOIN Poste p ON ce.id_poste = p.id
+JOIN categorie c ON p.id_categorie = c.id
+JOIN departement d ON p.id_departement = d.id
+JOIN Type_Contrat tc ON ce.id_type_contrat = tc.id
+JOIN Statut_Contrat sc ON ce.id_statut_contrat = sc.id
+LEFT JOIN candidature cand ON e.email = cand.email
+ORDER BY ce.date_debut DESC;
+
+-- Vue pour les candidats en attente d'évaluation
+CREATE OR REPLACE VIEW v_candidats_en_evaluation AS
+SELECT 
+    c.id,
+    c.nom,
+    c.prenom,
+    c.email,
+    c.telephone,
+    c.genre,
+    c.statut,
+    c.date_candidature,
+    a.titre as annonce_titre,
+    p.label as poste_nom,
+    e.id as entretien_id,
+    e.statut as entretien_statut,
+    e.note_manager,
+    e.note_rh,
+    CASE 
+        WHEN e.statut = 'termine' AND e.note_manager IS NOT NULL AND e.note_rh IS NULL THEN 1
+        ELSE 0
+    END as en_attente_evaluation_rh,
+    CASE 
+        WHEN e.statut = 'planifie' OR (e.statut = 'termine' AND e.note_manager IS NULL) THEN 1
+        ELSE 0
+    END as en_attente_entretien_manager
+FROM candidature c
+LEFT JOIN annonce_emploi a ON c.id_annonce = a.id
+LEFT JOIN Poste p ON a.id_poste = p.id
+LEFT JOIN entretien e ON c.id = e.id_candidature
+WHERE c.statut IN ('envoye_manager', 'entretien_planifie', 'entretien_termine')
+  AND c.decision_finale IS NULL
+ORDER BY c.date_candidature DESC;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TRIGGER IF EXISTS after_questionnaire_submit;
+DROP VIEW IF EXISTS v_formulaires_formation_complets;
+DROP TABLE IF EXISTS Questionnaire_Formation_Candidat;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+DROP TABLE IF EXISTS Evaluation_Formation;
+DROP TABLE IF EXISTS Formulaire_Formation;
+DROP TABLE IF EXISTS Candidat_Mise_Formation;
+DROP TABLE IF EXISTS Historique_Remise_Formation_Employe;
+DROP TABLE IF EXISTS Employe_Qualite_Performance;
+DROP TABLE IF EXISTS Employe_Competence;
+DROP TABLE IF EXISTS Candidat_Competence;
+DROP TABLE IF EXISTS Poste_Competence;
+DROP TABLE IF EXISTS Niveau_Competence;
+DROP TABLE IF EXISTS Competence;
+
+-- ========================================
+-- CRÉATION DES TABLES
+-- ========================================
+
+-- Table des compétences
+CREATE TABLE Competence (
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(200) NOT NULL,
+    description TEXT,
+    categorie VARCHAR(100) COMMENT 'Ex: Informatique, Jardinage, Comptabilité',
+    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des niveaux de compétence (référentiel 1-5)
+CREATE TABLE Niveau_Competence (
+    id INT PRIMARY KEY,
+    libelle VARCHAR(50) NOT NULL,
+    description TEXT
 );
 
 
-ALTER TABLE public.barem OWNER TO postgres;
+-- Association Poste-Compétence (compétences requises par poste)
+CREATE TABLE Poste_Competence (
+    id SERIAL PRIMARY KEY,
+    id_poste BIGINT UNSIGNED NOT NULL,
+    id_competence BIGINT UNSIGNED NOT NULL,
+    niveau_requis INT NOT NULL COMMENT 'Niveau 1-5 requis',
+    importance INT DEFAULT 5 COMMENT 'Importance 1-10 pour pondération',
+    FOREIGN KEY (id_poste) REFERENCES Poste(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id) ON DELETE CASCADE,
+    FOREIGN KEY (niveau_requis) REFERENCES Niveau_Competence(id),
+    UNIQUE KEY unique_poste_competence (id_poste, id_competence)
+);
 
---
--- Name: barem_id_barem_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
+-- Compétences du candidat (auto-déclarées + évaluées)
+CREATE TABLE Candidat_Competence (
+    id SERIAL PRIMARY KEY,
+    id_candidature BIGINT UNSIGNED NOT NULL,
+    id_competence BIGINT UNSIGNED NOT NULL,
+    niveau_declare INT COMMENT 'Niveau auto-déclaré par candidat',
+    niveau_evalue INT COMMENT 'Niveau évalué lors entretien',
+    date_evaluation DATETIME,
+    FOREIGN KEY (id_candidature) REFERENCES candidature(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_candidat_competence (id_candidature, id_competence)
+);
 
-CREATE SEQUENCE public.barem_id_barem_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+-- Table de mise en formation des candidats
+CREATE TABLE Candidat_Mise_Formation (
+    id SERIAL PRIMARY KEY,
+    id_candidature BIGINT UNSIGNED NOT NULL,
+    id_competence_deficitaire BIGINT UNSIGNED,
+    niveau_requis INT,
+    niveau_candidat INT,
+    statut VARCHAR(50) DEFAULT 'proposee' COMMENT 'proposee, acceptee, en_formation, terminee, echouee',
+    raison TEXT,
+    date_mise_en_formation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date_debut_formation DATETIME,
+    date_fin_formation DATETIME,
+    FOREIGN KEY (id_candidature) REFERENCES candidature(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence_deficitaire) REFERENCES Competence(id)
+);
 
+-- Formulaire de formation rempli par le candidat
+CREATE TABLE Formulaire_Formation (
+    id SERIAL PRIMARY KEY,
+    id_candidat_mise_formation BIGINT UNSIGNED NOT NULL,
+    contenu_formation TEXT NOT NULL,
+    duree_heures INT,
+    methodologie VARCHAR(100),
+    formateur VARCHAR(200),
+    date_debut_formation DATE,
+    date_fin_formation DATE,
+    resultats TEXT,
+    observations TEXT,
+    certificat VARCHAR(50),
+    date_submission DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_candidat_mise_formation) REFERENCES Candidat_Mise_Formation(id) ON DELETE CASCADE
+);
 
-ALTER SEQUENCE public.barem_id_barem_seq OWNER TO postgres;
+-- Évaluation de la formation par le RH
+CREATE TABLE Evaluation_Formation (
+    id SERIAL PRIMARY KEY,
+    id_formulaire_formation BIGINT UNSIGNED NOT NULL,
+    id_rh BIGINT UNSIGNED NOT NULL,
+    note_formation DECIMAL(4,2) NOT NULL COMMENT 'Note sur 20',
+    note_competence_finale DECIMAL(4,2) NOT NULL COMMENT 'Note compétence acquise sur 20',
+    observations TEXT,
+    decision VARCHAR(50) NOT NULL COMMENT 'accepte ou rejete',
+    date_evaluation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_formulaire_formation) REFERENCES Formulaire_Formation(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_rh) REFERENCES utilisateurs(id)
+);
 
---
--- Name: barem_id_barem_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
+-- Compétences des employés
+CREATE TABLE Employe_Competence (
+    id SERIAL PRIMARY KEY,
+    id_employe BIGINT UNSIGNED NOT NULL,
+    id_competence BIGINT UNSIGNED NOT NULL,
+    niveau INT NOT NULL COMMENT 'Niveau 1-5',
+    date_acquisition DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_employe) REFERENCES Employe(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_employe_competence (id_employe, id_competence)
+);
 
-ALTER SEQUENCE public.barem_id_barem_seq OWNED BY public.barem.id_barem;
+-- Performance et qualité des employés
+CREATE TABLE Employe_Qualite_Performance (
+    id SERIAL PRIMARY KEY,
+    id_employe BIGINT UNSIGNED NOT NULL,
+    score_performance INT DEFAULT 50 COMMENT 'Score 0-100%',
+    statut_employe VARCHAR(50) DEFAULT 'actif' COMMENT 'actif, suspendu_formation, licencie',
+    raison_suspension TEXT,
+    frais_formation DECIMAL(15,2) DEFAULT 0,
+    date_suspension DATETIME,
+    FOREIGN KEY (id_employe) REFERENCES Employe(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_employe_performance (id_employe)
+);
 
-
---
--- Name: besoin; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.besoin (
-    id_besoin integer NOT NULL,
-    experience integer,
-    mission character varying(200),
-    date_limite timestamp without time zone,
-    id_poste integer,
-    id_diplome integer,
-    sexe integer,
-    age integer
+-- Historique des remises en formation des employés
+CREATE TABLE Historique_Remise_Formation_Employe (
+    id SERIAL PRIMARY KEY,
+    id_employe BIGINT UNSIGNED NOT NULL,
+    id_competence BIGINT UNSIGNED,
+    ancien_score INT,
+    statut VARCHAR(50) COMMENT 'proposee, acceptee, terminee',
+    frais_formation DECIMAL(15,2),
+    raison TEXT,
+    date_remise_formation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_employe) REFERENCES Employe(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id)
 );
 
 
-ALTER TABLE public.besoin OWNER TO postgres;
+-- === Créer la table Questionnaire_Formation_Candidat ===
+-- Utilise BIGINT UNSIGNED pour correspondre à SERIAL (qui est souvent BIGINT UNSIGNED)
+CREATE TABLE IF NOT EXISTS Questionnaire_Formation_Candidat (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_formulaire_formation BIGINT UNSIGNED NOT NULL,
+    id_candidature BIGINT UNSIGNED NOT NULL,
 
---
--- Name: besoin_id_besoin_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
+    -- Questions
+    q1_contenu_attentes ENUM('oui','partiellement','non') NOT NULL,
+    q2_qualite_pedagogique TINYINT NOT NULL CHECK (q2_qualite_pedagogique BETWEEN 1 AND 5),
+    q3_objectifs_atteints ENUM('oui','partiellement','non') NOT NULL,
+    q4_ameliorations TEXT,
+    q5_formation_complementaire ENUM('oui','non') NOT NULL,
 
-CREATE SEQUENCE public.besoin_id_besoin_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+    -- Métadonnées
+    date_soumission TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut ENUM('soumis','evalue') DEFAULT 'soumis',
+
+    -- Contraintes FK
+    CONSTRAINT fk_qfc_ff FOREIGN KEY (id_formulaire_formation) REFERENCES Formulaire_Formation(id) ON DELETE CASCADE,
+    CONSTRAINT fk_qfc_cand FOREIGN KEY (id_candidature) REFERENCES candidature(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_questionnaire (id_formulaire_formation)
+);
+
+-- === S'assurer que Formulaire_Formation contient les colonnes de tracking (ajoute si manquant) ===
+ALTER TABLE Formulaire_Formation
+    ADD COLUMN IF NOT EXISTS questionnaire_complete BOOLEAN DEFAULT FALSE AFTER date_submission,
+    ADD COLUMN IF NOT EXISTS date_questionnaire_complete TIMESTAMP NULL AFTER questionnaire_complete;
+
+-- === Recréer la vue (utilisant LEFT JOIN sur la table nouvellement créée) ===
+CREATE OR REPLACE VIEW v_formulaires_formation_complets AS
+SELECT 
+    ff.*,
+    cmf.id_candidature,
+    cmf.statut AS statut_mise_formation,
+    c.nom AS candidat_nom,
+    c.prenom AS candidat_prenom,
+    c.email AS candidat_email,
+    qfc.id AS questionnaire_id,
+    qfc.statut AS questionnaire_statut,
+    qfc.date_soumission AS questionnaire_date_soumission
+FROM Formulaire_Formation ff
+JOIN Candidat_Mise_Formation cmf ON ff.id_candidat_mise_formation = cmf.id
+JOIN candidature c ON cmf.id_candidature = c.id
+LEFT JOIN Questionnaire_Formation_Candidat qfc ON ff.id = qfc.id_formulaire_formation
+ORDER BY ff.date_submission DESC;
+
+-- === Trigger : marquer formulaire complet après insertion d'un questionnaire ===
+DELIMITER $$
+CREATE TRIGGER after_questionnaire_submit
+AFTER INSERT ON Questionnaire_Formation_Candidat
+FOR EACH ROW
+BEGIN
+    -- marquer le formulaire comme complété
+    UPDATE Formulaire_Formation
+    SET questionnaire_complete = TRUE,
+        date_questionnaire_complete = NOW()
+    WHERE id = NEW.id_formulaire_formation;
+END$$
+DELIMITER ;
+
+-- === Indexes pour performance ===
+CREATE INDEX IF NOT EXISTS idx_questionnaire_formulaire ON Questionnaire_Formation_Candidat (id_formulaire_formation);
+CREATE INDEX IF NOT EXISTS idx_questionnaire_candidature ON Questionnaire_Formation_Candidat (id_candidature);
+CREATE INDEX IF NOT EXISTS idx_ff_questionnaire ON Formulaire_Formation (questionnaire_complete);
 
 
-ALTER SEQUENCE public.besoin_id_besoin_seq OWNER TO postgres;
-
---
--- Name: besoin_id_besoin_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.besoin_id_besoin_seq OWNED BY public.besoin.id_besoin;
 
 
---
--- Name: champs_besoin; Type: TABLE; Schema: public; Owner: postgres
---
+-- ========================================
+-- SUPPRESSION DES TABLES EXISTANTES
+-- ========================================
 
-CREATE TABLE public.champs_besoin (
-    id_champs_besoin integer NOT NULL,
-    champ character varying(100),
-    resultat character varying(100),
-    obligatoire boolean,
-    id_besoin integer
+SET FOREIGN_KEY_CHECKS = 0;
+
+
+
+-- Suppression des vues
+DROP VIEW IF EXISTS v_stats_competences;
+DROP VIEW IF EXISTS v_historique_remise_formation_employe;
+DROP VIEW IF EXISTS v_employes_performance;
+DROP VIEW IF EXISTS v_employe_competence_detail;
+DROP VIEW IF EXISTS v_formations_candidats_detail;
+DROP VIEW IF EXISTS v_candidats_mise_en_formation;
+DROP VIEW IF EXISTS v_candidature_competences_deficitaires;
+DROP VIEW IF EXISTS v_candidature_competence_matching;
+DROP VIEW IF EXISTS v_candidature_score_matching;
+DROP VIEW IF EXISTS v_poste_competence_detail;
+
+
+
+
+
+
+CREATE OR REPLACE VIEW v_poste_competence_detail AS
+SELECT 
+    pc.id,
+    pc.id_poste,
+    p.label as poste_nom,
+    c.libelle as categorie_nom,
+    pc.id_competence,
+    comp.libelle as competence_nom,
+    comp.description as competence_description,
+    comp.categorie as competence_categorie,
+    pc.niveau_requis,
+    nc.libelle as niveau_requis_label,
+    pc.importance
+FROM Poste_Competence pc
+JOIN Poste p ON pc.id_poste = p.id
+JOIN categorie c ON p.id_categorie = c.id
+JOIN Competence comp ON pc.id_competence = comp.id
+JOIN Niveau_Competence nc ON pc.niveau_requis = nc.id;
+
+-- Vue: Matching score candidature vs poste
+CREATE OR REPLACE VIEW v_candidature_score_matching AS
+SELECT 
+    cand.id as id_candidature,
+    cand.nom as candidat_nom,
+    cand.prenom as candidat_prenom,
+    cand.email as candidat_email,
+    a.id as annonce_id,
+    a.id_poste,
+    p.label as poste_nom,
+    c.libelle as categorie_libelle,
+    COUNT(DISTINCT pc.id_competence) as nb_competences_requises,
+    COUNT(DISTINCT CASE 
+        WHEN cc.niveau_evalue >= pc.niveau_requis THEN pc.id_competence 
+    END) as nb_competences_conformes,
+    COALESCE(
+        SUM(
+            CASE 
+                WHEN cc.niveau_evalue IS NOT NULL THEN 
+                    (LEAST(cc.niveau_evalue, pc.niveau_requis) / pc.niveau_requis) * pc.importance * 100
+                ELSE 0 
+            END
+        ) / NULLIF(SUM(pc.importance), 0),
+        0
+    ) as score_pondere_pct,
+    CASE 
+        WHEN cmf.statut IS NOT NULL THEN cmf.statut
+        WHEN cand.decision_finale IS NOT NULL THEN cand.decision_finale
+        ELSE 'candidat'
+    END as statut_evaluation,
+    e.id as entretien_id
+FROM candidature cand
+JOIN annonce_emploi a ON cand.id_annonce = a.id
+JOIN Poste p ON a.id_poste = p.id
+JOIN categorie c ON p.id_categorie = c.id
+LEFT JOIN Poste_Competence pc ON p.id = pc.id_poste
+LEFT JOIN Candidat_Competence cc ON cand.id = cc.id_candidature AND pc.id_competence = cc.id_competence
+LEFT JOIN Candidat_Mise_Formation cmf ON cand.id = cmf.id_candidature
+LEFT JOIN entretien e ON cand.id = e.id_candidature
+GROUP BY cand.id, a.id, p.id, c.id, cmf.statut, e.id;
+
+-- Vue: Matching détaillé compétence par compétence
+CREATE OR REPLACE VIEW v_candidature_competence_matching AS
+SELECT 
+    cand.id as id_candidature,
+    cand.nom as candidat_nom,
+    cand.prenom as candidat_prenom,
+    a.id_poste,
+    p.label as poste_nom,
+    pc.id_competence,
+    comp.libelle as competence_nom,
+    pc.niveau_requis,
+    nc_requis.libelle as niveau_requis_label,
+    COALESCE(cc.niveau_evalue, cc.niveau_declare, 0) as niveau_candidat,
+    COALESCE(nc_candidat.libelle, 'Non évalué') as niveau_candidat_label,
+    pc.importance,
+    CASE 
+        WHEN cc.niveau_evalue >= pc.niveau_requis THEN 100
+        WHEN cc.niveau_evalue IS NOT NULL THEN (cc.niveau_evalue / pc.niveau_requis) * 100
+        ELSE 0 
+    END as score_pct,
+    (pc.niveau_requis - COALESCE(cc.niveau_evalue, 0)) as ecart_niveau
+FROM candidature cand
+JOIN annonce_emploi a ON cand.id_annonce = a.id
+JOIN Poste p ON a.id_poste = p.id
+JOIN Poste_Competence pc ON p.id = pc.id_poste
+JOIN Competence comp ON pc.id_competence = comp.id
+JOIN Niveau_Competence nc_requis ON pc.niveau_requis = nc_requis.id
+LEFT JOIN Candidat_Competence cc ON cand.id = cc.id_candidature AND pc.id_competence = cc.id_competence
+LEFT JOIN Niveau_Competence nc_candidat ON cc.niveau_evalue = nc_candidat.id
+ORDER BY cand.id, pc.importance DESC;
+
+-- Vue: Compétences déficitaires
+CREATE OR REPLACE VIEW v_candidature_competences_deficitaires AS
+SELECT 
+    cand.id as id_candidature,
+    cand.nom as candidat_nom,
+    cand.prenom as candidat_prenom,
+    comp.id as id_competence,
+    comp.libelle as competence_nom,
+    pc.niveau_requis,
+    COALESCE(cc.niveau_evalue, 0) as niveau_candidat,
+    (pc.niveau_requis - COALESCE(cc.niveau_evalue, 0)) as ecart,
+    pc.importance
+FROM candidature cand
+JOIN annonce_emploi a ON cand.id_annonce = a.id
+JOIN Poste p ON a.id_poste = p.id
+JOIN Poste_Competence pc ON p.id = pc.id_poste
+JOIN Competence comp ON pc.id_competence = comp.id
+LEFT JOIN Candidat_Competence cc ON cand.id = cc.id_candidature AND pc.id_competence = cc.id_competence
+WHERE COALESCE(cc.niveau_evalue, 0) < pc.niveau_requis
+ORDER BY cand.id, pc.importance DESC, ecart DESC;
+
+-- Vue: Candidats mis en formation
+CREATE OR REPLACE VIEW v_candidats_mise_en_formation AS
+SELECT 
+    cmf.id as id_mise_formation,
+    cmf.id_candidature,
+    c.nom as candidat_nom,
+    c.prenom as candidat_prenom,
+    c.email as candidat_email,
+    a.titre as annonce_titre,
+    p.label as poste_nom,
+    comp.libelle as competence_nom,
+    cmf.niveau_requis,
+    cmf.niveau_candidat,
+    cmf.statut,
+    cmf.raison,
+    cmf.date_mise_en_formation,
+    cmf.date_debut_formation,
+    cmf.date_fin_formation,
+    ff.id as formulaire_id,
+    ff.date_submission as formulaire_date,
+    ef.id as evaluation_id,
+    ef.note_formation,
+    ef.note_competence_finale,
+    ef.decision as evaluation_decision
+FROM Candidat_Mise_Formation cmf
+JOIN candidature c ON cmf.id_candidature = c.id
+JOIN annonce_emploi a ON c.id_annonce = a.id
+JOIN Poste p ON a.id_poste = p.id
+LEFT JOIN Competence comp ON cmf.id_competence_deficitaire = comp.id
+LEFT JOIN Formulaire_Formation ff ON cmf.id = ff.id_candidat_mise_formation
+LEFT JOIN Evaluation_Formation ef ON ff.id = ef.id_formulaire_formation
+ORDER BY cmf.date_mise_en_formation DESC;
+
+-- Vue: Détail formations avec évaluations
+CREATE OR REPLACE VIEW v_formations_candidats_detail AS
+SELECT 
+    ff.id as formulaire_id,
+    ff.id_candidat_mise_formation,
+    c.id as candidature_id,
+    c.nom as candidat_nom,
+    c.prenom as candidat_prenom,
+    c.email as candidat_email,
+    comp.libelle as competence_nom,
+    ff.contenu_formation,
+    ff.duree_heures,
+    ff.methodologie,
+    ff.formateur,
+    ff.date_debut_formation,
+    ff.date_fin_formation,
+    ff.resultats,
+    ff.observations,
+    ff.certificat,
+    ff.date_submission,
+    ef.id as evaluation_id,
+    ef.note_formation,
+    ef.note_competence_finale,
+    ef.observations as observations_rh,
+    ef.decision,
+    ef.date_evaluation,
+    cmf.statut as statut_formation
+FROM Formulaire_Formation ff
+JOIN Candidat_Mise_Formation cmf ON ff.id_candidat_mise_formation = cmf.id
+JOIN candidature c ON cmf.id_candidature = c.id
+LEFT JOIN Competence comp ON cmf.id_competence_deficitaire = comp.id
+LEFT JOIN Evaluation_Formation ef ON ff.id = ef.id_formulaire_formation
+ORDER BY ff.date_submission DESC;
+
+-- Vue: Employés avec compétences
+CREATE OR REPLACE VIEW v_employe_competence_detail AS
+SELECT 
+    e.id as id_employe,
+    e.nom as nom_employe,
+    e.prenom as prenom_employe,
+    e.email as email_employe,
+    comp.id as id_competence,
+    comp.libelle as competence,
+    comp.description as competence_description,
+    ec.niveau as niveau_employe,
+    nc.libelle as niveau_label,
+    ec.date_acquisition
+FROM Employe e
+JOIN Employe_Competence ec ON e.id = ec.id_employe
+JOIN Competence comp ON ec.id_competence = comp.id
+JOIN Niveau_Competence nc ON ec.niveau = nc.id
+ORDER BY e.nom, e.prenom, comp.libelle;
+
+-- Vue: Performance employés
+CREATE OR REPLACE VIEW v_employes_performance AS
+SELECT 
+    e.id as id_employe,
+    e.nom as nom_employe,
+    e.prenom as prenom_employe,
+    e.email as email_employe,
+    e.contact,
+    ce.id_poste,
+    p.label as poste_nom,
+    d.libelle as nom_departement,
+    ce.date_debut as date_embauche,
+    eqp.score_performance,
+    eqp.statut_employe as statut_performance,
+    eqp.raison_suspension,
+    eqp.frais_formation,
+    eqp.date_suspension,
+    CASE 
+        WHEN eqp.score_performance < 10 THEN 'critique'
+        WHEN eqp.score_performance < 25 THEN 'attention_requise'
+        WHEN eqp.score_performance < 50 THEN 'amelioration_possible'
+        WHEN eqp.score_performance < 75 THEN 'satisfaisant'
+        ELSE 'excellent'
+    END as categorie_performance
+FROM Employe e
+LEFT JOIN Employe_Qualite_Performance eqp ON e.id = eqp.id_employe
+LEFT JOIN contrat_employe ce ON e.id = ce.id_employe
+LEFT JOIN Poste p ON ce.id_poste = p.id
+LEFT JOIN departement d ON p.id_departement = d.id
+WHERE ce.id_statut_contrat = 1 OR ce.id IS NULL
+ORDER BY e.nom, e.prenom;
+
+-- Vue: Historique remises en formation employé
+CREATE OR REPLACE VIEW v_historique_remise_formation_employe AS
+SELECT 
+    hrfe.id,
+    hrfe.id_employe,
+    e.nom as nom_employe,
+    e.prenom as prenom_employe,
+    comp.libelle as competence_nom,
+    hrfe.ancien_score,
+    hrfe.statut,
+    hrfe.frais_formation,
+    hrfe.raison,
+    hrfe.date_remise_formation as date_formation
+FROM Historique_Remise_Formation_Employe hrfe
+JOIN Employe e ON hrfe.id_employe = e.id
+LEFT JOIN Competence comp ON hrfe.id_competence = comp.id
+ORDER BY hrfe.date_remise_formation DESC;
+
+-- Vue: Statistiques globales
+CREATE OR REPLACE VIEW v_stats_competences AS
+SELECT 
+    (SELECT COUNT(*) FROM Competence) as total_competences,
+    (SELECT COUNT(*) FROM Candidat_Mise_Formation WHERE statut IN ('acceptee', 'en_formation')) as formations_actives,
+    (SELECT COUNT(*) FROM Candidat_Mise_Formation WHERE statut = 'terminee') as formations_reussies,
+    (SELECT COUNT(*) FROM Candidat_Mise_Formation WHERE statut = 'echouee') as formations_echouees,
+    (SELECT COUNT(*) FROM Employe_Qualite_Performance WHERE statut_employe = 'actif') as employes_actifs,
+    (SELECT COUNT(*) FROM Employe_Qualite_Performance WHERE statut_employe = 'suspendu_formation') as employes_formation,
+    (SELECT COUNT(*) FROM Employe_Qualite_Performance WHERE statut_employe = 'licencie') as employes_licencies,
+    (SELECT COUNT(*) FROM candidature WHERE decision_finale = 'accepte') as candidats_acceptes,
+    (SELECT COUNT(*) FROM Candidat_Mise_Formation WHERE statut IN ('acceptee', 'en_formation', 'terminee')) as candidats_formation,
+    (SELECT COUNT(*) FROM candidature WHERE decision_finale = 'rejete') as candidats_rejetes;
+
+
+-- Initialisation des données de base pour le système RH
+
+-- Types de contrat
+INSERT INTO Type_Contrat (label) VALUES
+('CDI - Contrat à Durée Indéterminée'),
+('CDD - Contrat à Durée Déterminée'),
+('Contrat d Essai'),
+('Contrat de Travail Temporaire'),
+('Stage'),
+('Alternance');
+
+-- Statuts de contrat
+INSERT INTO Statut_Contrat (label) VALUES
+('Actif'),
+('En attente'),
+('Terminé'),
+('Suspendu'),
+('Résilié');
+
+-- Catégories de personnel (selon le PDF fourni)
+INSERT INTO categorie (libelle) VALUES
+('Ouvrier'),
+('Employé'),
+('Technicien / Agent de Maîtrise'),
+('Cadre'),
+('Dirigeant');
+
+-- Départements
+INSERT INTO departement (libelle, fonction) VALUES
+('Direction Générale', 1),
+('Ressources Humaines', 1),
+('Finance et Comptabilité', 2),
+('Informatique / IT', 2),
+('Production', 3),
+('Commercial et Ventes', 2),
+('Marketing', 2),
+('Logistique', 3),
+('Qualité', 2),
+('Maintenance', 3);
+
+-- Postes par catégorie
+
+-- Ouvriers
+INSERT INTO Poste (label, valeur, id_categorie, id_departement) VALUES
+('Opérateur de Production', 1, 1, 5),
+('Conducteur d Engins', 1, 1, 5),
+('Technicien d Usine', 1, 1, 5),
+('Manutentionnaire', 1, 1, 8),
+('Agent de Maintenance', 1, 1, 10);
+
+-- Employés
+INSERT INTO Poste (label, valeur, id_categorie, id_departement) VALUES
+('Secrétaire', 2, 2, 2),
+('Assistant Administratif', 2, 2, 2),
+('Caissier', 2, 2, 6),
+('Agent d Accueil', 2, 2, 2),
+('Comptable Assistant', 2, 2, 3);
+
+-- Techniciens / Agents de Maîtrise
+INSERT INTO Poste (label, valeur, id_categorie, id_departement) VALUES
+('Chef dÉquipe Production', 3, 3, 5),
+('Superviseur Logistique', 3, 3, 8),
+('Technicien Informatique', 3, 3, 4),
+('Contrôleur Qualité', 3, 3, 9),
+('Responsable Maintenance', 3, 3, 10);
+
+-- Cadres
+INSERT INTO Poste (label, valeur, id_categorie, id_departement) VALUES
+('Responsable RH', 4, 4, 2),
+('Chef de Projet IT', 4, 4, 4),
+('Responsable Commercial', 4, 4, 6),
+('Responsable Marketing', 4, 4, 7),
+('Directeur de Production', 4, 4, 5),
+('Chef Comptable', 4, 4, 3);
+
+-- Dirigeants
+INSERT INTO Poste (label, valeur, id_categorie, id_departement) VALUES
+('Directeur Général', 5, 5, 1),
+('Directeur Financier', 5, 5, 3),
+('Directeur des Opérations', 5, 5, 5),
+('Directeur IT', 5, 5, 4);
+
+-- Configuration des postes (horaires standards)
+INSERT INTO config_poste (duree_travail, entree, sortie, id_poste) 
+SELECT 8, '08:00:00', '17:00:00', id FROM Poste WHERE id_categorie IN (1, 2, 3);
+
+INSERT INTO config_poste (duree_travail, entree, sortie, id_poste) 
+SELECT 8, '09:00:00', '18:00:00', id FROM Poste WHERE id_categorie IN (4, 5);
+
+-- Types de retenue (pour la paie)
+INSERT INTO type_retenu (libelle) VALUES
+('CNSS - Caisse Nationale de Sécurité Sociale'),
+('IRSA - Impôt sur les Revenus Salariaux'),
+('Mutuelle de Santé'),
+('Retraite Complémentaire'),
+('Prélèvement Assurance');
+
+-- Configuration des retenues par catégorie
+INSERT INTO config_retenu (pourcentage_entreprise, pourcentage_employer, salaire_min, salaire_max, id_categorie, id_type_retenu) VALUES
+-- CNSS pour toutes catégories (13% entreprise, 1% employé)
+(13.00, 1.00, 0, 999999999, 1, 1),
+(13.00, 1.00, 0, 999999999, 2, 1),
+(13.00, 1.00, 0, 999999999, 3, 1),
+(13.00, 1.00, 0, 999999999, 4, 1),
+(13.00, 1.00, 0, 999999999, 5, 1);
+
+-- IRSA progressif selon catégorie
+INSERT INTO config_retenu (pourcentage_entreprise, pourcentage_employer, salaire_min, salaire_max, id_categorie, id_type_retenu) VALUES
+(0, 0, 0, 350000, 1, 2),     -- Ouvriers: exonérés jusqu'à 350000
+(0, 5, 350001, 400000, 1, 2), -- 5% au-delà
+(0, 10, 400001, 500000, 2, 2), -- Employés: 10%
+(0, 15, 500001, 600000, 3, 2), -- TAM: 15%
+(0, 20, 600001, 999999999, 4, 2), -- Cadres: 20%
+(0, 20, 600001, 999999999, 5, 2); -- Dirigeants: 20%
+
+-- Types de documents
+INSERT INTO Type_Document (label) VALUES
+('CV'),
+('Lettre de Motivation'),
+('Diplôme'),
+('Certificat de Travail'),
+('Pièce d Identité'),
+('Justificatif de Domicile'),
+('Attestation de Formation'),
+('Bulletin de Salaire');
+
+-- Employé Manager exemple (pour tester)
+INSERT INTO Employe (nom, prenom, contact, cin, date_naissance, email, adresse, genre) VALUES
+('RAKOTO', 'Jean', '+261 34 12 345 67', '101 234 567 890', '1985-05-15', 'jean.rakoto@entreprise.mg', 'Antananarivo', 1);
+
+-- Données de configuration globale
+INSERT INTO data (libelle, valeur) VALUES
+('salaire_minimum_mensuel', 250000.00),
+('heures_travail_semaine', 40.00),
+('jours_conge_annuel', 22.00),
+('taux_heure_supplementaire', 1.50);
+
+-- Annonce exemple
+INSERT INTO annonce_emploi (titre, description, competences_requises, diplomes_requis, experience_min, 
+                            niveau_responsabilite, autonomie_requise, date_publication, date_limite, 
+                            statut, id_poste, id_type_contrat, id_manager) VALUES
+('Développeur Full Stack Senior', 
+ 'Nous recherchons un développeur full stack expérimenté pour rejoindre notre équipe IT. Vous serez en charge du développement et de la maintenance de nos applications web.',
+ 'PHP, MySQL, JavaScript, Vue.js, API REST, Git, Linux',
+ 'Licence en Informatique ou équivalent, Master souhaité',
+ 5,
+ 'Cadre',
+ 'Forte autonomie requise. Capacité à prendre des décisions techniques. Gestion de projet en mode agile.',
+ CURDATE(),
+ DATE_ADD(CURDATE(), INTERVAL 30 DAY),
+ 'active',
+ 17, -- Chef de Projet IT
+ 1,  -- CDI
+ 1   -- Manager ID
 );
 
 
-ALTER TABLE public.champs_besoin OWNER TO postgres;
-
---
--- Name: champs_besoin_id_champs_besoin_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.champs_besoin_id_champs_besoin_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+INSERT INTO utilisateurs (username, password, role, nom, prenom, email) VALUES
+('admin1', 'cccc', 'admin', 'ANDRIANJAKA', 'Marie', 'sss@gmail.com');
 
 
-ALTER SEQUENCE public.champs_besoin_id_champs_besoin_seq OWNER TO postgres;
-
---
--- Name: champs_besoin_id_champs_besoin_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.champs_besoin_id_champs_besoin_seq OWNED BY public.champs_besoin.id_champs_besoin;
+-- WARNING : Mila jerena kely ny eto
 
 
---
--- Name: contrat; Type: TABLE; Schema: public; Owner: postgres
---
 
-CREATE TABLE public.contrat (
-    id_contrat integer NOT NULL,
-    debut date,
-    duree integer,
-    description character varying(200),
-    id_personne integer
+-- Test data for formation/questionnaire flow
+-- Inserts one candidature, one Candidat_Mise_Formation, one Formulaire_Formation
+-- and one Questionnaire_Formation_Candidat (statut = 'soumis').
+-- Run with: mysql -u <user> -p <database> < public/sql/insertion_formation_test.sql
+
+START TRANSACTION;
+
+-- 1) Insert a candidature (rejected so it appears in candidatures_rejetees)
+INSERT INTO candidature (nom, prenom, email, date_candidature, decision_finale, date_decision, statut)
+VALUES ('Test', 'Candidat', 'test.candidat@example.com', NOW(), 'rejete', NOW(), 'rejete');
+SET @id_candidature = LAST_INSERT_ID();
+
+-- 2) Insert a Candidat_Mise_Formation linked to the candidature
+INSERT INTO Candidat_Mise_Formation (id_candidature, id_competence_deficitaire, niveau_requis, niveau_candidat, statut, date_mise_en_formation)
+VALUES (@id_candidature, NULL, 3, 1, 'questionnaire_soumis', NOW());
+SET @id_mise = LAST_INSERT_ID();
+
+-- 3) Insert a Formulaire_Formation linked to the mise
+INSERT INTO Formulaire_Formation (id_candidat_mise_formation, contenu_formation, duree_heures, methodologie, formateur, date_submission)
+VALUES (@id_mise, 'Formation de test - contenu minimal', 16, 'Présentiel', 'Formateur Test', NOW());
+SET @id_formulaire = LAST_INSERT_ID();
+
+-- 4) Insert a Questionnaire_Formation_Candidat linked to the formulaire and candidature
+INSERT INTO Questionnaire_Formation_Candidat (
+    id_formulaire_formation,
+    id_candidature,
+    q1_contenu_attentes,
+    q2_qualite_pedagogique,
+    q3_objectifs_atteints,
+    q4_ameliorations,
+    q5_formation_complementaire,
+    date_soumission,
+    statut
+) VALUES (
+    @id_formulaire,
+    @id_candidature,
+    'oui',
+    4,
+    'oui',
+    'Rien de particulier',
+    'non',
+    NOW(),
+    'soumis'
 );
-
-
-ALTER TABLE public.contrat OWNER TO postgres;
-
---
--- Name: contrat_id_contrat_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.contrat_id_contrat_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.contrat_id_contrat_seq OWNER TO postgres;
-
---
--- Name: contrat_id_contrat_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.contrat_id_contrat_seq OWNED BY public.contrat.id_contrat;
-
-
---
--- Name: critere_entretien; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.critere_entretien (
-    id_critere integer NOT NULL,
-    libelle character varying(50),
-    barem integer
-);
-
-
-ALTER TABLE public.critere_entretien OWNER TO postgres;
-
---
--- Name: critere_entretien_id_critere_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.critere_entretien_id_critere_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.critere_entretien_id_critere_seq OWNER TO postgres;
-
---
--- Name: critere_entretien_id_critere_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.critere_entretien_id_critere_seq OWNED BY public.critere_entretien.id_critere;
-
-
---
--- Name: cv; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.cv (
-    id_cv integer NOT NULL,
-    date_reception timestamp without time zone,
-    contact character varying(50),
-    experience integer,
-    adresse character varying(100),
-    photo character varying(200),
-    id_besoin integer,
-    id_diplome integer,
-    id_personne integer
-);
-
-
-ALTER TABLE public.cv OWNER TO postgres;
-
---
--- Name: cv_id_cv_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.cv_id_cv_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.cv_id_cv_seq OWNER TO postgres;
-
---
--- Name: cv_id_cv_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.cv_id_cv_seq OWNED BY public.cv.id_cv;
-
-
---
--- Name: detail_entretien; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.detail_entretien (
-    id_detail integer NOT NULL,
-    id_cv integer,
-    id_critere integer,
-    note integer
-);
-
-
-ALTER TABLE public.detail_entretien OWNER TO postgres;
-
---
--- Name: detail_entretien_id_detail_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.detail_entretien_id_detail_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.detail_entretien_id_detail_seq OWNER TO postgres;
-
---
--- Name: detail_entretien_id_detail_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.detail_entretien_id_detail_seq OWNED BY public.detail_entretien.id_detail;
-
-
---
--- Name: diplome; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.diplome (
-    id_diplome integer NOT NULL,
-    libelle character varying(100),
-    valeur integer
-);
-
-
-ALTER TABLE public.diplome OWNER TO postgres;
-
---
--- Name: diplome_id_diplome_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.diplome_id_diplome_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.diplome_id_diplome_seq OWNER TO postgres;
-
---
--- Name: diplome_id_diplome_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.diplome_id_diplome_seq OWNED BY public.diplome.id_diplome;
-
-
---
--- Name: etape; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.etape (
-    id_etape integer NOT NULL,
-    libelle character varying(100)
-);
-
-
-ALTER TABLE public.etape OWNER TO postgres;
-
---
--- Name: etape_id_etape_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.etape_id_etape_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.etape_id_etape_seq OWNER TO postgres;
-
---
--- Name: etape_id_etape_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.etape_id_etape_seq OWNED BY public.etape.id_etape;
-
-
---
--- Name: filiere; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.filiere (
-    id_filiere integer NOT NULL,
-    libelle character varying(100),
-    id_diplome integer
-);
-
-
-ALTER TABLE public.filiere OWNER TO postgres;
-
---
--- Name: filiere_id_filiere_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.filiere_id_filiere_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.filiere_id_filiere_seq OWNER TO postgres;
-
---
--- Name: filiere_id_filiere_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.filiere_id_filiere_seq OWNED BY public.filiere.id_filiere;
-
-
---
--- Name: historique_cv; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.historique_cv (
-    id_historique_cv integer NOT NULL,
-    resultat integer,
-    date_evaluation timestamp without time zone,
-    date_resultat timestamp without time zone,
-    id_cv integer,
-    id_etape integer
-);
-
-
-ALTER TABLE public.historique_cv OWNER TO postgres;
-
---
--- Name: historique_cv_id_historique_cv_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.historique_cv_id_historique_cv_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.historique_cv_id_historique_cv_seq OWNER TO postgres;
-
---
--- Name: historique_cv_id_historique_cv_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.historique_cv_id_historique_cv_seq OWNED BY public.historique_cv.id_historique_cv;
-
-
---
--- Name: historique_personnel; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.historique_personnel (
-    id_historique_personnel integer NOT NULL,
-    date_historique date,
-    id_personne integer,
-    id_statut integer
-);
-
-
-ALTER TABLE public.historique_personnel OWNER TO postgres;
-
---
--- Name: historique_personnel_id_historique_personnel_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.historique_personnel_id_historique_personnel_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.historique_personnel_id_historique_personnel_seq OWNER TO postgres;
-
---
--- Name: historique_personnel_id_historique_personnel_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.historique_personnel_id_historique_personnel_seq OWNED BY public.historique_personnel.id_historique_personnel;
-
-
---
--- Name: personne; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.personne (
-    id_personne integer NOT NULL,
-    nom character varying(100),
-    prenom character varying(100),
-    date_naissance date,
-    email character varying(100),
-    id_sexe integer
-);
-
-
-ALTER TABLE public.personne OWNER TO postgres;
-
---
--- Name: personne_id_personne_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.personne_id_personne_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.personne_id_personne_seq OWNER TO postgres;
-
---
--- Name: personne_id_personne_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.personne_id_personne_seq OWNED BY public.personne.id_personne;
-
-
---
--- Name: poste; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.poste (
-    id_poste integer NOT NULL,
-    designation character varying(150)
-);
-
-
-ALTER TABLE public.poste OWNER TO postgres;
-
---
--- Name: poste_id_poste_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.poste_id_poste_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.poste_id_poste_seq OWNER TO postgres;
-
---
--- Name: poste_id_poste_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.poste_id_poste_seq OWNED BY public.poste.id_poste;
-
-
---
--- Name: question_qcm; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.question_qcm (
-    id_question_qcm integer NOT NULL,
-    question character varying(200),
-    id_reponse integer,
-    point integer,
-    id_besoin integer
-);
-
-
-ALTER TABLE public.question_qcm OWNER TO postgres;
-
---
--- Name: question_qcm_id_question_qcm_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.question_qcm_id_question_qcm_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.question_qcm_id_question_qcm_seq OWNER TO postgres;
-
---
--- Name: question_qcm_id_question_qcm_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.question_qcm_id_question_qcm_seq OWNED BY public.question_qcm.id_question_qcm;
-
-
---
--- Name: reponses_cv; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.reponses_cv (
-    id_reponses_cv integer NOT NULL,
-    id_reponses_qcm integer,
-    id_question_qcm integer,
-    id_cv integer
-);
-
-
-ALTER TABLE public.reponses_cv OWNER TO postgres;
-
---
--- Name: reponses_cv_id_reponses_cv_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.reponses_cv_id_reponses_cv_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.reponses_cv_id_reponses_cv_seq OWNER TO postgres;
-
---
--- Name: reponses_cv_id_reponses_cv_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.reponses_cv_id_reponses_cv_seq OWNED BY public.reponses_cv.id_reponses_cv;
-
-
---
--- Name: reponses_qcm; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.reponses_qcm (
-    id_reponses_qcm integer NOT NULL,
-    reponse character varying(200),
-    id_question_qcm integer
-);
-
-
-ALTER TABLE public.reponses_qcm OWNER TO postgres;
-
---
--- Name: reponses_qcm_id_reponses_qcm_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.reponses_qcm_id_reponses_qcm_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.reponses_qcm_id_reponses_qcm_seq OWNER TO postgres;
-
---
--- Name: reponses_qcm_id_reponses_qcm_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.reponses_qcm_id_reponses_qcm_seq OWNED BY public.reponses_qcm.id_reponses_qcm;
-
-
---
--- Name: sexe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.sexe (
-    id_sexe integer NOT NULL,
-    libelle character varying(50)
-);
-
-
-ALTER TABLE public.sexe OWNER TO postgres;
-
---
--- Name: sexe_id_sexe_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.sexe_id_sexe_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.sexe_id_sexe_seq OWNER TO postgres;
-
---
--- Name: sexe_id_sexe_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.sexe_id_sexe_seq OWNED BY public.sexe.id_sexe;
-
-
---
--- Name: statut; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.statut (
-    id_statut integer NOT NULL,
-    libelle character varying(50)
-);
-
-
-ALTER TABLE public.statut OWNER TO postgres;
-
---
--- Name: statut_id_statut_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.statut_id_statut_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.statut_id_statut_seq OWNER TO postgres;
-
---
--- Name: statut_id_statut_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.statut_id_statut_seq OWNED BY public.statut.id_statut;
-
-
---
--- Name: vue_cv_personne_score; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW public.vue_cv_personne_score AS
- SELECT c.id_cv,
-    p.id_personne,
-    p.nom,
-    p.prenom,
-    p.date_naissance,
-    s.libelle AS sexe,
-    po.designation AS poste_souhaite,
-    c.experience AS experience_candidat,
-    d.libelle AS diplome,
-    count(hc.id_historique_cv) AS nombre_etapes_passees,
-    ( SELECT (sum(historique_cv.resultat) / 2)
-           FROM public.historique_cv
-          WHERE (historique_cv.id_cv = c.id_cv)) AS score_total,
-    max(hc.date_evaluation) AS derniere_evaluation,
-    max(
-        CASE
-            WHEN (hc.id_etape = 2) THEN hc.resultat
-            ELSE NULL::integer
-        END) AS note_qcm,
-    max(
-        CASE
-            WHEN (hc.id_etape = 3) THEN hc.resultat
-            ELSE NULL::integer
-        END) AS note_entretien,
-    string_agg(DISTINCT (e.libelle)::text, ', '::text ORDER BY (e.libelle)::text) AS etapes_passees
-   FROM ((((((((public.cv c
-     JOIN public.personne p ON ((c.id_personne = p.id_personne)))
-     JOIN public.sexe s ON ((p.id_sexe = s.id_sexe)))
-     JOIN public.diplome d ON ((c.id_diplome = d.id_diplome)))
-     JOIN public.historique_personnel hp ON ((p.id_personne = hp.id_personne)))
-     JOIN public.besoin b ON ((c.id_besoin = b.id_besoin)))
-     JOIN public.poste po ON ((b.id_poste = po.id_poste)))
-     LEFT JOIN public.historique_cv hc ON ((c.id_cv = hc.id_cv)))
-     LEFT JOIN public.etape e ON ((hc.id_etape = e.id_etape)))
-  WHERE (( SELECT max(hp2.id_statut) AS max
-           FROM public.historique_personnel hp2
-          WHERE (hp2.id_personne = p.id_personne)) = 1)
-  GROUP BY c.id_cv, p.id_personne, p.nom, p.prenom, p.date_naissance, s.libelle, po.designation, c.experience, d.libelle;
-
-
-ALTER VIEW public.vue_cv_personne_score OWNER TO postgres;
-
---
--- Name: annonce id_annonce; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.annonce ALTER COLUMN id_annonce SET DEFAULT nextval('public.annonce_id_annonce_seq'::regclass);
-
-
---
--- Name: barem id_barem; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.barem ALTER COLUMN id_barem SET DEFAULT nextval('public.barem_id_barem_seq'::regclass);
-
-
---
--- Name: besoin id_besoin; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.besoin ALTER COLUMN id_besoin SET DEFAULT nextval('public.besoin_id_besoin_seq'::regclass);
-
-
---
--- Name: champs_besoin id_champs_besoin; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.champs_besoin ALTER COLUMN id_champs_besoin SET DEFAULT nextval('public.champs_besoin_id_champs_besoin_seq'::regclass);
-
-
---
--- Name: contrat id_contrat; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contrat ALTER COLUMN id_contrat SET DEFAULT nextval('public.contrat_id_contrat_seq'::regclass);
-
-
---
--- Name: critere_entretien id_critere; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.critere_entretien ALTER COLUMN id_critere SET DEFAULT nextval('public.critere_entretien_id_critere_seq'::regclass);
-
-
---
--- Name: cv id_cv; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cv ALTER COLUMN id_cv SET DEFAULT nextval('public.cv_id_cv_seq'::regclass);
-
-
---
--- Name: detail_entretien id_detail; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.detail_entretien ALTER COLUMN id_detail SET DEFAULT nextval('public.detail_entretien_id_detail_seq'::regclass);
-
-
---
--- Name: diplome id_diplome; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.diplome ALTER COLUMN id_diplome SET DEFAULT nextval('public.diplome_id_diplome_seq'::regclass);
-
-
---
--- Name: etape id_etape; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.etape ALTER COLUMN id_etape SET DEFAULT nextval('public.etape_id_etape_seq'::regclass);
-
-
---
--- Name: filiere id_filiere; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.filiere ALTER COLUMN id_filiere SET DEFAULT nextval('public.filiere_id_filiere_seq'::regclass);
-
-
---
--- Name: historique_cv id_historique_cv; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_cv ALTER COLUMN id_historique_cv SET DEFAULT nextval('public.historique_cv_id_historique_cv_seq'::regclass);
-
-
---
--- Name: historique_personnel id_historique_personnel; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_personnel ALTER COLUMN id_historique_personnel SET DEFAULT nextval('public.historique_personnel_id_historique_personnel_seq'::regclass);
-
-
---
--- Name: personne id_personne; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.personne ALTER COLUMN id_personne SET DEFAULT nextval('public.personne_id_personne_seq'::regclass);
-
-
---
--- Name: poste id_poste; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.poste ALTER COLUMN id_poste SET DEFAULT nextval('public.poste_id_poste_seq'::regclass);
-
-
---
--- Name: question_qcm id_question_qcm; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_qcm ALTER COLUMN id_question_qcm SET DEFAULT nextval('public.question_qcm_id_question_qcm_seq'::regclass);
-
-
---
--- Name: reponses_cv id_reponses_cv; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_cv ALTER COLUMN id_reponses_cv SET DEFAULT nextval('public.reponses_cv_id_reponses_cv_seq'::regclass);
-
-
---
--- Name: reponses_qcm id_reponses_qcm; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_qcm ALTER COLUMN id_reponses_qcm SET DEFAULT nextval('public.reponses_qcm_id_reponses_qcm_seq'::regclass);
-
-
---
--- Name: sexe id_sexe; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.sexe ALTER COLUMN id_sexe SET DEFAULT nextval('public.sexe_id_sexe_seq'::regclass);
-
-
---
--- Name: statut id_statut; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.statut ALTER COLUMN id_statut SET DEFAULT nextval('public.statut_id_statut_seq'::regclass);
-
-
---
--- Data for Name: annonce; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.annonce (id_annonce, id_besoin) FROM stdin;
-1	2
-\.
-
-
---
--- Data for Name: barem; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.barem (id_barem, libelle, valeur) FROM stdin;
-1	faible	0.00
-2	moyen	0.50
-3	eleve	1.00
-\.
-
-
---
--- Data for Name: besoin; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.besoin (id_besoin, experience, mission, date_limite, id_poste, id_diplome, sexe, age) FROM stdin;
-1	24	developper des applications web	2024-12-31 23:59:59	1	2	2	40
-2	2	mission 1	2025-09-22 00:00:00	1	1	1	45
-\.
-
-
---
--- Data for Name: champs_besoin; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.champs_besoin (id_champs_besoin, champ, resultat, obligatoire, id_besoin) FROM stdin;
-1	diplome	1	t	2
-\.
-
-
---
--- Data for Name: contrat; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.contrat (id_contrat, debut, duree, description, id_personne) FROM stdin;
-1	2025-09-22	6	CONTRAT DE TRAVAIL ├Ç DUR├ëE IND├ëTERMIN├ëE (CDI)	3
-\.
-
-
---
--- Data for Name: critere_entretien; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.critere_entretien (id_critere, libelle, barem) FROM stdin;
-1	Respect des horaires et ponctualite	2
-2	Politesse et courtoisie	2
-3	Presentation personnelle	2
-4	Clarte de l expression orale	2
-5	Ecoute active	2
-6	Gestion du stress	2
-7	Capacite a recevoir une critique	2
-8	Motivation generale	2
-9	Implication dans la vie d equipe	2
-10	Respect des regles et consignes	2
-\.
-
-
---
--- Data for Name: cv; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.cv (id_cv, date_reception, contact, experience, adresse, photo, id_besoin, id_diplome, id_personne) FROM stdin;
-1	2024-06-01 10:00:00	0123456789	12	Antananarivo	/photos/jean.jpg	1	2	1
-2	2024-06-02 11:00:00	0987654321	6	Antananarivo	/photos/marie.jpg	1	1	2
-3	2025-09-22 00:00:00	+261 34 12 34 56	5	Antananarivo, Madagascar	public/images/Capture_d___cran_2025-09-21_145809.png	2	1	3
-\.
-
-
---
--- Data for Name: detail_entretien; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.detail_entretien (id_detail, id_cv, id_critere, note) FROM stdin;
-1	3	1	2
-2	3	2	2
-3	3	3	2
-4	3	4	2
-5	3	5	2
-6	3	6	2
-7	3	7	2
-8	3	8	2
-9	3	9	2
-10	3	10	2
-\.
-
-
---
--- Data for Name: diplome; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.diplome (id_diplome, libelle, valeur) FROM stdin;
-1	licence	1
-2	master	2
-3	doctorat	3
-\.
-
-
---
--- Data for Name: etape; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.etape (id_etape, libelle) FROM stdin;
-1	selection de dossier
-2	examen QCM
-3	entretien
-\.
-
-
---
--- Data for Name: filiere; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.filiere (id_filiere, libelle, id_diplome) FROM stdin;
-\.
-
-
---
--- Data for Name: historique_cv; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.historique_cv (id_historique_cv, resultat, date_evaluation, date_resultat, id_cv, id_etape) FROM stdin;
-1	1	2024-06-05 14:00:00	2024-06-10 09:00:00	2	1
-2	0	2025-09-22 13:59:22.698029	2025-09-22 13:59:22.698029	3	1
-3	18	2025-09-22 14:07:08.048129	2025-09-22 14:07:08.048129	3	2
-4	20	2025-09-22 11:09:00	2025-09-22 11:09:00	3	3
-\.
-
-
---
--- Data for Name: historique_personnel; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.historique_personnel (id_historique_personnel, date_historique, id_personne, id_statut) FROM stdin;
-1	2024-01-19	1	1
-2	2024-01-20	2	1
-3	\N	3	1
-4	2025-09-22	3	2
-\.
-
-
---
--- Data for Name: personne; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.personne (id_personne, nom, prenom, date_naissance, email, id_sexe) FROM stdin;
-1	RAKOTO	Jean	2000-01-01	jean@test.com	1
-2	RAKOTO	Marie	2000-01-01	marie@test.com	1
-3	Rajao	Andry	1990-01-01	rajao.andry@email.com	1
-\.
-
-
---
--- Data for Name: poste; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.poste (id_poste, designation) FROM stdin;
-1	developpeur junior
-2	comptable
-3	directeur commercial
-\.
-
-
---
--- Data for Name: question_qcm; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.question_qcm (id_question_qcm, question, id_reponse, point, id_besoin) FROM stdin;
-1	Quel est le role principal d un framework MVC ?	1	2	1
-2	Quelle est la difference entre SQL et NoSQL ?	4	2	1
-3	Comment optimiser la performance d une application web ?	7	2	1
-4	Comment gerez-vous le travail en equipe ?	10	2	1
-5	Quelle est l importance de la documentation dans un projet ?	13	2	1
-6	Comment reagissez-vous face a un delai serre ?	16	2	1
-7	Que faites-vous si vous decouvrez une erreur critique en production ?	19	2	1
-8	Comment reagissez-vous a une critique de votre code ?	22	2	1
-9	Que faites-vous si un coll┼águe ne respecte pas les standards du projet ?	25	2	1
-10	Quel est le role principal d un framework MVC ?	10	2	2
-11	Quelle est la difference entre SQL et NoSQL ?	13	2	2
-12	Comment optimiser la performance d une application web ?	16	2	2
-13	Comment gerez-vous le travail en equipe ?	19	2	2
-14	Quelle est l importance de la documentation dans un projet ?	22	2	2
-15	Comment reagissez-vous face a un delai serre ?	25	2	2
-16	Que faites-vous si vous decouvrez une erreur critique en production ?	28	2	2
-17	Comment reagissez-vous a une critique de votre code ?	31	2	2
-18	Que faites-vous si un coll┼águe ne respecte pas les standards du projet ?	34	2	2
-\.
-
-
---
--- Data for Name: reponses_cv; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.reponses_cv (id_reponses_cv, id_reponses_qcm, id_question_qcm, id_cv) FROM stdin;
-1	28	10	3
-2	31	11	3
-3	34	12	3
-4	37	13	3
-5	40	14	3
-6	43	15	3
-7	46	16	3
-8	49	17	3
-9	52	18	3
-\.
-
-
---
--- Data for Name: reponses_qcm; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.reponses_qcm (id_reponses_qcm, reponse, id_question_qcm) FROM stdin;
-1	Separer la logique metier, la presentation et les donnees	1
-2	Gerer la base de donnees	1
-3	Creer des interfaces graphiques	1
-4	SQL est relationnel, NoSQL est non relationnel	2
-5	SQL est plus rapide	2
-6	NoSQL ne g┼áre pas les donnees	2
-7	Utiliser le cache, optimiser les requ╦åtes, minifier les ressources	3
-8	Ajouter plus de serveurs	3
-9	Augmenter la RAM	3
-10	Communiquer et collaborer avec les membres	4
-11	Travailler seul	4
-12	Ignorer les autres	4
-13	Facilite la maintenance et la transmission du projet	5
-14	Permet de gagner du temps	5
-15	N est pas utile	5
-16	Prioriser les tãÆches et demander de l aide si besoin	6
-17	Ignorer le delai	6
-18	Faire tout soi-m╦åme	6
-19	Informer l equipe et corriger rapidement	7
-20	Ignorer l erreur	7
-21	BlãÆmer un coll┼águe	7
-22	Accepter et chercher a s ameliorer	8
-23	Se vexer	8
-24	Ignorer la critique	8
-25	Discuter avec lui et rappeler les standards	9
-26	Signaler au manager	9
-27	Ignorer le probl┼áme	9
-28	Separer la logique metier, la presentation et les donnees	10
-29	Gerer la base de donnees	10
-30	Creer des interfaces graphiques	10
-31	SQL est relationnel, NoSQL est non relationnel	11
-32	SQL est plus rapide	11
-33	NoSQL ne g┼áre pas les donnees	11
-34	Utiliser le cache, optimiser les requ╦åtes, minifier les ressources	12
-35	Ajouter plus de serveurs	12
-36	Augmenter la RAM	12
-37	Communiquer et collaborer avec les membres	13
-38	Travailler seul	13
-39	Ignorer les autres	13
-40	Facilite la maintenance et la transmission du projet	14
-41	Permet de gagner du temps	14
-42	N est pas utile	14
-43	Prioriser les tãÆches et demander de l aide si besoin	15
-44	Ignorer le delai	15
-45	Faire tout soi-m╦åme	15
-46	Informer l equipe et corriger rapidement	16
-47	Ignorer l erreur	16
-48	BlãÆmer un coll┼águe	16
-49	Accepter et chercher a s ameliorer	17
-50	Se vexer	17
-51	Ignorer la critique	17
-52	Discuter avec lui et rappeler les standards	18
-53	Signaler au manager	18
-54	Ignorer le probl┼áme	18
-\.
-
-
---
--- Data for Name: sexe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.sexe (id_sexe, libelle) FROM stdin;
-1	feminin
-2	masculin
-\.
-
-
---
--- Data for Name: statut; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.statut (id_statut, libelle) FROM stdin;
-1	Candidat
-2	Employer
-3	Recale
-4	Employe
-\.
-
-
---
--- Name: annonce_id_annonce_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.annonce_id_annonce_seq', 1, true);
-
-
---
--- Name: barem_id_barem_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.barem_id_barem_seq', 3, true);
-
-
---
--- Name: besoin_id_besoin_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.besoin_id_besoin_seq', 2, true);
-
-
---
--- Name: champs_besoin_id_champs_besoin_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.champs_besoin_id_champs_besoin_seq', 1, true);
-
-
---
--- Name: contrat_id_contrat_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.contrat_id_contrat_seq', 1, true);
-
-
---
--- Name: critere_entretien_id_critere_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.critere_entretien_id_critere_seq', 10, true);
-
-
---
--- Name: cv_id_cv_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cv_id_cv_seq', 3, true);
-
-
---
--- Name: detail_entretien_id_detail_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.detail_entretien_id_detail_seq', 10, true);
-
-
---
--- Name: diplome_id_diplome_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.diplome_id_diplome_seq', 3, true);
-
-
---
--- Name: etape_id_etape_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.etape_id_etape_seq', 3, true);
-
-
---
--- Name: filiere_id_filiere_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.filiere_id_filiere_seq', 1, false);
-
-
---
--- Name: historique_cv_id_historique_cv_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.historique_cv_id_historique_cv_seq', 4, true);
-
-
---
--- Name: historique_personnel_id_historique_personnel_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.historique_personnel_id_historique_personnel_seq', 4, true);
-
-
---
--- Name: personne_id_personne_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.personne_id_personne_seq', 3, true);
-
-
---
--- Name: poste_id_poste_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.poste_id_poste_seq', 3, true);
-
-
---
--- Name: question_qcm_id_question_qcm_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.question_qcm_id_question_qcm_seq', 18, true);
-
-
---
--- Name: reponses_cv_id_reponses_cv_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.reponses_cv_id_reponses_cv_seq', 9, true);
-
-
---
--- Name: reponses_qcm_id_reponses_qcm_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.reponses_qcm_id_reponses_qcm_seq', 54, true);
-
-
---
--- Name: sexe_id_sexe_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.sexe_id_sexe_seq', 2, true);
-
-
---
--- Name: statut_id_statut_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.statut_id_statut_seq', 4, true);
-
-
---
--- Name: annonce annonce_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.annonce
-    ADD CONSTRAINT annonce_pkey PRIMARY KEY (id_annonce);
-
-
---
--- Name: barem barem_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.barem
-    ADD CONSTRAINT barem_pkey PRIMARY KEY (id_barem);
-
-
---
--- Name: besoin besoin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.besoin
-    ADD CONSTRAINT besoin_pkey PRIMARY KEY (id_besoin);
-
-
---
--- Name: champs_besoin champs_besoin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.champs_besoin
-    ADD CONSTRAINT champs_besoin_pkey PRIMARY KEY (id_champs_besoin);
-
-
---
--- Name: contrat contrat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contrat
-    ADD CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat);
-
-
---
--- Name: critere_entretien critere_entretien_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.critere_entretien
-    ADD CONSTRAINT critere_entretien_pkey PRIMARY KEY (id_critere);
-
-
---
--- Name: cv cv_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cv
-    ADD CONSTRAINT cv_pkey PRIMARY KEY (id_cv);
-
-
---
--- Name: detail_entretien detail_entretien_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.detail_entretien
-    ADD CONSTRAINT detail_entretien_pkey PRIMARY KEY (id_detail);
-
-
---
--- Name: diplome diplome_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.diplome
-    ADD CONSTRAINT diplome_pkey PRIMARY KEY (id_diplome);
-
-
---
--- Name: etape etape_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.etape
-    ADD CONSTRAINT etape_pkey PRIMARY KEY (id_etape);
-
-
---
--- Name: filiere filiere_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.filiere
-    ADD CONSTRAINT filiere_pkey PRIMARY KEY (id_filiere);
-
-
---
--- Name: historique_cv historique_cv_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_cv
-    ADD CONSTRAINT historique_cv_pkey PRIMARY KEY (id_historique_cv);
-
-
---
--- Name: historique_personnel historique_personnel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_personnel
-    ADD CONSTRAINT historique_personnel_pkey PRIMARY KEY (id_historique_personnel);
-
-
---
--- Name: personne personne_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.personne
-    ADD CONSTRAINT personne_pkey PRIMARY KEY (id_personne);
-
-
---
--- Name: poste poste_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.poste
-    ADD CONSTRAINT poste_pkey PRIMARY KEY (id_poste);
-
-
---
--- Name: question_qcm question_qcm_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_qcm
-    ADD CONSTRAINT question_qcm_pkey PRIMARY KEY (id_question_qcm);
-
-
---
--- Name: reponses_cv reponses_cv_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_cv
-    ADD CONSTRAINT reponses_cv_pkey PRIMARY KEY (id_reponses_cv);
-
-
---
--- Name: reponses_qcm reponses_qcm_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_qcm
-    ADD CONSTRAINT reponses_qcm_pkey PRIMARY KEY (id_reponses_qcm);
-
-
---
--- Name: sexe sexe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.sexe
-    ADD CONSTRAINT sexe_pkey PRIMARY KEY (id_sexe);
-
-
---
--- Name: statut statut_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.statut
-    ADD CONSTRAINT statut_pkey PRIMARY KEY (id_statut);
-
-
---
--- Name: annonce annonce_id_besoin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.annonce
-    ADD CONSTRAINT annonce_id_besoin_fkey FOREIGN KEY (id_besoin) REFERENCES public.besoin(id_besoin);
-
-
---
--- Name: besoin besoin_id_diplome_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.besoin
-    ADD CONSTRAINT besoin_id_diplome_fkey FOREIGN KEY (id_diplome) REFERENCES public.diplome(id_diplome);
-
-
---
--- Name: besoin besoin_id_poste_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.besoin
-    ADD CONSTRAINT besoin_id_poste_fkey FOREIGN KEY (id_poste) REFERENCES public.poste(id_poste);
-
-
---
--- Name: champs_besoin champs_besoin_id_besoin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.champs_besoin
-    ADD CONSTRAINT champs_besoin_id_besoin_fkey FOREIGN KEY (id_besoin) REFERENCES public.besoin(id_besoin);
-
-
---
--- Name: contrat contrat_id_personne_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contrat
-    ADD CONSTRAINT contrat_id_personne_fkey FOREIGN KEY (id_personne) REFERENCES public.personne(id_personne);
-
-
---
--- Name: cv cv_id_besoin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cv
-    ADD CONSTRAINT cv_id_besoin_fkey FOREIGN KEY (id_besoin) REFERENCES public.besoin(id_besoin);
-
-
---
--- Name: cv cv_id_diplome_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cv
-    ADD CONSTRAINT cv_id_diplome_fkey FOREIGN KEY (id_diplome) REFERENCES public.diplome(id_diplome);
-
-
---
--- Name: cv cv_id_personne_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cv
-    ADD CONSTRAINT cv_id_personne_fkey FOREIGN KEY (id_personne) REFERENCES public.personne(id_personne);
-
-
---
--- Name: detail_entretien detail_entretien_id_critere_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.detail_entretien
-    ADD CONSTRAINT detail_entretien_id_critere_fkey FOREIGN KEY (id_critere) REFERENCES public.critere_entretien(id_critere);
-
-
---
--- Name: detail_entretien detail_entretien_id_cv_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.detail_entretien
-    ADD CONSTRAINT detail_entretien_id_cv_fkey FOREIGN KEY (id_cv) REFERENCES public.cv(id_cv);
-
-
---
--- Name: filiere filiere_id_diplome_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.filiere
-    ADD CONSTRAINT filiere_id_diplome_fkey FOREIGN KEY (id_diplome) REFERENCES public.diplome(id_diplome);
-
-
---
--- Name: historique_cv historique_cv_id_cv_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_cv
-    ADD CONSTRAINT historique_cv_id_cv_fkey FOREIGN KEY (id_cv) REFERENCES public.cv(id_cv);
-
-
---
--- Name: historique_cv historique_cv_id_etape_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_cv
-    ADD CONSTRAINT historique_cv_id_etape_fkey FOREIGN KEY (id_etape) REFERENCES public.etape(id_etape);
-
-
---
--- Name: historique_personnel historique_personnel_id_personne_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_personnel
-    ADD CONSTRAINT historique_personnel_id_personne_fkey FOREIGN KEY (id_personne) REFERENCES public.personne(id_personne);
-
-
---
--- Name: historique_personnel historique_personnel_id_statut_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.historique_personnel
-    ADD CONSTRAINT historique_personnel_id_statut_fkey FOREIGN KEY (id_statut) REFERENCES public.statut(id_statut);
-
-
---
--- Name: personne personne_id_sexe_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.personne
-    ADD CONSTRAINT personne_id_sexe_fkey FOREIGN KEY (id_sexe) REFERENCES public.sexe(id_sexe);
-
-
---
--- Name: question_qcm question_qcm_id_besoin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_qcm
-    ADD CONSTRAINT question_qcm_id_besoin_fkey FOREIGN KEY (id_besoin) REFERENCES public.besoin(id_besoin);
-
-
---
--- Name: reponses_cv reponses_cv_id_cv_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_cv
-    ADD CONSTRAINT reponses_cv_id_cv_fkey FOREIGN KEY (id_cv) REFERENCES public.cv(id_cv);
-
-
---
--- Name: reponses_cv reponses_cv_id_question_qcm_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_cv
-    ADD CONSTRAINT reponses_cv_id_question_qcm_fkey FOREIGN KEY (id_question_qcm) REFERENCES public.question_qcm(id_question_qcm);
-
-
---
--- Name: reponses_cv reponses_cv_id_reponses_qcm_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_cv
-    ADD CONSTRAINT reponses_cv_id_reponses_qcm_fkey FOREIGN KEY (id_reponses_qcm) REFERENCES public.reponses_qcm(id_reponses_qcm);
-
-
---
--- Name: reponses_qcm reponses_qcm_id_question_qcm_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reponses_qcm
-    ADD CONSTRAINT reponses_qcm_id_question_qcm_fkey FOREIGN KEY (id_question_qcm) REFERENCES public.question_qcm(id_question_qcm);
-
-
---
--- PostgreSQL database dump complete
---
-
+SET @id_questionnaire = LAST_INSERT_ID();
+
+-- 5) Ensure Formulaire_Formation is marked complete (trigger may already do this)
+UPDATE Formulaire_Formation
+SET questionnaire_complete = 1,
+    date_questionnaire_complete = NOW()
+WHERE id = @id_formulaire;
+
+-- 6) Ensure mise status is questionnaire_soumis
+UPDATE Candidat_Mise_Formation SET statut = 'questionnaire_soumis' WHERE id = @id_mise;
+
+COMMIT;
+
+-- Verification queries (run after the script):
+-- SELECT * FROM candidature WHERE id = @id_candidature; -- if running interactively the variable is not set; instead query by email
+-- SELECT * FROM candidature WHERE email = 'test.candidat@example.com';
+-- SELECT * FROM Candidat_Mise_Formation WHERE id_candidature = (SELECT id FROM candidature WHERE email = 'test.candidat@example.com');
+-- SELECT * FROM Formulaire_Formation WHERE id_candidat_mise_formation = (SELECT id FROM Candidat_Mise_Formation WHERE id_candidature = (SELECT id FROM candidature WHERE email = 'test.candidat@example.com'));
+-- SELECT * FROM Questionnaire_Formation_Candidat WHERE id_candidature = (SELECT id FROM candidature WHERE email = 'test.candidat@example.com');
+
+-- End of file
+
+
+
+
+-- ========================================
+-- INSERTION DES COMPÉTENCES
+-- ========================================
+-- Insertion des niveaux standards
+INSERT INTO Niveau_Competence (id, libelle, description) VALUES
+(1, 'Débutant', 'Connaissances de base, nécessite supervision'),
+(2, 'Intermédiaire', 'Peut travailler avec assistance ponctuelle'),
+(3, 'Confirmé', 'Autonome sur les tâches courantes'),
+(4, 'Avancé', 'Expert, peut former les autres'),
+(5, 'Maître', 'Niveau expert reconnu, innovateur');
+
+
+-- Compétences pour Informatique
+INSERT INTO Competence (libelle, description, categorie) VALUES
+('Java', 'Langage de programmation orienté objet', 'Informatique'),
+('Python', 'Langage de programmation polyvalent', 'Informatique'),
+('SQL', 'Gestion de bases de données', 'Informatique'),
+('JavaScript', 'Langage pour développement web', 'Informatique'),
+('Réseau', 'Configuration et maintenance réseau', 'Informatique'),
+('Sécurité informatique', 'Protection des systèmes', 'Informatique');
+
+-- Compétences pour Production
+INSERT INTO Competence (libelle, description, categorie) VALUES
+('Conduite engins', 'Opération de machines lourdes', 'Production'),
+('Maintenance industrielle', 'Entretien équipements', 'Production'),
+('Contrôle qualité', 'Vérification conformité produits', 'Production'),
+('Lecture plans', 'Compréhension schémas techniques', 'Production'),
+('Sécurité au travail', 'Respect normes sécurité', 'Production');
+
+-- Compétences pour Bureautique
+INSERT INTO Competence (libelle, description, categorie) VALUES
+('Excel', 'Tableur Microsoft Excel', 'Bureautique'),
+('Word', 'Traitement de texte', 'Bureautique'),
+('Communication', 'Compétences relationnelles', 'Soft Skills'),
+('Organisation', 'Gestion du temps et priorités', 'Soft Skills'),
+('Service client', 'Relation avec la clientèle', 'Commercial');
+
+-- Compétences pour Comptabilité
+INSERT INTO Competence (libelle, description, categorie) VALUES
+('Comptabilité générale', 'Principes comptables de base', 'Comptabilité'),
+('Fiscalité', 'Connaissance réglementation fiscale', 'Comptabilité'),
+('Audit', 'Contrôle et vérification comptes', 'Comptabilité'),
+('Reporting financier', 'Préparation rapports financiers', 'Comptabilité');
+
+-- Compétences pour Jardinage/Ouvrier
+INSERT INTO Competence (libelle, description, categorie) VALUES
+('Jardinage', 'Entretien espaces verts', 'Ouvrier'),
+('Maçonnerie', 'Travaux de construction', 'Ouvrier'),
+('Électricité', 'Installation électrique', 'Ouvrier'),
+('Plomberie', 'Installation sanitaire', 'Ouvrier');
+
+-- ========================================
+-- ASSOCIATION COMPÉTENCES AUX POSTES
+-- ========================================
+
+-- Technicien Informatique (id=13)
+INSERT INTO Poste_Competence (id_poste, id_competence, niveau_requis, importance) 
+SELECT 13, id, 4, 9 FROM Competence WHERE libelle='Java'
+UNION ALL SELECT 13, id, 3, 7 FROM Competence WHERE libelle='Python'
+UNION ALL SELECT 13, id, 4, 8 FROM Competence WHERE libelle='SQL'
+UNION ALL SELECT 13, id, 3, 6 FROM Competence WHERE libelle='Réseau';
+
+-- Chef de Projet IT (id=17)
+INSERT INTO Poste_Competence (id_poste, id_competence, niveau_requis, importance) 
+SELECT 17, id, 5, 10 FROM Competence WHERE libelle='Java'
+UNION ALL SELECT 17, id, 4, 8 FROM Competence WHERE libelle='SQL'
+UNION ALL SELECT 17, id, 5, 9 FROM Competence WHERE libelle='Organisation'
+UNION ALL SELECT 17, id, 4, 8 FROM Competence WHERE libelle='Communication';
+
+-- Opérateur de Production (id=1)
+INSERT INTO Poste_Competence (id_poste, id_competence, niveau_requis, importance) 
+SELECT 1, id, 2, 7 FROM Competence WHERE libelle='Conduite engins'
+UNION ALL SELECT 1, id, 3, 9 FROM Competence WHERE libelle='Sécurité au travail'
+UNION ALL SELECT 1, id, 2, 6 FROM Competence WHERE libelle='Lecture plans';
+
+-- Comptable Assistant (id=10)
+INSERT INTO Poste_Competence (id_poste, id_competence, niveau_requis, importance) 
+SELECT 10, id, 3, 9 FROM Competence WHERE libelle='Comptabilité générale'
+UNION ALL SELECT 10, id, 4, 8 FROM Competence WHERE libelle='Excel'
+UNION ALL SELECT 10, id, 2, 6 FROM Competence WHERE libelle='Fiscalité';
+
+-- Secrétaire (id=6)
+INSERT INTO Poste_Competence (id_poste, id_competence, niveau_requis, importance) 
+SELECT 6, id, 4, 8 FROM Competence WHERE libelle='Word'
+UNION ALL SELECT 6, id, 3, 7 FROM Competence WHERE libelle='Excel'
+UNION ALL SELECT 6, id, 4, 9 FROM Competence WHERE libelle='Communication'
+UNION ALL SELECT 6, id, 4, 8 FROM Competence WHERE libelle='Organisation';
+
+-- ========================================
+-- CRÉATION DES VUES
+-- ========================================
+
+-- Vue: Détail compétences requises par poste
+
+
+-- ========================================
+-- VÉRIFICATION
+-- ========================================
+
+SELECT 'Tables créées avec succès!' as message;
+SELECT COUNT(*) as nombre_competences FROM Competence;
+SELECT COUNT(*) as associations_poste_competence FROM Poste_Competence;
+
+
+
+-- ========================================
+-- INSERTION DONNÉES TEST POUR COMPÉTENCES
+-- ========================================
+
+-- Supposons que vous avez des candidatures avec des IDs 1, 2, 3, 4, 5
+-- Nous allons leur attribuer des compétences évaluées
+
+-- Candidat 1 - Postule pour Technicien Informatique (id_poste=13)
+-- Compétences requises : Java(4), Python(3), SQL(4), Réseau(3)
+INSERT INTO Candidat_Competence (id_candidature, id_competence, niveau_declare, niveau_evalue, date_evaluation)
+SELECT 1, id, 4, 4, NOW() FROM Competence WHERE libelle='Java'
+UNION ALL SELECT 1, id, 3, 3, NOW() FROM Competence WHERE libelle='Python'
+UNION ALL SELECT 1, id, 4, 4, NOW() FROM Competence WHERE libelle='SQL'
+UNION ALL SELECT 1, id, 3, 3, NOW() FROM Competence WHERE libelle='Réseau'
+ON DUPLICATE KEY UPDATE niveau_evalue = VALUES(niveau_evalue), date_evaluation = NOW();
+
+-- Candidat 2 - Postule pour Technicien Informatique mais manque Java
+INSERT INTO Candidat_Competence (id_candidature, id_competence, niveau_declare, niveau_evalue, date_evaluation)
+SELECT 2, id, 2, 2, NOW() FROM Competence WHERE libelle='Java'
+UNION ALL SELECT 2, id, 3, 3, NOW() FROM Competence WHERE libelle='Python'
+UNION ALL SELECT 2, id, 3, 3, NOW() FROM Competence WHERE libelle='SQL'
+UNION ALL SELECT 2, id, 2, 2, NOW() FROM Competence WHERE libelle='Réseau'
+ON DUPLICATE KEY UPDATE niveau_evalue = VALUES(niveau_evalue), date_evaluation = NOW();
+
+
+-- DANGER : Tsy mandeha 
+
+
+-- Candidat 3 - Postule pour Comptable Assistant (id_poste=10)
+-- Compétences requises : Comptabilité générale(3), Excel(4), Fiscalité(2)
+-- INSERT INTO Candidat_Competence (id_candidature, id_competence, niveau_declare, niveau_evalue, date_evaluation)
+-- SELECT 3, id, 3, 3, NOW() FROM Competence WHERE libelle='Comptabilité générale'
+-- UNION ALL SELECT 3, id, 4, 4, NOW() FROM Competence WHERE libelle='Excel'
+-- UNION ALL SELECT 3, id, 2, 2, NOW() FROM Competence WHERE libelle='Fiscalité'
+-- ON DUPLICATE KEY UPDATE niveau_evalue = VALUES(niveau_evalue), date_evaluation = NOW();
+
+-- -- Candidat 4 - Postule pour Secrétaire (id_poste=6)
+-- -- Compétences requises : Word(4), Excel(3), Communication(4), Organisation(4)
+-- INSERT INTO Candidat_Competence (id_candidature, id_competence, niveau_declare, niveau_evalue, date_evaluation)
+-- SELECT 4, id, 4, 4, NOW() FROM Competence WHERE libelle='Word'
+-- UNION ALL SELECT 4, id, 3, 3, NOW() FROM Competence WHERE libelle='Excel'
+-- UNION ALL SELECT 4, id, 4, 4, NOW() FROM Competence WHERE libelle='Communication'
+-- UNION ALL SELECT 4, id, 3, 3, NOW() FROM Competence WHERE libelle='Organisation'
+-- ON DUPLICATE KEY UPDATE niveau_evalue = VALUES(niveau_evalue), date_evaluation = NOW();
+
+-- -- Candidat 5 - Postule pour Chef de Projet IT (id_poste=17) avec lacunes
+-- -- Compétences requises : Java(5), SQL(4), Organisation(5), Communication(4)
+-- INSERT INTO Candidat_Competence (id_candidature, id_competence, niveau_declare, niveau_evalue, date_evaluation)
+-- SELECT 5, id, 4, 4, NOW() FROM Competence WHERE libelle='Java'
+-- UNION ALL SELECT 5, id, 3, 3, NOW() FROM Competence WHERE libelle='SQL'
+-- UNION ALL SELECT 5, id, 3, 3, NOW() FROM Competence WHERE libelle='Organisation'
+-- UNION ALL SELECT 5, id, 4, 4, NOW() FROM Competence WHERE libelle='Communication'
+-- ON DUPLICATE KEY UPDATE niveau_evalue = VALUES(niveau_evalue), date_evaluation = NOW();
+
+-- ========================================
+-- METTRE À JOUR ENTRETIENS EXISTANTS
+-- ========================================
+
+-- S'assurer que les entretiens sont publiés pour le matching
+UPDATE entretien 
+SET statut_publication = 'publie' 
+WHERE statut = 'termine' AND statut_publication IS NULL;
+
+-- ========================================
+-- VÉRIFICATION
+-- ========================================
+
+SELECT 'Données test insérées avec succès!' as message;
+
+-- Afficher les candidats avec compétences
+SELECT 
+    c.id,
+    c.nom,
+    c.prenom,
+    COUNT(cc.id) as nb_competences_evaluees
+FROM candidature c
+LEFT JOIN Candidat_Competence cc ON c.id = cc.id_candidature
+GROUP BY c.id
+ORDER BY c.id;
+
+-- Vérifier le matching
+SELECT 
+    cand.id,
+    cand.nom,
+    cand.prenom,
+    COUNT(DISTINCT pc.id_competence) as nb_competences_requises,
+    COUNT(DISTINCT cc.id_competence) as nb_competences_evaluees
+FROM candidature cand
+JOIN annonce_emploi a ON cand.id_annonce = a.id
+JOIN Poste p ON a.id_poste = p.id
+LEFT JOIN Poste_Competence pc ON p.id = pc.id_poste
+LEFT JOIN Candidat_Competence cc ON cand.id = cc.id_candidature
+GROUP BY cand.id
+ORDER BY cand.id
+LIMIT 10;
+SET FOREIGN_KEY_CHECKS = 1;
