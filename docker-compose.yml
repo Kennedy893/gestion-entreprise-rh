@@ -1,13 +1,37 @@
-version: '3.7'
-
 services:
-    flight:
-        image: php:8-alpine
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public
-        environment:
-            docker: "true"
+    php:
+        build: .
         ports:
-            - "8080:8080"
+        - "8010:80"
+        image: php:8.2-apache
         volumes:
-            - .:/var/www
+        - ./source:/var/www/html
+        environment:
+        - BASE_URL=http://localhost:8010
+        depends_on:
+        - mysql
+        restart: always
+        networks:
+            - rh
+
+    mysql:
+        image: mysql:8
+        container_name: gestion_mysql
+        restart: unless-stopped
+        environment:
+        MYSQL_DATABASE: gestion_rh
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_PASSWORD: root
+        MYSQL_USER: root
+        ports:
+        - "3308:3306"
+        volumes:
+        - mysql_data:/var/lib/mysql
+        networks:
+        - rh
+
+    networks:
+        rh:
+
+    volumes:
+        mysql_data:
