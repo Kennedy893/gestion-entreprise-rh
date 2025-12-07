@@ -1,37 +1,30 @@
 services:
-    php:
-        build: .
-        ports:
-        - "8010:80"
-        image: php:8.2-apache
-        volumes:
-        - ./source:/var/www/html
-        environment:
-        - BASE_URL=http://localhost:8010
-        depends_on:
-        - mysql
-        restart: always
-        networks:
-            - rh
-
-    mysql:
-        image: mysql:8
-        container_name: gestion_mysql
-        restart: unless-stopped
-        environment:
-        MYSQL_DATABASE: gestion_rh
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_PASSWORD: root
-        MYSQL_USER: root
-        ports:
-        - "3308:3306"
-        volumes:
-        - mysql_data:/var/lib/mysql
-        networks:
-        - rh
-
-    networks:
-        rh:
-
+  app:
+    build: .
+    container_name: flight_app
+    ports:
+      - "8010:80"
     volumes:
-        mysql_data:
+      - ./source:/var/www/html
+    depends_on:
+      - mysql
+    restart: always
+
+  mysql:
+    image: mysql:8
+    container_name: flight_mysql
+    restart: unless-stopped
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: gestion_rh
+        # Supprimez MYSQL_USER et MYSQL_PASSWORD ou utilisez un autre nom d'utilisateur
+        MYSQL_USER: gestion_user
+        MYSQL_PASSWORD: password
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./script.sql:/docker-entrypoint-initdb.d/script.sql
+
+volumes:
+  mysql_data:
