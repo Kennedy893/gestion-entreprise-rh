@@ -6,77 +6,88 @@
     <li class="nav-item">
       <a href="<?= constant('BASE_URL') ?>" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Tableau de bord</a>
     </li>
+    
     <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle" id="employes-toggle">
-        <i class="fa-solid fa-users"></i>Employés
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-users"></i> Employés
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
-        <li><a href="<?= constant('BASE_URL') ?>time/employees"> Liste Employes </a></li>
-        <li><a href="<?= constant('BASE_URL') ?>time/presences"> Pointage / Présences </a></li>
-        <li><a href="<?= constant('BASE_URL') ?>time/timecards"> Timecards </a></li>
-        <li><a href="<?= constant('BASE_URL') ?>time/form-sheet"> TimeGeneral </a></li>
+        <li><a href="<?= constant('BASE_URL') ?>time/employees"> <i class="fa-solid fa-list"></i> Liste Employés</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>time/presences"> <i class="fa-solid fa-fingerprint"></i> Pointage / Présences</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>time/timecards"> <i class="fa-solid fa-clock"></i> Timecards</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>time/form-sheet"> <i class="fa-solid fa-calendar-alt"></i> TimeGeneral</a></li>
       </ul>
     </li>
 
     <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle" id="bulletins-toggle">
-        <i class="fa-solid fa-file-invoice-dollar"></i>Bulletins
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-file-invoice-dollar"></i> Bulletins
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
-        <li><a href="#">Fiches de Paie</a></li>
-        <li><a href="#">Pointage / Présences</a></li>
-        <li><a href="#">Avantages & Primes</a></li>
+        <li><a href="#"><i class="fa-solid fa-file-contract"></i> Fiches de Paie</a></li>
+        <li><a href="#"><i class="fa-solid fa-fingerprint"></i> Pointage / Présences</a></li>
+        <li><a href="#"><i class="fa-solid fa-gift"></i> Avantages & Primes</a></li>
       </ul>
     </li>
 
     <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle" id="performance-toggle">
-        <i class="fa-solid fa-file-invoice-dollar"></i>Performance
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-chart-line"></i> Performance
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
-        <li><a href="<?= constant('BASE_URL') ?>performance/calendar">Calendrier</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>performance/dashboard">Dashboard</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>performance/calendar"> <i class="fa-solid fa-calendar"></i> Calendrier</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>performance/dashboard"> <i class="fa-solid fa-chart-bar"></i> Dashboard</a></li>
       </ul>
     </li>
 
     <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle" id="performance-toggle">
-        <i class="fa-solid fa-file-invoice-dollar"></i>Congés
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-umbrella-beach"></i> Congés
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
-        <li><a href="<?= constant('BASE_URL') ?>vers_demande_conge">Demande congé</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>liste_conge">Liste congés</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>validation_rh">Liste congés (RH)</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>vers_solde_conge">Solde de conge</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>vers_demande_conge"> <i class="fa-solid fa-file-import"></i> Demande congé</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>liste_conge"> <i class="fa-solid fa-list-check"></i> Liste congés</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>validation_rh"> <i class="fa-solid fa-user-check"></i> Liste congés (RH)</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>vers_solde_conge"> <i class="fa-solid fa-coins"></i> Solde de congé</a></li>
       </ul>
     </li>
 
     <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle" id="performance-toggle">
-        <i class="fa-solid fa-file-invoice-dollar"></i>Employes
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-user-tie"></i> Services RH
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
-        <li><a href="<?= constant('BASE_URL') ?>choose_consultation">Consultation</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>choose_soumission">Soumission</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>demande_attestation">Demande d'attestation</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>demande_remboursement">Demande de remboursement</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>choose_consultation"> <i class="fa-solid fa-search"></i> Consultation</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>choose_soumission"> <i class="fa-solid fa-paper-plane"></i> Soumission</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>demande_attestation"> <i class="fa-solid fa-file-certificate"></i> Demande d'attestation</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>demande_remboursement"> <i class="fa-solid fa-money-bill-wave"></i> Demande de remboursement</a></li>
       </ul>
     </li>
 
-
+    <li class="nav-item has-submenu">
+      <a href="#" class="nav-link dropdown-toggle">
+        <i class="fa-solid fa-calculator"></i> Gestion de paie
+        <i class="fa-solid fa-chevron-right arrow-icon"></i>
+      </a>
+      <ul class="submenu">
+        <li><a href="<?= constant('BASE_URL') ?>paie"> <i class="fa-solid fa-file-invoice"></i> État de paie</a></li>
+      </ul>
+    </li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Rapports</a>
+      <a href="#" class="nav-link"><i class="fa-solid fa-file-chart-column"></i> Rapports</a>
     </li>
+    
     <li class="nav-item">
       <a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Paramètres</a>
     </li>
   </ul>
+  
   <div class="user-profile">
     <div class="user-avatar">DR</div>
     <div class="emp-details" style="text-align: left">

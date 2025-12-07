@@ -95,12 +95,3 @@ $router->get('/prediction/@id', [$hController, 'get_prediction']);
 
 // Ajoutez ces routes à votre configuration Flight existante
 
-// Routes du chatbot
-
-
-// $router->get('/paie/etats/export',[$Paie_Controller, 'exportEtatDePaie']);
-// $router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF']);
-
-// $DashboardController = new DashboardController();
-// $router->get('/dashboard', [$DashboardController, 'showDashboardPage']);
-// $router->get('/dashboard/employees-by-age', [$DashboardController, 'getEmployeesByAge']);

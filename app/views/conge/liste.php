@@ -1,11 +1,11 @@
 <style>
     .main-content {
         padding: 30px;
-        margin: 20px auto;
+        width: 1400px;
+        margin: 20px 350px;
     }
 
     .container {
-        max-width: 1300px;
         margin: 0 auto;
     }
 

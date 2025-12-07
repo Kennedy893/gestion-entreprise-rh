@@ -8,7 +8,7 @@
 
     function moneyFormat($amount)
     {
-        return number_format($amount, 2, ',', ' ') . " Ar";
+        return number_format($amount, 2, ',', ' ');
     }
 
     function isActive($route, $current)

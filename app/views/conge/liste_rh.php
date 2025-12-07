@@ -1,7 +1,8 @@
 <style>
     .main-content {
         padding: 30px;
-        margin: 20px auto;
+        margin: 20px 350px;
+        width: 1400px;
     }
 
     .container {
