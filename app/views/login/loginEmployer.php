@@ -160,15 +160,17 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/time/presences" method="GET">
+            <form action="<?= constant('BASE_URL') ?>log" method="post">
                 <div class="form-group">
                     <label for="matricule">Matricule</label>
-                    <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Votre matricule" required>
+                    <input type="text" id="matricule" name="matricule" value="0001" class="form-control" placeholder="Votre matricule" required>
                 </div>
+
+                <input type="hidden" name="role" value="1">
                 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Votre mot de passe" required>
+                    <input type="password" id="password" name="password" value="pass" class="form-control" placeholder="Votre mot de passe" required>
                 </div>
                 
                 <button type="submit" class="login-btn">Se connecter</button>

@@ -160,17 +160,19 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/time/employees" method="GET">
+            <form action="<?= constant('BASE_URL') ?>log" method="post">
                 <div class="form-group">
                     <label for="username">Nom d'utilisateur</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Votre identifiant" required>
+                    <input type="text" id="username" name="username" class="form-control" value="Manager 1" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Votre mot de passe" required>
+                    <input type="password" id="password" name="password" class="form-control" value="Votre" required>
                 </div>
                 
+                <input type="hidden" name="role" value="2">
+
                 <div class="form-group">
                     <label for="department">Département</label>
                     <select id="department" name="department" class="form-control" required>
