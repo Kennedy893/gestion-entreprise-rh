@@ -22,7 +22,8 @@ class MessageController {
         Flight::render('employe/messagerie', [
             'messages' => $messages,
             'id_employe' => $id_employe
-        ]);
+        ], 'contenu');
+        Flight::render('shared/home');
     }
 
     public function envoyer()
