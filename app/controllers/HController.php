@@ -56,31 +56,8 @@ class HController
                 Flight::HModel()->insert_generalised("presence", $colonnes, $valeur);
             }
         } else if ($type == 2) {
-            $colonnes[] = "sortie";
-            $colonnes[] = "montant";
-            foreach ($valeurs as $valeur) {
-                $where_colonnes = ["id_employe", "date_travail"];
-                $where_valeurs = [$valeur[0], $valeur[1]];
-                $presence = Flight::HModel()->get_generalised("presence", "*", $where_colonnes, $where_valeurs, "AND sortie IS NULL AND montant IS NULL", []);
-                $heure_entree = $presence[0]['entree'];
-                $heure_sortie = $valeur[2];
-
-                $ferier = Flight::HpresenceModel()->is_ferier($date);
-                $weekend = Flight::HpresenceModel()->is_weekend($date);
-                $h_supplementaire = Flight::HpresenceModel()->h_supplementaire($heure_entree, $heure_sortie, $valeur[0], $date);
-                $coeff = [$ferier, $weekend, $h_supplementaire];
-                $mult = max($coeff);
-                $duree = strtotime($heure_sortie) - strtotime($heure_entree);
-                $valeur[3] = $valeur[3] * $mult * $duree / 3600;
-
-                if (Flight::HpresenceModel()->is_heure_supp($valeur[2], $valeur[0], $valeur[1])) {
-                    try {
-                        $valeur[] = Flight::HpresenceModel()->condition_heure_supp($valeur[1], $valeur[0], $duree / 3600);
-                    } catch (Exception $e) {
-                        Flight::redirect(constant('BASE_URL') . 'time/presences?error=' . $e->getMessage());
-                    }
-                }
-                Flight::HModel()->update_generalised("presence", $colonnes, $valeur, $where_colonnes, $where_valeurs, "AND sortie IS NULL AND montant IS NULL", []);
+            foreach ($ids as $id) {
+                $this->insert_sortie($date, $id, $heure);
             }
         }
 
