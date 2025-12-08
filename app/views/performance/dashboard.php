@@ -66,7 +66,7 @@ foreach ($data['heures'] as $heure) {
             <section class="card employees-card">
                 <h2>Employés Actifs</h2>
                 <div class="employees-stats">
-                    <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?idDept=1">
+                    <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?idDept=1">
                         <div class="total-employees">
                             <span class="number"><?php echo $employes_actifs; ?></span>
                             <span class="label">Employés actifs</span>
