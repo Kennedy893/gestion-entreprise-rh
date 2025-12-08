@@ -154,9 +154,9 @@ function genererEtoiles($note) {
 <div class="container">
     <h1>Calendrier des Présences</h1>
     <div class="navigation">
-        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $moisPrecedent ?>&annee=<?= $anneePrecedente ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">← Précédent</a>
-        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= date('n') ?>&annee=<?= date('Y') ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Aujourd'hui</a>
-        <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $moisSuivant ?>&annee=<?= $anneeSuivante ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Suivant →</a>
+        <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?mois=<?= $moisPrecedent ?>&annee=<?= $anneePrecedente ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">← Précédent</a>
+        <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?mois=<?= date('n') ?>&annee=<?= date('Y') ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Aujourd'hui</a>
+        <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?mois=<?= $moisSuivant ?>&annee=<?= $anneeSuivante ?>&idEmp=<?= $id_employe ?>&idDept=<?= $idDept ?>">Suivant →</a>
     </div>
     <div class="contenu-principal" style="display: flex; gap: 32px;">
         <div class="colonne-gauche" style="flex:1;">
@@ -166,7 +166,7 @@ function genererEtoiles($note) {
                 <ul class="employe-list">
                     <?php foreach ($employes as $emp): ?>
                         <li>
-                            <a href="<?php echo constant('BASE_URL'); ?>/performance/calendar?mois=<?= $mois ?>&annee=<?= $annee ?>&idEmp=<?= $emp['id'] ?>&idDept=<?= $idDept ?>" 
+                            <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?mois=<?= $mois ?>&annee=<?= $annee ?>&idEmp=<?= $emp['id'] ?>&idDept=<?= $idDept ?>" 
                                style="<?= ($emp['id'] == $id_employe) ? 'font-weight:bold;color:#1976d2;' : '' ?>">
                                 <?= htmlspecialchars($emp['nom'].' '.$emp['prenom']) ?>
                             </a>
