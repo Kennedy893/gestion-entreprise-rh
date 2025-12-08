@@ -37,11 +37,15 @@ class WelcomeController
 
     public function login () {
 
+        session_start();
         if ($_POST['role'] == 1) {
+            $_SESSION['role'] = 1;
             Flight::redirect(constant('BASE_URL') . 'choose_soumission');
         } elseif ($_POST['role'] == 2) {
+            $_SESSION['role'] = 2;
             Flight::redirect(constant('BASE_URL') . 'time/form-sheet');
         } elseif ($_POST['role'] == 3) {
+            $_SESSION['role'] = 3;
             Flight::redirect(constant('BASE_URL'));
         }
         
