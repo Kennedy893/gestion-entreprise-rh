@@ -4,7 +4,7 @@
   <div class="brand"><i class="fa-solid fa-sack-dollar"></i> GESTION rh</div>
   <ul class="nav-menu">
     <li class="nav-item">
-      <a href="<?= constant('BASE_URL') ?>" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Tableau de bord</a>
+      <a href="<?= constant('BASE_URL') ?>" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Tableau de bord</a>
     </li>
     
     <li class="nav-item has-submenu">
@@ -15,8 +15,7 @@
       <ul class="submenu">
         <li><a href="<?= constant('BASE_URL') ?>time/employees"> <i class="fa-solid fa-list"></i> Liste Employés</a></li>
         <li><a href="<?= constant('BASE_URL') ?>time/presences"> <i class="fa-solid fa-fingerprint"></i> Pointage / Présences</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>time/timecards"> <i class="fa-solid fa-clock"></i> Timecards</a></li>
-        <li><a href="<?= constant('BASE_URL') ?>time/form-sheet"> <i class="fa-solid fa-calendar-alt"></i> TimeGeneral</a></li>
+        <li><a href="<?= constant('BASE_URL') ?>time/form-sheet"> <i class="fa-solid fa-calendar-alt"></i> Feuille de temps </a></li>
       </ul>
     </li>
 
@@ -66,14 +65,14 @@
         <li><a href="<?= constant('BASE_URL') ?>paie"> <i class="fa-solid fa-file-invoice"></i> État de paie</a></li>
       </ul>
     </li>
-
+<!-- 
     <li class="nav-item">
       <a href="#" class="nav-link"><i class="fa-solid fa-file-chart-column"></i> Rapports</a>
     </li>
     
     <li class="nav-item">
       <a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Paramètres</a>
-    </li>
+    </li> -->
   </ul>
   
   <div class="user-profile">
