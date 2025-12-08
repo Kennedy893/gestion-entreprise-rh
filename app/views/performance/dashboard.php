@@ -43,16 +43,87 @@ foreach ($data['heures'] as $heure) {
     <title>Dashboard Performance</title>
     <link rel="stylesheet" href="<?php echo constant('BASE_URL'); ?>/public/assets/css/Hcss/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Harmonisation des champs du formulaire (select, input, button) */
+        .dashboard-header form select,
+        .dashboard-header form input[type="number"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #1f2937;
+            font-size: 14px;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        .dashboard-header form select:hover,
+        .dashboard-header form input[type="number"]:hover {
+            border-color: #cbd5e1;
+        }
+        .dashboard-header form select:focus,
+        .dashboard-header form input[type="number"]:focus {
+            outline: none;
+            border-color: #1a237e;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.12);
+        }
+        .dashboard-header form label {
+            color: #1a237e;
+        }
+        .dashboard-header form button {
+            padding: 8px 14px;
+            border: 1px solid #1a237e;
+            background: #1a237e;
+            color: #ffffff;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s ease, transform .02s ease;
+        }
+        .dashboard-header form button:hover {
+            background: #283593;
+        }
+        .dashboard-header form button:active {
+            transform: translateY(1px);
+        }
+        /* Flèche personnalisée du select */
+        .dashboard-header form select {
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%231f2937' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px;
+        }
+        /* Bandeau mise à jour */
+        .update-info {
+            margin: 10px 0 16px 0;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 600;
+        }
+        /* Responsive: empiler sur mobile */
+        @media (max-width: 640px) {
+            .dashboard-header form {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .dashboard-header form select,
+            .dashboard-header form input[type="number"],
+            .dashboard-header form button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <h1>Dashboard Performance Département</h1>
-            <div class="header-info">
-                <span>Mise à jour: <?php echo date('d/m/Y'); ?></span>
-                <span>Année: <?php echo $annee ?? date('Y'); ?></span>
-            </div>
-            <!-- Sélecteur statique de département -->
+            <!-- Sélecteur statique/dynamique de département -->
             <form action="<?php echo constant('BASE_URL'); ?>performance/dashboard" method="get" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
                 <label for="idDept" style="font-weight:600;">Département:</label>
                 <select name="idDept" id="idDept">
@@ -60,7 +131,6 @@ foreach ($data['heures'] as $heure) {
                     foreach($data['list_dept'] as $dept) {
                 ?>
                         <option value="<?php echo $dept['id']; ?>" <?php echo (($data['idDept'] ?? null) == $dept['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($dept['libelle']); ?></option>
-                    
                 <?php
                     }
                 ?>
@@ -70,6 +140,11 @@ foreach ($data['heures'] as $heure) {
                 <button type="submit">Confirmer</button>
             </form>
         </header>
+
+        <!-- Bandeau "Mise à jour" placé entre le bloc titre/sélecteurs et les statistiques -->
+        <div class="update-info">
+            Mise à jour: <?php echo date('d/m/Y'); ?>
+        </div>
 
         <div class="dashboard-grid">
             <!-- Section Performance -->
@@ -84,7 +159,7 @@ foreach ($data['heures'] as $heure) {
             <section class="card employees-card">
                 <h2>Employés Actifs</h2>
                 <div class="employees-stats">
-                    <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?idDept=<?=$data['idDept'] ?? 1 ?>">
+                    <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?idDept=<?= $data['idDept'] ?? 1 ?>">
                         <div class="total-employees">
                             <span class="number"><?php echo $employes_actifs; ?></span>
                             <span class="label">Employés actifs</span>
@@ -125,8 +200,8 @@ foreach ($data['heures'] as $heure) {
                     {
                         label: 'Productivité',
                         data: <?php echo json_encode($productivite); ?>,
-                        borderColor: '#1a237e',
-                        backgroundColor: 'rgba(26, 35, 126, 0.05)',
+                        borderColor: '#1565C0',                         // bleu
+                        backgroundColor: 'rgba(21, 101, 192, 0.15)',     // bleu translucide
                         tension: 0.3,
                         fill: true,
                         borderWidth: 2.5
@@ -134,8 +209,8 @@ foreach ($data['heures'] as $heure) {
                     {
                         label: 'Gestion du Temps',
                         data: <?php echo json_encode($gestion_temps); ?>,
-                        borderColor: '#283593',
-                        backgroundColor: 'rgba(40, 53, 147, 0.05)',
+                        borderColor: '#E53935',                         // rouge
+                        backgroundColor: 'rgba(229, 57, 53, 0.15)',     // rouge translucide
                         tension: 0.3,
                         fill: true,
                         borderWidth: 2.5
@@ -143,8 +218,8 @@ foreach ($data['heures'] as $heure) {
                     {
                         label: 'Ponctualité',
                         data: <?php echo json_encode($ponctualite); ?>,
-                        borderColor: '#303f9f',
-                        backgroundColor: 'rgba(48, 63, 159, 0.05)',
+                        borderColor: '#43A047',                         // vert
+                        backgroundColor: 'rgba(67, 160, 71, 0.15)',     // vert translucide
                         tension: 0.3,
                         fill: true,
                         borderWidth: 2.5
