@@ -513,7 +513,7 @@ RÉPONSE (UN SEUL FORMAT CI-DESSUS) :
     {
         error_log("=== PROMPT ENVOYÉ À GEMINI ===");
         error_log($prompt);
-
+        //api ra lany AIzaSyDHI7ODFCeCnBNizyf2UhB85Mzy9btP4oY
         $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyD3anBC9bVIwjYslbGqM8vGOao3BqV2Xew";
 
         $data = [
