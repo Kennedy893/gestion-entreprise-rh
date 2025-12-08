@@ -1,4 +1,5 @@
 <?php
+
 // Récupération des données dynamiques
 $mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 // Données de performance dynamiques
@@ -51,6 +52,21 @@ foreach ($data['heures'] as $heure) {
                 <span>Mise à jour: <?php echo date('d/m/Y'); ?></span>
                 <span>Année: <?php echo $annee ?? date('Y'); ?></span>
             </div>
+            <!-- Sélecteur statique de département -->
+            <form action="<?php echo constant('BASE_URL'); ?>performance/dashboard" method="get" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+                <label for="idDept" style="font-weight:600;">Département:</label>
+                <select name="idDept" id="idDept">
+                <?php
+                    foreach($data['list_dept'] as $dept) {
+                ?>
+                        <option value="<?php echo $dept['id']; ?>" <?php echo (($data['idDept'] ?? null) == $dept['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($dept['libelle']); ?></option>
+                    
+                <?php
+                    }
+                ?>
+                </select>
+                <button type="submit">Confirmer</button>
+            </form>
         </header>
 
         <div class="dashboard-grid">
@@ -66,7 +82,7 @@ foreach ($data['heures'] as $heure) {
             <section class="card employees-card">
                 <h2>Employés Actifs</h2>
                 <div class="employees-stats">
-                    <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?idDept=<?=$_GET['idDept'] ?? 1 ?>">
+                    <a href="<?php echo constant('BASE_URL'); ?>performance/calendar?idDept=<?=$data['idDept'] ?? 1 ?>">
                         <div class="total-employees">
                             <span class="number"><?php echo $employes_actifs; ?></span>
                             <span class="label">Employés actifs</span>

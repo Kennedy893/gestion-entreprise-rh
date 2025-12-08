@@ -279,6 +279,8 @@ class HController
         $idDept = Flight::request()->query->idDept;
         $annee = Flight::request()->query->annee;
 
+        $dept_list = Flight::HModel()->get_generalised("departement", "*", [], [], "", []);
+
         if (!$annee) {
             $annee = date("Y");
         }
@@ -298,7 +300,9 @@ class HController
             $nbr_postes[] = count($employes_poste);
         }
         $data = [
+            'idDept' => $idDept,
             'nbr_postes' => $nbr_postes,
+            'list_dept' => $dept_list,
             'postes' => $postes,
             'nbr_employes' => array_sum($nbr_postes),
             'heures' => $heures,
