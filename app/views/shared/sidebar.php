@@ -49,6 +49,7 @@
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>
       <ul class="submenu">
+        <li><a href="<?= constant('BASE_URL') ?>vers_messagerie"> <i class="fa-solid fa-chat"></i> Messagerie </a></li>
         <li><a href="<?= constant('BASE_URL') ?>choose_consultation"> <i class="fa-solid fa-search"></i> Consultation</a></li>
         <li><a href="<?= constant('BASE_URL') ?>choose_soumission"> <i class="fa-solid fa-paper-plane"></i> Soumission</a></li>
         <li><a href="<?= constant('BASE_URL') ?>demande_attestation"> <i class="fa-solid fa-file-certificate"></i> Demande d'attestation</a></li>

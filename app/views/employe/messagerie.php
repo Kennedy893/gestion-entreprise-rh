@@ -1,431 +1,336 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie RH - RH Manager</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    /* VARIABLES */
+    :root {
+        --primary: #4f46e5;       /* Indigo (Couleur principale) */
+        --primary-light: #eef2ff; /* Fond des bulles reçues */
+        --secondary: #10b981;     /* Vert (Indicateur en ligne) */
+        --bg-body: #f1f5f9;       /* Gris clair (Fond général) */
+        --bg-card: #ffffff;       /* Fond du conteneur de chat */
+        --text-main: #0f172a;     /* Noir foncé */
+        --text-muted: #64748b;    /* Gris bleu */
+        --border: #e2e8f0;        
+        --radius: 12px;
+        --radius-sm: 6px;
+    }
+    
+    .main-content {
+        width: 1350px;
+        margin: 20px 350px;
+        height: 80vh;
+        min-height: 500px;
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+    /* --- HEADER DE CONVERSATION --- */
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border);
+        background-color: #ffffff;
+        flex-shrink: 0;
+    }
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .chat-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: var(--primary);
+        color: white;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        font-size: 0.8rem;
+    }
+    .online-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        background-color: var(--secondary);
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+    .chat-info {
+        line-height: 1.3;
+    }
+    .chat-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-main);
+    }
+    .chat-status {
+        font-size: 0.8rem;
+        color: var(--secondary);
+        font-weight: 500;
+    }
+    .chat-status span {
+        margin-right: 3px;
+    }
+    .action-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        margin-left: 10px;
+        padding: 5px;
+        transition: color 0.2s;
+    }
+    .action-btn:hover {
+        color: var(--primary);
+    }
 
+    /* --- MESSAGES CONTAINER --- */
+    .messages-container {
+        flex-grow: 1;
+        padding: 20px 15px;
+        overflow-y: auto;
+        background-color: var(--bg-body);
+        scroll-behavior: smooth;
+    }
+
+    /* --- DIVISEUR DE DATE --- */
+    .date-divider {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .date-divider span {
+        display: inline-block;
+        background-color: #e5e7eb;
+        color: var(--text-muted);
+        padding: 5px 10px;
+        border-radius: var(--radius);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    /* --- MESSAGE INDIVIDUEL --- */
+    .message-wrapper {
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+    }
+    .message-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        /* Défaut: RH */
+        background-color: var(--primary);
+        color: white;
+    }
+    .message-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        max-width: 80%;
+    }
+    .message-bubble {
+        padding: 10px 15px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+    .message-time {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+
+    /* Style Message Reçu (RH) */
+    .message-wrapper.received {
+        justify-content: flex-start;
+    }
+    .message-wrapper.received .message-avatar {
+        margin-right: 8px;
+        background-color: var(--primary); /* Conserver la couleur RH */
+    }
+    .message-wrapper.received .message-bubble {
+        background-color: var(--primary-light);
+        color: var(--text-main);
+        border-bottom-left-radius: 4px;
+    }
+    .message-wrapper.received .message-time {
+        align-self: flex-start;
+        margin-left: 8px;
+    }
+
+    /* Style Message Envoyé (MOI) */
+    .message-wrapper.sent {
+        justify-content: flex-end;
+    }
+    .message-wrapper.sent .message-avatar {
+        margin-left: 8px;
+        order: 2; /* Place l'avatar à droite */
+        background-color: var(--secondary); /* Couleur pour l'utilisateur (MOI) */
+    }
+    .message-wrapper.sent .message-content-wrapper {
+        align-items: flex-end;
+        order: 1; /* Place le contenu à gauche */
+    }
+    .message-wrapper.sent .message-bubble {
+        background-color: var(--primary);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+    .message-wrapper.sent .message-time {
+        align-self: flex-end;
+        margin-right: 8px;
+    }
+
+    /* --- INDICATEUR DE FRAPPE (Typing) --- */
+    .typing-indicator {
+        margin-left: 8px;
+        background-color: var(--primary-light);
+        padding: 10px 15px;
+        border-radius: 18px;
+        width: 60px;
+        opacity: 0; /* Masqué par défaut */
+        transition: opacity 0.3s;
+    }
+    .typing-indicator.active {
+        opacity: 1;
+    }
+    .typing-dots {
+        display: flex;
+        gap: 4px;
+    }
+    .typing-dots span {
+        width: 6px;
+        height: 6px;
+        background-color: var(--primary);
+        border-radius: 50%;
+        animation: typing 1s infinite;
+        opacity: 0.6;
+    }
+    .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes typing {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
+
+    /* --- ZONE DE SAISIE --- */
+    .message-input-container {
+        padding: 10px 15px;
+        border-top: 1px solid var(--border);
+        background-color: #ffffff;
+        flex-shrink: 0;
+    }
+    .input-wrapper {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+    }
+    .input-actions {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+    .attach-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        padding: 5px;
+        transition: color 0.2s;
+    }
+    .attach-btn:hover {
+        color: var(--primary);
+    }
+    .message-input {
+        flex-grow: 1;
+        min-height: 40px;
+        max-height: 120px;
+        resize: none;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        overflow-y: auto;
+        transition: border-color 0.2s;
+    }
+    .message-input:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+    .send-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 0.2s;
+    }
+    .send-btn:hover:not(:disabled) {
+        background-color: var(--primary-dark);
+    }
+    .send-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* --- ÉTAT VIDE --- */
+    .empty-state {
+        text-align: center;
+        color: var(--text-muted);
+        padding-top: 50px;
+    }
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    .empty-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .empty-subtext {
+        font-size: 0.9rem;
+    }
+    
+    /* Media queries */
+    @media (max-width: 768px) {
         .main-content {
-            margin-left: 260px;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: margin-left 0.3s ease;
+            border-radius: 0;
+            box-shadow: none;
         }
+    }
+</style>
 
-        .chat-header {
-            background: white;
-            padding: 20px 32px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .chat-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 18px;
-            position: relative;
-        }
-
-        .online-indicator {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 14px;
-            height: 14px;
-            background: #10b981;
-            border: 3px solid white;
-            border-radius: 50%;
-        }
-
-        .chat-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 2px;
-        }
-
-        .chat-status {
-            font-size: 12px;
-            color: #10b981;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: #f1f5f9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 18px;
-        }
-
-        .action-btn:hover {
-            background: #e2e8f0;
-            transform: scale(1.05);
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 32px;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .messages-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .messages-container::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .message-wrapper {
-            display: flex;
-            gap: 12px;
-            animation: messageSlideIn 0.3s ease;
-        }
-
-        .message-wrapper.sent {
-            flex-direction: row-reverse;
-        }
-
-        @keyframes messageSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .message-wrapper.received .message-avatar {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        }
-
-        .message-wrapper.sent .message-avatar {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        }
-
-        .message-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            max-width: 60%;
-        }
-
-        .message-wrapper.sent .message-content-wrapper {
-            align-items: flex-end;
-        }
-
-        .message-bubble {
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.5;
-            word-wrap: break-word;
-            position: relative;
-        }
-
-        .message-wrapper.received .message-bubble {
-            background: white;
-            color: #1e293b;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .message-wrapper.sent .message-bubble {
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: #94a3b8;
-            padding: 0 4px;
-        }
-
-        .date-divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 16px 0;
-        }
-
-        .date-divider span {
-            background: #e2e8f0;
-            color: #64748b;
-            padding: 6px 16px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            width: fit-content;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .typing-indicator.active {
-            display: block;
-        }
-
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .typing-dots span {
-            width: 8px;
-            height: 8px;
-            background: #94a3b8;
-            border-radius: 50%;
-            animation: typingBounce 1.4s infinite;
-        }
-
-        .typing-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .message-input-container {
-            background: white;
-            padding: 20px 32px;
-            border-top: 1px solid #e2e8f0;
-            flex-shrink: 0;
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        .input-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .attach-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: #f1f5f9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 18px;
-            color: #64748b;
-        }
-
-        .attach-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-
-        .message-input {
-            flex: 1;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-family: inherit;
-            resize: none;
-            max-height: 120px;
-            min-height: 44px;
-            transition: all 0.2s ease;
-        }
-
-        .message-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: white;
-        }
-
-        .message-input::placeholder {
-            color: #94a3b8;
-        }
-
-        .send-btn {
-            width: 44px;
-            height: 44px;
-            border: none;
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 20px;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-        }
-
-        .send-btn:active {
-            transform: scale(0.95);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
-
-        .empty-state {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-text {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #64748b;
-        }
-
-        .empty-subtext {
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-
-            .chat-header,
-            .messages-container,
-            .message-input-container {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-
-            .message-content-wrapper {
-                max-width: 80%;
-            }
-
-            .attach-btn {
-                display: none;
-            }
-        }
-    </style>
-</head>
 <body>
-    <!-- Sidebar -->
-    <?php include('app/views/sidebar/sidebar.php') ?>
-
     <div class="main-content">
-        <!-- Header de la conversation -->
         <div class="chat-header">
             <div class="header-left">
                 <div class="chat-avatar">
@@ -435,18 +340,17 @@
                 <div class="chat-info">
                     <div class="chat-title">Service Ressources Humaines</div>
                     <div class="chat-status">
-                        <span>●</span>
+                        <span style="color: var(--secondary);">●</span>
                         En ligne
                     </div>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="action-btn" title="Rechercher">🔍</button>
-                <button class="action-btn" title="Plus d'options">⋮</button>
+                <button class="action-btn" title="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="action-btn" title="Plus d'options"><i class="fa-solid fa-ellipsis-vertical"></i></button>
             </div>
         </div>
 
-        <!-- Zone des messages -->
         <div class="messages-container" id="messagesContainer">
             <?php if (empty($messages)): ?>
                 <div class="empty-state">
@@ -458,7 +362,7 @@
                 <?php 
                 $lastDate = null;
                 foreach ($messages as $msg): 
-                    $messageDate = date('Y-m-d', strtotime($msg['date_envoi']));
+                    $messageDate = date('Y-m-d', strtotime($msg['date_envoi'] ?? 'now'));
                     $today = date('Y-m-d');
                     $yesterday = date('Y-m-d', strtotime('-1 day'));
                     
@@ -474,45 +378,48 @@
                 <?php 
                         $lastDate = $messageDate;
                     endif;
+                    
+                    // Déterminer l'expéditeur
+                    $isSent = ($msg['sender'] ?? 0) == 0;
                 ?>
                 
-                <div class="message-wrapper <?= $msg['sender'] == 0 ? 'sent' : 'received' ?>">
-                    <div class="message-avatar">
-                        <?= $msg['sender'] == 0 ? 'MOI' : 'RH' ?>
+                <div class="message-wrapper <?= $isSent ? 'sent' : 'received' ?>">
+                    <div class="message-avatar" style="background-color: <?= $isSent ? 'var(--secondary)' : 'var(--primary)' ?>;">
+                        <?= $isSent ? 'MOI' : 'RH' ?>
                     </div>
                     <div class="message-content-wrapper">
                         <div class="message-bubble">
-                            <?= nl2br(htmlspecialchars($msg['contenu'])) ?>
+                            <?= nl2br(htmlspecialchars($msg['contenu'] ?? '')) ?>
                         </div>
                         <div class="message-time">
-                            <?= date('H:i', strtotime($msg['date_envoi'])) ?>
+                            <?= date('H:i', strtotime($msg['date_envoi'] ?? 'now')) ?>
                         </div>
                     </div>
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
 
-            <!-- Indicateur de frappe -->
-            <div class="message-wrapper received">
+            <div class="message-wrapper received" id="typingWrapper" style="display: none;">
                 <div class="message-avatar">RH</div>
-                <div class="typing-indicator" id="typingIndicator">
-                    <div class="typing-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                <div class="message-content-wrapper">
+                    <div class="typing-indicator">
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Zone de saisie -->
         <div class="message-input-container">
             <form method="POST" action="<?= constant('BASE_URL') ?>envoyer_message" id="messageForm" class="input-wrapper">
-                <input type="hidden" name="id_employe" value="<?= $id_employe ?>">
+                <input type="hidden" name="id_employe" value="<?= $id_employe ?? '' ?>">
                 
                 <div class="input-actions">
-                    <button type="button" class="attach-btn" title="Joindre un fichier">📎</button>
-                    <button type="button" class="attach-btn" title="Emoji">😊</button>
+                    <button type="button" class="attach-btn" title="Joindre un fichier"><i class="fa-solid fa-paperclip"></i></button>
+                    <button type="button" class="attach-btn" title="Emoji"><i class="fa-solid fa-face-smile"></i></button>
                 </div>
                 
                 <textarea 
@@ -525,7 +432,7 @@
                 ></textarea>
                 
                 <button type="submit" class="send-btn" id="sendBtn" disabled title="Envoyer">
-                    ➤
+                    <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
         </div>
@@ -536,28 +443,30 @@
         const messageInput = document.getElementById('messageInput');
         const messageForm = document.getElementById('messageForm');
         const sendBtn = document.getElementById('sendBtn');
-        const typingIndicator = document.getElementById('typingIndicator');
+        const typingWrapper = document.getElementById('typingWrapper'); // Le nouveau div wrapper pour l'indicateur
 
-        // Scroll automatique vers le bas
+        // 1. Scroll automatique vers le bas
         function scrollToBottom() {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         // Scroll au chargement
         window.addEventListener('load', () => {
-            setTimeout(scrollToBottom, 100);
+            setTimeout(scrollToBottom, 200);
         });
 
-        // Auto-resize du textarea
+        // 2. Auto-resize du textarea et gestion du bouton d'envoi
         messageInput.addEventListener('input', function() {
+            // Auto-resize
             this.style.height = 'auto';
+            // Limiter la hauteur à 120px
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
             
             // Activer/désactiver le bouton d'envoi
             sendBtn.disabled = this.value.trim().length === 0;
         });
 
-        // Envoyer avec Entrée (Shift+Entrée pour nouvelle ligne)
+        // 3. Envoyer avec Entrée (Shift+Entrée pour nouvelle ligne)
         messageInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -567,33 +476,25 @@
             }
         });
 
-        // Animation lors de l'envoi
+        // 4. Animation lors de l'envoi et simulation de l'indicateur
         messageForm.addEventListener('submit', function(e) {
-            sendBtn.innerHTML = '⏳';
+            // Mise à jour du bouton
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             sendBtn.disabled = true;
             
             // Simuler l'indicateur de frappe du destinataire
+            typingWrapper.style.display = 'flex';
+            scrollToBottom();
+            
+            // Simuler la fin de la réponse RH après un délai
             setTimeout(() => {
-                typingIndicator.classList.add('active');
-            }, 1000);
+                typingWrapper.style.display = 'none';
+                scrollToBottom();
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+            }, 3000); // 3 secondes de simulation
         });
 
-        // Simulation de réception de message (pour démo)
-        // Dans un vrai système, cela serait géré par WebSocket ou polling
-        function simulateTyping() {
-            typingIndicator.classList.add('active');
-            setTimeout(() => {
-                typingIndicator.classList.remove('active');
-            }, 3000);
-        }
-
-        // Auto-focus sur l'input
+        // 5. Auto-focus sur l'input
         messageInput.focus();
-
-        // Empêcher le zoom sur iOS lors du focus
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            messageInput.style.fontSize = '16px';
-        }
     </script>
 </body>
-</html>
