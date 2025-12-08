@@ -42,7 +42,7 @@
             $montant = $p['montant'];
             if ($montant !== null) {
                 $salaireNormal = Flight::HpresenceModel()->get_salaire_heure($id, $p['date_travail']) * $duree;
-                if ($montant <= $salaireNormal) { $norm += $duree; } else { $supp += $duree; }
+                if ($montant <= $salaireNormal*1.1) { $norm += $duree; } else { $supp += $duree; }
             }
         }
         $empStats[$id] = ['norm' => $norm, 'supp' => $supp];
