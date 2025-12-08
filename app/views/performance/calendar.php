@@ -115,6 +115,7 @@ function genererEtoiles($note) {
     <link rel="stylesheet" href="<?php echo constant('BASE_URL'); ?>/public/assets/css/Hcss/calendar.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        .container { width: 1350px; margin: 20px 350px;}
         .mois-titre { font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; }
         .calendrier { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
         .calendrier th, .calendrier td { border: 1px solid #e2e8f0; text-align: center; padding: 8px; }
