@@ -65,6 +65,8 @@ foreach ($data['heures'] as $heure) {
                     }
                 ?>
                 </select>
+                <label for="annee">Annee:</label>
+                <input type="number" name="annee" id="annee" value="<?php echo htmlspecialchars($data['annee'] ?? date('Y')); ?>">
                 <button type="submit">Confirmer</button>
             </form>
         </header>
