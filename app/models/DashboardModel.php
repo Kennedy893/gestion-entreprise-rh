@@ -57,11 +57,14 @@ class DashboardModel
     {
         $stmt = $this->db->prepare("
            SELECT 
-    AVG(EXTRACT(YEAR FROM AGE(
-        DATE '2027-01-01',  -- la date de référence
-        date_debut
-    ))) AS anciennete_moyenne
-FROM contrat_employe where date_fin = '2027-01-01';
+    ROUND(AVG(
+        EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_debut)) + 
+        EXTRACT(MONTH FROM AGE(CURRENT_DATE, date_debut)) / 12.0 +
+        EXTRACT(DAY FROM AGE(CURRENT_DATE, date_debut)) / 365.0
+    ), 2) AS anciennete_moyenne
+FROM contrat_employe 
+WHERE date_fin IS NULL 
+  AND id_statut_contrat = 1;
         ");
         $stmt->execute();
         $result = $stmt->fetch();
@@ -96,5 +99,31 @@ FROM contrat_employe where date_fin = '2027-01-01';
         ");
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+    public function countParFille()
+    {
+        $stmt = $this->db->prepare("
+    SELECT COUNT(*) as cou
+FROM contrat_employe ce
+JOIN employe e ON ce.id_employe = e.id
+WHERE ce.id_statut_contrat = 1 
+  AND e.genre = 1;
+        ");
+        $stmt->execute([]);
+        $result = $stmt->fetch();
+        return $result['cou'] ?? 0;
+    }
+    public function countParGarcon()
+    {
+        $stmt = $this->db->prepare("
+    SELECT COUNT(*) as cou
+FROM contrat_employe ce
+JOIN employe e ON ce.id_employe = e.id
+WHERE ce.id_statut_contrat = 1 
+  AND e.genre = 2;
+        ");
+        $stmt->execute([]);
+        $result = $stmt->fetch();
+        return $result['cou'] ?? 0;
     }
 }

@@ -16,14 +16,17 @@ class DashboardController {
         $turnover = $DashboardModel->getTurnoverStats();
         $absenteeism = $DashboardModel->getAbsenteeismStats();
         $averageSeniority = $DashboardModel->getAverageSeniority();
-        
+        $fille = $DashboardModel->countParFille();
+        $garcon=$DashboardModel->countParGarcon();
         $ageDistribution = $DashboardModel->getAgeDistribution();
         
         Flight::render('Dashboard/dashboard', [
             'turnover' => $turnover,
             'absenteeism' => $absenteeism,
             'averageSeniority' => round($averageSeniority, 2),
-            'ageDistribution' => $ageDistribution
+            'ageDistribution' => $ageDistribution,
+            'fille'=>$fille,
+            'garcon'=>$garcon
         ], 'contenu');
         Flight::render('shared/home');
     }

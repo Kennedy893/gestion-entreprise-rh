@@ -1,6 +1,5 @@
 <style>
     /* Styles spécifiques au Dashboard */
-
     .dashboard-container {
         padding: 0;
         max-width: 1370px;
@@ -30,7 +29,6 @@
         padding: 25px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         border-left: 5px solid var(--primary);
-        /* Ligne colorée pour l'accent */
         transition: transform 0.2s;
     }
 
@@ -59,13 +57,15 @@
         color: var(--secondary);
     }
 
-    /* Couleurs spécifiques aux KPI (Exemples) */
+    /* Couleurs spécifiques aux KPI */
     .stat-card:nth-child(1) {
         border-left-color: var(--primary);
+        /* Turnover */
     }
 
     .stat-card:nth-child(2) .stat-value {
         color: var(--danger-text);
+        /* Absentéisme */
     }
 
     .stat-card:nth-child(2) {
@@ -74,27 +74,39 @@
 
     .stat-card:nth-child(3) .stat-value {
         color: var(--success-text);
+        /* Ancienneté */
     }
 
     .stat-card:nth-child(3) {
         border-left-color: var(--success-text);
     }
 
-
-    /* --- CONTENEUR DE GRAPHIQUES ET RECHERCHE --- */
-    .chart-and-search-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        /* Graphique large, recherche plus étroite */
-        gap: 25px;
+    .stat-card:nth-child(4) .stat-value {
+        color: #9333ea;
+        /* Filles */
     }
 
+    .stat-card:nth-child(4) {
+        border-left-color: #9333ea;
+    }
+
+    .stat-card:nth-child(5) .stat-value {
+        color: #0ea5e9;
+        /* Garçons */
+    }
+
+    .stat-card:nth-child(5) {
+        border-left-color: #0ea5e9;
+    }
+
+    /* --- CONTENEUR DE GRAPHIQUES --- */
     .chart-container {
         background: var(--bg-card);
         border-radius: var(--radius);
         padding: 25px;
         width: 1200px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        margin-top: 30px;
     }
 
     .chart-container h3 {
@@ -107,161 +119,85 @@
         gap: 8px;
     }
 
-
-    /* --- RECHERCHE PAR ÂGE (Bloc à droite) --- */
-    .age-search {
-        background: var(--bg-card);
-        border-radius: var(--radius);
-        padding: 25px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-
-    .age-search h3 {
-        font-size: 1.25rem;
-        color: var(--text-main);
-        margin-top: 0;
-        margin-bottom: 10px;
-    }
-
-    .age-search p {
-        color: var(--text-muted);
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-    }
-
-    .search-controls {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    #age-input {
-        padding: 10px 12px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        font-size: 1rem;
-        width: 100px;
-        text-align: center;
-        transition: border-color 0.3s;
-    }
-
-    #age-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-
-    .search-controls button {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.2s;
-    }
-
-    .search-controls button:hover {
-        background-color: var(--primary-dark);
-    }
-
-    .result-display {
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 8px;
-        background: var(--bg-body);
-        border: 1px solid var(--border);
-        display: none;
-        /* Masqué par défaut */
-        font-size: 0.95rem;
-    }
-
-    /* Couleurs spécifiques aux résultats JS */
-    #age-result .fa-triangle-exclamation {
-        color: var(--danger-text);
-    }
-
-    #age-result .fa-rotate {
-        color: var(--primary);
-    }
-
-    #age-result .fa-circle-check {
-        color: var(--success-text);
-    }
-
-
     /* --- Responsive Design --- */
-    @media (max-width: 900px) {
-        .chart-and-search-grid {
-            grid-template-columns: 1fr;
-            /* Empilement sur mobile */
+    @media (max-width: 1200px) {
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+        
+        .dashboard-container {
+            margin: 20px 50px;
         }
     }
 </style>
+
 <div class="dashboard-container">
     <h1><i class="fa-solid fa-chart-line" style="color: var(--primary);"></i> Tableau de Bord RH - Statistiques</h1>
 
     <div class="stats-grid">
+        <!-- Turnover -->
         <div class="stat-card">
             <div class="stat-label">Taux de Rétention/Turnover</div>
             <div class="stat-value" id="turnover-value"><?php echo htmlspecialchars($turnover); ?></div>
             <div>Contrats Actifs / Total de contrats</div>
         </div>
 
+        <!-- Absentéisme -->
         <div class="stat-card">
-            <div class="stat-label">ABSENTÉISME</div>
+            <div class="stat-label">ABSENTÉISME(NOMBRE)</div>
             <div class="stat-value" id="absenteeism-value"><?php echo htmlspecialchars($absenteeism); ?></div>
             <div>Total des heures d'absences</div>
         </div>
 
+        <!-- Ancienneté moyenne -->
         <div class="stat-card">
-            <div class="stat-label">ANCIENNETÉ MOYENNE</div>
+            <div class="stat-label">ANCIENNETÉ MOYENNE(ANS)</div>
             <div class="stat-value" id="seniority-value"><?php echo htmlspecialchars($averageSeniority); ?></div>
-            <div>Années d'ancienneté moyenne par employé</div>
+            <div>Années d'ancienneté moyenne</div>
+        </div>
+
+        <!-- Filles -->
+        <div class="stat-card">
+            <div class="stat-label">FEMMES</div>
+            <div class="stat-value" id="fille-value"><?php echo htmlspecialchars($fille); ?></div>
+            <div>Employées féminines actives</div>
+        </div>
+
+        <!-- Garçons -->
+        <div class="stat-card">
+            <div class="stat-label">HOMMES</div>
+            <div class="stat-value" id="garcon-value"><?php echo htmlspecialchars($garcon); ?></div>
+            <div>Employés masculins actifs</div>
         </div>
     </div>
 
-    <div class="chart-and-search-grid">
-
-        <div class="chart-container" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 20px;">
-            <h3 style="font-family: 'Outfit', sans-serif; font-weight: 600; margin-bottom: 10px;">
-                <i class="fa-solid fa-chart-bar" style="color: var(--primary);"></i>
-                Distribution des employés par âge (contrats actifs)
-            </h3>
-            <div style="position: relative; height: 350px;">
-                <canvas id="ageChart"></canvas>
-            </div>
+    <!-- Graphique de distribution d'âge -->
+    <div class="chart-container">
+        <h3 style="font-family: 'Outfit', sans-serif; font-weight: 600; margin-bottom: 10px;">
+            <i class="fa-solid fa-chart-bar" style="color: var(--primary);"></i>
+            Distribution des employés par âge (contrats actifs)
+        </h3>
+        <div style="position: relative; height: 350px;">
+            <canvas id="ageChart"></canvas>
         </div>
-
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
 <script>
-    // Données
-    const ageDistribution = [
-        {"age":"29","count_employees":4},
-        {"age":"31","count_employees":5},
-        {"age":"36","count_employees":2},
-        {"age":"39","count_employees":3},
-        {"age":"41","count_employees":1}
-    ];
-
+    // Données du graphique d'âge
+    const ageDistribution = <?php echo json_encode($ageDistribution); ?>;
     const ages = ageDistribution.map(item => item.age);
     const counts = ageDistribution.map(item => parseInt(item.count_employees));
 
     const ctx = document.getElementById('ageChart').getContext('2d');
 
-    // 🎨 Dégradé de couleur pour les barres
+    // Dégradé de couleur pour les barres
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(79, 70, 229, 0.9)');
     gradient.addColorStop(1, 'rgba(79, 70, 229, 0.3)');
 
-    // 📊 Création du graphique
+    // Création du graphique
     const ageChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -335,4 +271,3 @@
         }
     });
 </script>
-
