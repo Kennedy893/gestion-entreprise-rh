@@ -1,18 +1,37 @@
     <link rel="stylesheet" href="<?= constant('BASE_URL') ?>public/assets/css/pointage.css">
     
+
     <div class="main-content">
         <div class="container">
-            <h2><i class="fa-solid fa-clock-check" style="color: var(--primary);"></i> Formulaire de Pointage</h2>
+            <h2>📋 Formulaire de Pointage</h2>
 
             <?php if (isset($_GET['error'])): ?>
                 <div class="error-message">
-                    <i class="fa-solid fa-triangle-exclamation"></i> <?php echo htmlspecialchars($_GET['error']); ?>
+                    ❌ <?php echo htmlspecialchars($_GET['error']); ?>
                 </div>
             <?php endif; ?>
 
-            <div class="card">
-                <h3>👥 Liste des employés</h3>
+            <form method="post" action="<?php echo constant('BASE_URL'); ?>/time/presences">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="date">Date :</label>
+                        <input type="date" id="date" name="date" required>
+                        
+                        <label for="type">Type :</label>
+                        <select id="type" name="type" required>
+                            <option value="1">Entrée</option>
+                            <option value="2">Sortie</option>
+                        </select>
+                        
+                        <label for="heure">Heure :</label>
+                        <input type="time" id="heure" name="heure" required>
+                    </div>
+                    
+                    <input type="submit" class="submit-btn" value="✅ Valider la sélection">
+                </div>
 
+                <h3>👥 Liste des employés</h3>
+                
                 <div class="filter-container">
                     <label for="filterInput">Filtrer par nom/prénom :</label>
                     <input type="text" id="filterInput" placeholder="Tapez un nom ou prénom...">
@@ -21,80 +40,65 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="checkbox-cell">Sélectionner</th>
+                            <th style="width: 80px;">Sélectionner</th>
                             <th>Nom & Prénom</th>
-                            <th style="width: 450px;">Relevé des Heures</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        // Utilisez $data['employees'] si disponible, sinon un tableau vide pour éviter les erreurs.
-                        $employees = $data['employees'] ?? [];
-                        $currentMonth = date('n');
-
-                        for ($i = 0; $i < count($employees); $i++) {
-                            $id = $employees[$i]['id'];
-                            $fullName = $employees[$i]['nom'] . " " . $employees[$i]['prenom'];
-                        ?>
-                            <tr data-name="<?php echo strtolower($fullName); ?>">
-                                <td class="checkbox-cell">
-                                    <input type="checkbox" name="employes[]" value="<?php echo $id; ?>">
-                                </td>
-                                <td>
-                                    <strong><?php echo $fullName; ?></strong>
-                                </td>
-                                <td>
-                                    <form method="get" action="<?php echo constant('BASE_URL'); ?>time/releves">
-                                        <input type="hidden" name="id_employe" value="<?php echo $id; ?>">
-                                        <input type="number" name="annee" placeholder="Année" min="1900" max="2100" required value="<?php echo date('Y'); ?>">
-                                        <select name="mois">
-                                            <?php $months = [1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril', 5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août', 9 => 'Septembre', 10 => 'Octobre', 11 => 'Novembre', 12 => 'Décembre']; ?>
-                                            <?php foreach ($months as $num => $name): ?>
-                                                <option value="<?= $num ?>" <?= ($num == $currentMonth) ? 'selected' : '' ?>><?= $name ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <button type="submit">
-                                            <i class="fa-solid fa-chart-simple"></i> Relevé
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php
+                    <?php
+                        $employees = $data['employees'];
+                        for ($i=0 ; $i < count($employees); $i++) 
+                        {
+                    ?>
+                        <tr>
+                            <td style="text-align: center;">
+                                <input type="checkbox" name="employes[]" value="<?php echo $employees[$i]['id']; ?>">
+                            </td>
+                            <td>
+                                <strong><?php echo $employees[$i]['nom'] . " " . $employees[$i]['prenom']; ?></strong>
+                            </td>
+                        </tr>
+                    <?php
                         }
-                        ?>
+                    ?>
                     </tbody>
                 </table>
-            </div>
+            </form>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const table = document.querySelector('table');
-            const tbody = table ? table.querySelector('tbody') : null;
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const heading = form.querySelector('h3');
+        const table = form.querySelector('table');
+        const tbody = table ? table.querySelector('tbody') : null;
 
-            if (!table || !tbody) return;
+        if (!heading || !tbody) return;
 
-            const filterInput = document.getElementById('filterInput');
+        const filterInput = document.getElementById('filterInput');
 
-            const filterRows = () => {
-                const q = filterInput.value.trim().toLowerCase();
-                const rows = Array.from(tbody.rows);
-                rows.forEach(tr => {
-                    // Utilisation de l'attribut data-name pour le filtrage
-                    const nameAttr = tr.getAttribute('data-name');
-                    if (!nameAttr) return;
-
-                    tr.style.display = nameAttr.includes(q) ? '' : 'none';
-                });
-            };
-
-            filterInput.addEventListener('input', filterRows);
-
-            // Pré-sélectionner le mois actuel (déjà fait en PHP mais on le garde pour la robustesse)
-            const currentMonth = new Date().getMonth() + 1;
-            document.querySelectorAll('select[name="mois"]').forEach(select => {
-                select.value = currentMonth;
+        const filterRows = () => {
+            const q = filterInput.value.trim().toLowerCase();
+            const rows = Array.from(tbody.rows);
+            rows.forEach(tr => {
+                const nameCell = tr.cells[1];
+                if (!nameCell) return;
+                const txt = nameCell.textContent.toLowerCase();
+                tr.style.display = q === '' || txt.includes(q) ? '' : 'none';
             });
-        });
+        };
+
+        filterInput.addEventListener('input', filterRows);
+
+        // Pré-remplir la date d'aujourd'hui
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+
+        // Pré-remplir l'heure actuelle
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('heure').value = `${hours}:${minutes}`;
+    });
     </script>
