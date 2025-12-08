@@ -350,7 +350,7 @@ class ChatbotPaieModel
 
         // Obtenir le contrat actif
         $sqlContrat = "SELECT date_debut FROM contrat_employe 
-                       WHERE id_employe = ? AND id_statut_contrat = 2 
+                       WHERE id_employe = ? AND id_statut_contrat = 1
                        AND :date BETWEEN date_debut AND date_fin";
         $stmtContrat = $this->db->prepare($sqlContrat);
         $stmtContrat->execute(['date' => date('Y-m-d'), $id]);
@@ -374,7 +374,7 @@ class ChatbotPaieModel
                     FROM absence a
                     JOIN statut_abscence st on a.id = st.id_absence 
                     JOIN Document dc on dc.id=a.id_document
-                    WHERE dc.id_employe = ? AND st.statut = 11";
+                    WHERE dc.id_employe = ? AND st.statut = 1";
         $stmtPris = $this->db->prepare($sqlPris);
         $stmtPris->execute([$id]);
         $result = $stmtPris->fetch(PDO::FETCH_ASSOC);
@@ -395,45 +395,45 @@ class ChatbotPaieModel
      * Obtenir le total des congés pris depuis le début du contrat
      */
     public function getCongesPrisTotalParNom($nomEmploye)
-    {
-        $employes = $this->rechercherEmployeParNom($nomEmploye);
-        if (empty($employes)) return ['error' => "Employé '{$nomEmploye}' non trouvé."];
-        if (count($employes) > 1) return ['error' => 'Plusieurs employés trouvés', 'employes' => $employes];
+{
+    $employes = $this->rechercherEmployeParNom($nomEmploye);
+    if (empty($employes)) return ['error' => "Employé '{$nomEmploye}' non trouvé."];
+    if (count($employes) > 1) return ['error' => 'Plusieurs employés trouvés', 'employes' => $employes];
 
-        $id = $employes[0]['id'];
+    $id = $employes[0]['id'];
 
-        // Obtenir le contrat actif pour la date de début
-        $sqlContrat = "SELECT date_debut FROM contrat_employe 
-                       WHERE id_employe = ? AND id_statut_contrat = 2";
-        $stmtContrat = $this->db->prepare($sqlContrat);
-        $stmtContrat->execute([$id]);
-        $contrat = $stmtContrat->fetch(PDO::FETCH_ASSOC);
+    // Obtenir le contrat actif pour la date de début
+    $sqlContrat = "SELECT date_debut FROM contrat_employe 
+                   WHERE id_employe = ? AND id_statut_contrat = 1";
+    $stmtContrat = $this->db->prepare($sqlContrat);
+    $stmtContrat->execute([$id]);
+    $contrat = $stmtContrat->fetch(PDO::FETCH_ASSOC);
 
-        if (!$contrat) {
-            return ['error' => 'Aucun contrat trouvé pour cet employé'];
-        }
-
-        // Total des jours de congé pris (validés uniquement)
-        $sqlTotal = "SELECT 
-                        COUNT(*) as nombre_demandes,
-                        SUM(DATEDIFF(a.date_fin, a.date_debut) + 1) as total_jours
-                     FROM absence a JOIN statut_abscence st on a.id = st.id_absence
-                    JOIN Document dc on dc.id=a.id_document 
-                     WHERE dc.id_employe = ? 
-                     AND st.statut = 1
-                     AND a.date_debut >= ?";
-        $stmtTotal = $this->db->prepare($sqlTotal);
-        $stmtTotal->execute([$id, $contrat['date_debut']]);
-        $stats = $stmtTotal->fetch(PDO::FETCH_ASSOC);
-
-        return [
-            'employe' => $employes[0],
-            'date_debut_contrat' => $contrat['date_debut'],
-            'nombre_demandes' => $stats['nombre_demandes'] ?? 0,
-            'total_jours_pris' => $stats['total_jours'] ?? 0
-        ];
+    if (!$contrat) {
+        return ['error' => 'Aucun contrat trouvé pour cet employé'];
     }
 
+    // Total des jours de congé pris (validés uniquement) - CORRIGÉ
+    $sqlTotal = "SELECT 
+                    COUNT(*) as nombre_demandes,
+                    SUM((a.date_fin - a.date_debut) + 1) as total_jours
+                 FROM absence a 
+                 JOIN statut_abscence st on a.id = st.id_absence
+                 JOIN Document dc on dc.id = a.id_document 
+                 WHERE dc.id_employe = ? 
+                 AND st.statut = 1
+                 AND a.date_debut >= ?";
+    $stmtTotal = $this->db->prepare($sqlTotal);
+    $stmtTotal->execute([$id, $contrat['date_debut']]);
+    $stats = $stmtTotal->fetch(PDO::FETCH_ASSOC);
+
+    return [
+        'employe' => $employes[0],
+        'date_debut_contrat' => $contrat['date_debut'],
+        'nombre_demandes' => $stats['nombre_demandes'] ?? 0,
+        'total_jours_pris' => $stats['total_jours'] ?? 0
+    ];
+}
     /**
      * Obtenir l'historique complet des congés
      */
@@ -514,7 +514,7 @@ RÉPONSE (UN SEUL FORMAT CI-DESSUS) :
         error_log("=== PROMPT ENVOYÉ À GEMINI ===");
         error_log($prompt);
 
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyBhaHsD1496HzKL4steqW0fbbTsWKaYQrk";
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyD3anBC9bVIwjYslbGqM8vGOao3BqV2Xew";
 
         $data = [
             'contents' => [

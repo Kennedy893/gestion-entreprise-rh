@@ -144,7 +144,7 @@
             messages.scrollTop = messages.scrollHeight;
             
             // Envoyer au serveur
-           fetch('<?= constant('BASE_URL') ?>/chatbot/ask', {
+           fetch('<?= constant('BASE_URL') ?>chatbot/ask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
