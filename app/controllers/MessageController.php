@@ -32,8 +32,7 @@ class MessageController {
         $id_employe = $_POST['id_employe'];
 
         Flight::MessageModel()->envoyerMessage($id_employe, $contenu, 0);
-
-        Flight::redirect(constant('BASE_URL').'employe/messagerie?id_employe=' . $id_employe);
+        Flight::redirect(constant('BASE_URL').'vers_messagerie?id_employe=' . $id_employe);
     }
 
 
