@@ -160,15 +160,17 @@
         </div>
         
         <div class="login-form">
-            <form action="<?= constant('BASE_URL') ?>/dashboard" method="GET">
+            <form action="<?= constant('BASE_URL') ?>log" method="post">
                 <div class="form-group">
                     <label for="email">Email RH</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="email@entreprise.com" required>
+                    <input type="email" id="email" name="email" class="form-control" value="email@entreprise.com" required>
                 </div>
                 
+                <input type="hidden" name="role" value="3">
+
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Votre mot de passe" required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Votre mot de passe" value="1234" required>
                 </div>
                 
                 <button type="submit" class="login-btn">Se connecter</button>

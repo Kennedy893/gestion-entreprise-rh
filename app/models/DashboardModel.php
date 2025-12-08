@@ -120,7 +120,7 @@ WHERE ce.id_statut_contrat = 1
 FROM contrat_employe ce
 JOIN employe e ON ce.id_employe = e.id
 WHERE ce.id_statut_contrat = 1 
-  AND e.genre = 2;
+  AND e.genre = 0;
         ");
         $stmt->execute([]);
         $result = $stmt->fetch();

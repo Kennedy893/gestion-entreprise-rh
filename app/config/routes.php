@@ -27,11 +27,12 @@ $Paie_Controller = new \app\controllers\PaieController();
 
 
 
+
 // Routes pour login 
 $router->get('/loginRH', [$Welcome_Controller, 'homeRH']);
 $router->get('/loginManager', [$Welcome_Controller, 'homeManager']);
 $router->get('/login', [$Welcome_Controller, 'homeEmp']);
-
+$router->post('/log', [$Welcome_Controller, 'login']);
 
 // $router->get('/', [$Welcome_Controller, 'home']);
 

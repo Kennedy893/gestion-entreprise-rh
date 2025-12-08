@@ -76,13 +76,13 @@
     </li> -->
   </ul>
   
-  <div class="user-profile">
-    <div class="user-avatar">DR</div>
+  <!-- <div class="user-profile">
+    <div class="user-avatar"></div>
     <div class="emp-details" style="text-align: left">
       <div style="color: white; font-size: 0.9rem">Dir. RH</div>
       <div style="color: #94a3b8; font-size: 0.75rem">Admin</div>
     </div>
-  </div>
+  </div> -->
 </nav>
 
 <script>
