@@ -171,7 +171,7 @@
         }
     }
 </style>
-
+<?=  include("app/views/chatbot.php") ?>
 <div class="main-content">
     <div class="page-header">        
         <h1 class="page-title">

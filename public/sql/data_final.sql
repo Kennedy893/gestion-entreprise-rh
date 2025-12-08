@@ -291,7 +291,7 @@ INSERT INTO statut_abscence (date_statut, statut, id_absence) VALUES
 
 -- Statuts pour les congés maladie
 ('2025-12-02', 1, 4),  -- Maladie Marie validé
-('2025-12-04', 1, 5),  -- Maladie Paul validé
+('2025-12-04', 1, 5);  -- Maladie Paul validé
 ('2025-12-05', 1, 6),  -- Maladie Sara validé
 ('2025-12-03', 1, 7),  -- Maladie Luc validé
 ('2025-12-01', 1, 8),  -- Maladie Claire validé
