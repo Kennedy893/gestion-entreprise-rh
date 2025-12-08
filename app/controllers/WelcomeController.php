@@ -5,11 +5,10 @@ namespace app\controllers;
 
 use Flight;
 
-class WelcomeController {
+class WelcomeController
+{
 
-	public function __construct() {
-
-	}
+    public function __construct() {}
 
     public function home()
     {
@@ -18,12 +17,21 @@ class WelcomeController {
     public function homeRH()
     {
         Flight::render('login/loginRH');
-    }public function homeManager()
+    }
+    public function homeManager()
     {
         Flight::render('login/loginManager');
-    }public function homeEmp()
+    }
+    public function homeEmp()
     {
         Flight::render('login/loginEmployer');
     }
+
+
+    // public function attestation () {
+    //     $type
+    //     $id_emp = 1;
+    // }
+
 
 }

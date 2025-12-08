@@ -38,14 +38,23 @@ class HpresenceModel {
     }
     public function get_semaine($date)
     {
-        $dt = new DateTime($date);
+        $dt = DateTime::createFromFormat('Y-m-d', $date);
+        if (!$dt) {
+            throw new Exception("Date invalide pour get_semaine: ".$date);
+        }
+
+        // Lundi comme début de semaine
         $startOfWeek = clone $dt;
         $startOfWeek->modify('monday this week');
+
+        // Dimanche comme fin de semaine (lundi + 6 jours)
         $endOfWeek = clone $startOfWeek;
         $endOfWeek->modify('+6 days');
+
         $debut = $startOfWeek->format('Y-m-d');
         $fin   = $endOfWeek->format('Y-m-d');
-        $retour=[$debut,$fin];
+
+        return [$debut, $fin];
     }
     public function condition_heure_supp($date,$id_employe,$duree)
     {

@@ -11,7 +11,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="post" action="<?php echo constant('BASE_URL'); ?>/time/presences">
+            <form method="post" action="<?php echo constant('BASE_URL'); ?>time/presences">
                 <div class="form-container">
                     <div class="form-group">
                         <label for="date">Date :</label>

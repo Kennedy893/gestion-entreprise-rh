@@ -23,6 +23,9 @@
     }
   ?>
 
+  <?php 
+    include('chatbot.php');
+  ?>
 
 </body>
 
