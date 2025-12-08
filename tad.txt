@@ -18,3 +18,4 @@ Prediction turnover:(miandry gestion perfomrance haisinniaina de integgrena sisa
 donne moi le conge total prise par razafy
 donne moi le salaire total de razafy
 donne moi la liste des employer
+donne moi le retenue de razafy
