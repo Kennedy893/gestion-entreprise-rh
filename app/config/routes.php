@@ -89,6 +89,7 @@ $router->get('/paie/fiche/export/@id', [$Paie_Controller, 'exportFichePaiePDF'])
 $router->post('/chatbot/ask', [$chatcontoller_Controller, 'processQuestion']);
 $router->get('/contratGen/@id', [$gen, 'genererContratPdf']);
 $router->get('/attestation/@id', [$gen, 'genererAttestationTravailPdf']);
+$router->post('/attes', [$gen, 'attestation']);
 $router->get('/generation', [$gen, 'homeGen']);
 $router->get('/prediction/@id', [$hController, 'get_prediction']);
 

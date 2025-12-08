@@ -22,18 +22,6 @@
 
     <li class="nav-item has-submenu">
       <a href="#" class="nav-link dropdown-toggle">
-        <i class="fa-solid fa-file-invoice-dollar"></i> Bulletins
-        <i class="fa-solid fa-chevron-right arrow-icon"></i>
-      </a>
-      <ul class="submenu">
-        <li><a href="#"><i class="fa-solid fa-file-contract"></i> Fiches de Paie</a></li>
-        <li><a href="#"><i class="fa-solid fa-fingerprint"></i> Pointage / Présences</a></li>
-        <li><a href="#"><i class="fa-solid fa-gift"></i> Avantages & Primes</a></li>
-      </ul>
-    </li>
-
-    <li class="nav-item has-submenu">
-      <a href="#" class="nav-link dropdown-toggle">
         <i class="fa-solid fa-chart-line"></i> Performance
         <i class="fa-solid fa-chevron-right arrow-icon"></i>
       </a>

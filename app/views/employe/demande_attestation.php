@@ -293,7 +293,7 @@
                 </div>
             </div>
 
-            <form action="#" method="post">
+            <form action="<?= constant('BASE_URL') ?>attes" method="post">
                 <div class="form-group">
                     <label class="form-label">
                         Type d'attestation <span class="required">*</span>
@@ -378,12 +378,12 @@
         }
 
         // Animation de soumission
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(e) {
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Envoi en cours...';
-            submitBtn.disabled = true;
-        });
+        // const form = document.querySelector('form');
+        // form.addEventListener('submit', function(e) {
+        //     const submitBtn = this.querySelector('button[type="submit"]');
+        //     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Envoi en cours...';
+        //     submitBtn.disabled = true;
+        // });
 
         // Gérer la sélection des cartes radio (Couleur et bordure)
         const radioInputs = document.querySelectorAll('input[type="radio"]');
