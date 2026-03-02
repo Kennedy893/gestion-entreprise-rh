@@ -29,8 +29,8 @@ CREATE TABLE Type_Document(
 CREATE TABLE Document(
    id SERIAL PRIMARY KEY,
    chemin VARCHAR(250),
-   id_type_document INT,
-   id_employe INT,
+   id_type_document BIGINT UNSIGNED,
+   id_employe BIGINT UNSIGNED,
    FOREIGN KEY(id_employe) REFERENCES Employe(id),
    FOREIGN KEY(id_type_document) REFERENCES Type_Document(id)
 );
@@ -50,8 +50,8 @@ CREATE TABLE absence(
    motif VARCHAR(255),
    date_debut DATE,
    date_fin DATE,
-   id_document INT,
-   id_conge INT,
+   id_document BIGINT UNSIGNED,
+   id_conge BIGINT UNSIGNED,
    FOREIGN KEY(id_document) REFERENCES Document(id),
    FOREIGN KEY(id_conge) REFERENCES conge(id)
 );
@@ -60,7 +60,7 @@ CREATE TABLE statut_abscence(
    id SERIAL PRIMARY KEY,
    date_statut DATE,
    statut INT,
-   id_absence INT,
+   id_absence BIGINT UNSIGNED,
    FOREIGN KEY(id_absence) REFERENCES absence(id)
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE presence(
    entree TIME,
    sortie TIME,
    montant DECIMAL(15,2),
-   id_employe INT,
+   id_employe BIGINT UNSIGNED,
    FOREIGN KEY(id_employe) REFERENCES Employe(id)
 );
 
@@ -100,8 +100,8 @@ CREATE TABLE Poste(
    id SERIAL PRIMARY KEY,
    label VARCHAR(50),
    valeur INT,
-   id_categorie INT,
-   id_departement INT,
+   id_categorie BIGINT UNSIGNED,
+   id_departement BIGINT UNSIGNED,
    FOREIGN KEY(id_categorie) REFERENCES categorie(id),
    FOREIGN KEY(id_departement) REFERENCES departement(id)
 );
@@ -111,7 +111,7 @@ CREATE TABLE config_poste(
    duree_travail INT,
    entree TIME,
    sortie TIME,
-   id_poste INT,
+   id_poste BIGINT UNSIGNED,
    FOREIGN KEY(id_poste) REFERENCES Poste(id)
 );
 
@@ -121,8 +121,8 @@ CREATE TABLE config_retenu(
    pourcentage_employer DECIMAL(5,2),
    salaire_min DECIMAL(25,2),
    salaire_max DECIMAL(25,2),
-   id_categorie INT,
-   id_type_retenu INT,
+   id_categorie BIGINT UNSIGNED,
+   id_type_retenu BIGINT UNSIGNED,
    FOREIGN KEY(id_categorie) REFERENCES categorie(id),
    FOREIGN KEY(id_type_retenu) REFERENCES type_retenu(id)
 );
@@ -133,10 +133,10 @@ CREATE TABLE contrat_employe(
    date_fin DATE,
    duree INT,
    salaire DECIMAL(25,2),
-   id_poste INT,
-   id_employe INT,
-   id_statut_contrat INT,
-   id_type_contrat INT,
+   id_poste BIGINT UNSIGNED,
+   id_employe BIGINT UNSIGNED,
+   id_statut_contrat BIGINT UNSIGNED,
+   id_type_contrat BIGINT UNSIGNED,
    FOREIGN KEY(id_poste) REFERENCES Poste(id),
    FOREIGN KEY(id_employe) REFERENCES Employe(id),
    FOREIGN KEY(id_statut_contrat) REFERENCES Statut_Contrat(id),
@@ -147,6 +147,6 @@ CREATE TABLE avantage(
    id SERIAL PRIMARY KEY,
    libelle VARCHAR(100),
    montant DECIMAL(25,2),
-   id_contrat_employe INT,
+   id_contrat_employe BIGINT UNSIGNED,
    FOREIGN KEY(id_contrat_employe) REFERENCES contrat_employe(id)
 );
